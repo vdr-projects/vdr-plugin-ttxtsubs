@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2008-12-13 21:47+0100\n"
+"POT-Creation-Date: 2008-12-13 23:18+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -18,226 +18,170 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ttxtsubs.c:43
 msgid "Teletext subtitles"
 msgstr "Tekstitys (Teksti-TV)"
 
-#: ttxtsubs.c:279
 msgid "Hide teletext subtitles"
 msgstr "Piilota tekstitys (Teksti-TV)"
 
-#: ttxtsubs.c:281
 msgid "Display teletext subtitles"
 msgstr "Näytä tekstitys (Teksti-TV)"
 
-#: ttxtsubs.c:284
 msgid "Position Teletext Subtitles for 4:3/Anamorph"
 msgstr "4:3/Anamorfinen tekstitys (Teksti-TV)"
 
-#: ttxtsubs.c:286
 msgid "Position Teletext Subtitles for Letterbox"
 msgstr "Letterbox tekstitys (Teksti-TV)"
 
-#: ttxtsubs.c:288
 msgid "Page Selection"
 msgstr "Tekstityssivun valinta"
 
-#: ttxtsubs.c:612
 msgid "Display on/off"
 msgstr "aktivointi"
 
-#: ttxtsubs.c:613
 msgid "4:3/Letterbox"
 msgstr "kuvasuhde"
 
-#: ttxtsubs.c:614
 msgid "Page Mode"
 msgstr "sivun valinta"
 
-#: ttxtsubs.c:617
 msgid "Left"
 msgstr "vasen"
 
-#: ttxtsubs.c:618
 msgid "Center"
 msgstr "keskitä"
 
-#: ttxtsubs.c:619
 msgid "Right"
 msgstr "oikea"
 
-#: ttxtsubs.c:622
 msgid "All"
 msgstr "kaikki"
 
-#: ttxtsubs.c:623
 msgid "Only DVB-S"
 msgstr "vain DVB-S"
 
-#: ttxtsubs.c:624
 msgid "Only DVB-T"
 msgstr "vain DVB-T"
 
-#: ttxtsubs.c:625
 msgid "Only DVB-C"
 msgstr "vain DVB-C"
 
-#: ttxtsubs.c:628
 msgid "Black"
 msgstr "musta"
 
-#: ttxtsubs.c:629
 msgid "White"
 msgstr "valkoinen"
 
-#: ttxtsubs.c:630
 msgid "Red"
 msgstr "punainen"
 
-#: ttxtsubs.c:631
 msgid "Green"
 msgstr "vihreä"
 
-#: ttxtsubs.c:632
 msgid "Yellow"
 msgstr "keltainen"
 
-#: ttxtsubs.c:633
 msgid "Magenta"
 msgstr "magenta"
 
-#: ttxtsubs.c:634
 msgid "Blue"
 msgstr "sininen"
 
-#: ttxtsubs.c:635
 msgid "Cyan"
 msgstr "syaani"
 
-#: ttxtsubs.c:636
 msgid "Custom"
 msgstr "muokattava"
 
-#: ttxtsubs.c:637
 msgid "Transparent"
 msgstr "läpinäkyvä"
 
-#: ttxtsubs.c:638
 msgid "Grey"
 msgstr "harmaa"
 
-#: ttxtsubs.c:662 ttxtsubspagemenu.c:35
 msgid "Display Subtitles"
 msgstr "Näytä tekstitykset"
 
-#: ttxtsubs.c:663
 msgid "Record Subtitles"
 msgstr "Tallenna tekstitykset"
 
-#: ttxtsubs.c:664
 msgid "Live Delay"
 msgstr "Viive Live-lähetyksessä"
 
-#: ttxtsubs.c:665
 msgid "Replay Delay"
 msgstr "Viive toistossa"
 
-#: ttxtsubs.c:668
 msgid "Main Menu Alternative"
 msgstr "Päävalikon toiminnot"
 
-#: ttxtsubs.c:672
 msgid "Text Horizontal Position"
 msgstr "Vaakatasaus"
 
-#: ttxtsubs.c:674
 msgid "Text Vertical Position"
 msgstr "Pystytasaus"
 
-#: ttxtsubs.c:675
 msgid "4:3/Anamorph"
 msgstr "4:3/anamorfinen"
 
-#: ttxtsubs.c:675
 msgid "Letterbox"
 msgstr "letterbox"
 
-#: ttxtsubs.c:676
 msgid "Text Vertical Adjust"
 msgstr "Pystytasauksen hienosäätö"
 
-#: ttxtsubs.c:678
 msgid "Line Spacing Adjust"
 msgstr "Rivivälin hienosäätö"
 
-#: ttxtsubs.c:680
 msgid "Workaround for some French chns"
 msgstr "Ranskalainen silmänkääntötemppu"
 
-#: ttxtsubs.c:684
 msgid "DVB Source Selection"
 msgstr "Tekstityslähteen valinta"
 
-#: ttxtsubs.c:686
 msgid "Font Size (pixel)"
 msgstr "Kirjasintyypin koko (px)"
 
-#: ttxtsubs.c:689
 msgid "Text Color"
 msgstr "Kirjasimen väri"
 
-#: ttxtsubs.c:693
 msgid "Background Color"
 msgstr "Taustaväri"
 
-#: ttxtsubs.c:705
 msgid "Custom Color"
 msgstr "Muokattava väri"
 
-#: ttxtsubs.c:710
 msgid "Red Value"
 msgstr "Punainen"
 
-#: ttxtsubs.c:711
 msgid "Green Value"
 msgstr "Vihreä"
 
-#: ttxtsubs.c:712
 msgid "Blue Value"
 msgstr "Sininen"
 
-#: ttxtsubs.c:713
 msgid "Transparency Value"
 msgstr "Läpinäkyvyys"
 
-#: ttxtsubs.c:723 ttxtsubs.c:731
 msgid "Language"
 msgstr "Tekstityskieli"
 
-#: ttxtsubs.c:731
 msgid "Hearing Impaired"
 msgstr "kuulorajoitteisille"
 
-#: ttxtsubspagemenu.c:16
 msgid "Subtitle Page Settings"
 msgstr "Tekstityssivun asetukset"
 
-#: ttxtsubspagemenu.c:30
 msgid "Auto"
 msgstr "automaattinen"
 
-#: ttxtsubspagemenu.c:31
 msgid "Manual"
 msgstr "manuaalinen"
 
-#: ttxtsubspagemenu.c:32
 msgid "Disabled"
 msgstr "pois"
 
-#: ttxtsubspagemenu.c:36
 msgid "Subtitle Mode"
 msgstr "Tekstitystapa"
 
-#: ttxtsubspagemenu.c:37
 msgid "Manual Subtitle Page"
 msgstr "Asetettu tekstityssivu"

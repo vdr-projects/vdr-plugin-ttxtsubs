@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2008-12-13 21:47+0100\n"
+"POT-Creation-Date: 2008-12-13 23:18+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Vyacheslav Dikonov <sdiconov@mail.ru>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -15,226 +15,170 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-5\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ttxtsubs.c:43
 msgid "Teletext subtitles"
 msgstr "Телетекст-субтитры"
 
-#: ttxtsubs.c:279
 msgid "Hide teletext subtitles"
 msgstr "Скрыть субтитры"
 
-#: ttxtsubs.c:281
 msgid "Display teletext subtitles"
 msgstr "Показывать субтитры"
 
-#: ttxtsubs.c:284
 msgid "Position Teletext Subtitles for 4:3/Anamorph"
 msgstr "Субтитры в кадре 4:3"
 
-#: ttxtsubs.c:286
 msgid "Position Teletext Subtitles for Letterbox"
 msgstr "Субтитры в кадре широкоэкранного фильма"
 
-#: ttxtsubs.c:288
 msgid "Page Selection"
 msgstr ""
 
-#: ttxtsubs.c:612
 msgid "Display on/off"
 msgstr "включить/выключить"
 
-#: ttxtsubs.c:613
 msgid "4:3/Letterbox"
 msgstr "4:3/широкий экран"
 
-#: ttxtsubs.c:614
 msgid "Page Mode"
 msgstr ""
 
-#: ttxtsubs.c:617
 msgid "Left"
 msgstr "слева"
 
-#: ttxtsubs.c:618
 msgid "Center"
 msgstr "в центре"
 
-#: ttxtsubs.c:619
 msgid "Right"
 msgstr "справа"
 
-#: ttxtsubs.c:622
 msgid "All"
 msgstr ""
 
-#: ttxtsubs.c:623
 msgid "Only DVB-S"
 msgstr ""
 
-#: ttxtsubs.c:624
 msgid "Only DVB-T"
 msgstr ""
 
-#: ttxtsubs.c:625
 msgid "Only DVB-C"
 msgstr ""
 
-#: ttxtsubs.c:628
 msgid "Black"
 msgstr "чёрный"
 
-#: ttxtsubs.c:629
 msgid "White"
 msgstr "белый"
 
-#: ttxtsubs.c:630
 msgid "Red"
 msgstr "красный"
 
-#: ttxtsubs.c:631
 msgid "Green"
 msgstr "зелёный"
 
-#: ttxtsubs.c:632
 msgid "Yellow"
 msgstr "жёлтый"
 
-#: ttxtsubs.c:633
 msgid "Magenta"
 msgstr "пурпурный"
 
-#: ttxtsubs.c:634
 msgid "Blue"
 msgstr "синий"
 
-#: ttxtsubs.c:635
 msgid "Cyan"
 msgstr "голубой"
 
-#: ttxtsubs.c:636
 msgid "Custom"
 msgstr "настраиваемый"
 
-#: ttxtsubs.c:637
 msgid "Transparent"
 msgstr "прозрачный"
 
-#: ttxtsubs.c:638
 msgid "Grey"
 msgstr "серый"
 
-#: ttxtsubs.c:662 ttxtsubspagemenu.c:35
 msgid "Display Subtitles"
 msgstr "Показывать субтитры"
 
-#: ttxtsubs.c:663
 msgid "Record Subtitles"
 msgstr "Записывать субтитры"
 
-#: ttxtsubs.c:664
 msgid "Live Delay"
 msgstr ""
 
-#: ttxtsubs.c:665
 msgid "Replay Delay"
 msgstr ""
 
-#: ttxtsubs.c:668
 msgid "Main Menu Alternative"
 msgstr "Команда в главном меню"
 
-#: ttxtsubs.c:672
 msgid "Text Horizontal Position"
 msgstr "Размещение текста по горизонтали"
 
-#: ttxtsubs.c:674
 msgid "Text Vertical Position"
 msgstr "Размещение текста по вертикали"
 
-#: ttxtsubs.c:675
 msgid "4:3/Anamorph"
 msgstr "4:3"
 
-#: ttxtsubs.c:675
 msgid "Letterbox"
 msgstr "широкий экран"
 
-#: ttxtsubs.c:676
 msgid "Text Vertical Adjust"
 msgstr "Вертикальный сдвиг текста"
 
-#: ttxtsubs.c:678
 msgid "Line Spacing Adjust"
 msgstr "Расстояние между строками"
 
-#: ttxtsubs.c:680
 msgid "Workaround for some French chns"
 msgstr "Спец. настройки для франц. каналов"
 
-#: ttxtsubs.c:684
 msgid "DVB Source Selection"
 msgstr ""
 
-#: ttxtsubs.c:686
 msgid "Font Size (pixel)"
 msgstr ""
 
-#: ttxtsubs.c:689
 msgid "Text Color"
 msgstr "Цвет текста"
 
-#: ttxtsubs.c:693
 msgid "Background Color"
 msgstr "Цвет фона"
 
-#: ttxtsubs.c:705
 msgid "Custom Color"
 msgstr "Настраиваемый цвет"
 
-#: ttxtsubs.c:710
 msgid "Red Value"
 msgstr "Уровень красного"
 
-#: ttxtsubs.c:711
 msgid "Green Value"
 msgstr "Уровень зелёного"
 
-#: ttxtsubs.c:712
 msgid "Blue Value"
 msgstr "Уровень синего"
 
-#: ttxtsubs.c:713
 msgid "Transparency Value"
 msgstr "Степень прозрачности"
 
-#: ttxtsubs.c:723 ttxtsubs.c:731
 msgid "Language"
 msgstr "Язык"
 
-#: ttxtsubs.c:731
 msgid "Hearing Impaired"
 msgstr "для слабослышащих"
 
-#: ttxtsubspagemenu.c:16
 msgid "Subtitle Page Settings"
 msgstr ""
 
-#: ttxtsubspagemenu.c:30
 msgid "Auto"
 msgstr ""
 
-#: ttxtsubspagemenu.c:31
 msgid "Manual"
 msgstr ""
 
-#: ttxtsubspagemenu.c:32
 msgid "Disabled"
 msgstr ""
 
-#: ttxtsubspagemenu.c:36
 msgid "Subtitle Mode"
 msgstr ""
 
-#: ttxtsubspagemenu.c:37
 msgid "Manual Subtitle Page"
 msgstr ""
