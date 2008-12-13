@@ -33,4 +33,4 @@ class cVDRTtxtsubsHookListener {
   static cVDRTtxtsubsHookListener *Hook(void);
 };
 
-#endif __VDRTTXTSUBSHOOKS_H
+#endif

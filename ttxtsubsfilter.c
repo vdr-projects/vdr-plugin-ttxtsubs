@@ -141,11 +141,11 @@ void cTtxtSubsFilter::MakeY0(char *outdata, char *indata, uint16_t newpageno)
   memcpy(o->data + 2, i->data + 2, 6);
 
   // new text
-  char txtbuf[32];
+  unsigned char txtbuf[32];
   size_t txtlen;
   size_t n;
 
-  txtlen = snprintf(txtbuf, 32, "%03x", newpageno < 0x100 ? newpageno + 0x800 : newpageno);
+  txtlen = snprintf((char *) txtbuf, 32, "%03x", newpageno < 0x100 ? newpageno + 0x800 : newpageno);
 
   for(n = 0; n < txtlen; n++) {
     if(parity(txtbuf[n]))
@@ -154,5 +154,5 @@ void cTtxtSubsFilter::MakeY0(char *outdata, char *indata, uint16_t newpageno)
       o->data[n + 8] = invtab[txtbuf[n]]; // XXX wrong parity?
   }
   for(; n < 32; n++)
-    o->data[n + 8] = invtab[' ']; // space already has right parity
+    o->data[n + 8] = invtab[(unsigned char) ' ']; // space already has right parity
 }

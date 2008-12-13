@@ -14,6 +14,9 @@
 #include <string.h>
 #include <errno.h>
 
+#include <vdr/device.h>
+#include <vdr/dvbdevice.h>
+
 #include "linux/dvb/dmx.h"
 #include "siinfo.h"
 
@@ -158,6 +161,8 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
   char name[100];
   time_t start_time;
 
+  // printf("CollectSections %d/%d\n", pid, table_id); // XXXX
+
   snprintf(name, sizeof(name), "/dev/dvb/adapter%d/demux0", card_no);
 
   memset(sects, 0, sizeof(char*) * 256);
@@ -166,7 +171,7 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
     perror("DEMUX DEVICE 1: ");
     return -1;
   }
-  
+  //  printf("ttxtsubs: siinfo.c: checking pid %d\n", pid); // XXXX
   if(SetSectFilt(fd, pid, table_id, 0xff)) {
     ret = -1;
     goto bail;
@@ -188,6 +193,7 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
       p = (char *) malloc(SECTSIZE);
 
     n = read_timeout(fd, p, SECTSIZE, 250);
+
     if(n < 8)
       continue;
 
@@ -227,13 +233,59 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
   return ret;
 }
 
+// When using a full featured card with hw_sections=0, at frequency change
+// there seems to sometimes be left one (or more?) section block from the
+// previous channel somewhere in the pipe. Whe need to remove that.
+static void DiscardBufferedSections(int card_no, uint16_t pid, int table_id)
+{
+  int fd;
+  char name[100];
+  int ret = -1;
+  int n = 0;
+  char buf[SECTSIZE];
+
+  snprintf(name, sizeof(name), "/dev/dvb/adapter%d/demux0", card_no);
+
+  if((fd = open(name, O_RDWR)) < 0){
+    perror("DEMUX DEVICE 1: ");
+    return;
+  }
+
+  if(SetSectFilt(fd, pid, table_id, 0xff)) {
+    goto bail;
+  }
+
+  // first read one section
+  read_timeout(fd, buf, SECTSIZE, 1000);
+
+  // this loop doesn't seem to be needed
+  do {
+    struct pollfd pi;
+    pi.fd = fd;
+    pi.events = POLLIN | POLLERR | POLLHUP | POLLNVAL;
+
+    ret = poll(&pi, 1, 0);
+    if(ret > 0 && (pi.revents & POLLIN)) {
+      read(fd, buf, SECTSIZE);
+      n++;
+    }
+  } while (ret > 0);
+
+  if(n)
+    printf("\nttxtsubs: DiscardBufferedSections: Discarded %d extra buffered sections\n\n", n + 1); // XXX
+ bail:
+  close(fd);
+}
+
 static void FreeSects(char **sects)
 {
   int i;
 
   for(i = 0; i < 256; i++) {
-    if(sects[i])
+    if(sects[i]) {
       free(sects[i]);
+      sects[i] = NULL;
+    }
   }
 }
 
@@ -358,6 +410,8 @@ static int FindTtxtInfoInPMT(int card_no, int pid, int vpid, struct ttxtinfo *in
   char *pmtsects[256];
   int numsects;
 
+  // printf("FindTtxtInfoInPMT pid: %d, vpid: %d\n", pid, vpid); // XXXX
+
   ret = CollectSections(card_no, pid, 0x02, pmtsects, &numsects);
   if(ret)
     goto bail;
@@ -375,13 +429,33 @@ static int FindTtxtInfoInPMT(int card_no, int pid, int vpid, struct ttxtinfo *in
   return ret;
 }
 
+/*
+ * Get dvb device number from device index
+ * this is needed for those having cards which aren't dvb cards, like
+ * mpeg decoders. It will probably break if there are unused devices.
+ */
+int DeviceToCardNo(int device_no)
+{
+  int card_no = -1;
+  int i;
+
+  for(i = 0; i <= device_no; i++) {
+    cDevice *d = cDevice::GetDevice(i);
+    cDvbDevice *dd = dynamic_cast<cDvbDevice*>(d);
+    if(dd)
+      card_no++;
+  }
+
+  return card_no;
+}
+
 
 /*
  * find the ttxt_info in the PMT via the PAT, try first with the SID
  * and if that fails with the VPID
  * return <> 0 on error;
  */
-int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
+int GetTtxtInfo(int device_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
 {
   int ret;
   char *patsects[256];
@@ -390,62 +464,78 @@ int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
   int j;
   uint16_t pmt_pid = 0;
   int foundinfo = 0;
+  int card_no;
+  int retry;
 
   memset((char *) info, 0, sizeof(*info));
 
-  ret = CollectSections(card_no, 0, 0, patsects, &numsects);
-  if(ret)
-    goto bail;
+  for(retry = 0; retry <= 1 && !foundinfo; retry++) { // XXX retry two times due to flaky pat scanning with hw_sections=0
 
-  if(sid != 0) {
-    int found;
+    // printf("GetTtxtInfo A sid: %d, vpid: %d\n", sid, vpid); // XXXX
 
-    for(i = 0, found = 0; i < numsects && !found; i++) {
-      int numdescrs;
-      struct PAT_sect *s = (struct PAT_sect *) patsects[i];
-      
-      numdescrs = ((ntohs(s->syntax_len) & 0x3FF) - 7) / 4;
-      
-      for(j = 0; j < numdescrs && !found; j++) {
-	uint16_t pno = ntohs(s->d[j].program_number);
-
-	if(pno == 0)
-	  continue; // network pid
-	
-	if(pno == sid) {
-	  pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
-	  found = 1;
-	}
-      }
+    card_no = DeviceToCardNo(device_no);
+    if(card_no == -1) {
+      fprintf(stderr, "ttxtsubs: GetTtxtInfo - couldn't find a card for device %d\n", card_no);
     }
-  }
 
-  if(pmt_pid != 0) {
-    ret = FindTtxtInfoInPMT(card_no, pmt_pid, 0, info, &foundinfo);
-  } else {
-    // SID not found, try searching VID in all SIDS
-    if(vpid != 0) {
-      int done;
-      for(i = 0, done = 0; i < numsects && !done; i++) {
+    DiscardBufferedSections(card_no, 0, 0);
+    
+    ret = CollectSections(card_no, 0, 0, patsects, &numsects);
+    if(ret)
+      goto bail;
+    
+    if(sid != 0) {
+      int found;
+      
+      for(i = 0, found = 0; i < numsects && !found; i++) {
 	int numdescrs;
 	struct PAT_sect *s = (struct PAT_sect *) patsects[i];
-      
+	
 	numdescrs = ((ntohs(s->syntax_len) & 0x3FF) - 7) / 4;
 	
-	for(j = 0; j < numdescrs && !done; j++) {
+	for(j = 0; j < numdescrs && !found; j++) {
 	  uint16_t pno = ntohs(s->d[j].program_number);
 	  
 	  if(pno == 0)
 	    continue; // network pid
 	  
-	  pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
-
-	  ret = FindTtxtInfoInPMT(card_no, pmt_pid, vpid, info, &foundinfo);
-	  if(ret) {
-	    done = 1;
+	  if(pno == sid) {
+	    pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
+	    found = 1;
 	  }
-	  if(foundinfo)
-	    done = 1;
+	}
+      }
+    }
+    
+    if(pmt_pid != 0) {
+      // printf("GetTtxtInfo B pmt_pid: %d, vpid: %d\n", pmt_pid, vpid); // XXXX
+      ret = FindTtxtInfoInPMT(card_no, pmt_pid, 0, info, &foundinfo);
+    } else {
+      // SID not found, try searching VID in all SIDS
+      if(vpid != 0) {
+	int done;
+	for(i = 0, done = 0; i < numsects && !done; i++) {
+	  int numdescrs;
+	  struct PAT_sect *s = (struct PAT_sect *) patsects[i];
+	  
+	  numdescrs = ((ntohs(s->syntax_len) & 0x3FF) - 7) / 4;
+	  
+	  for(j = 0; j < numdescrs && !done; j++) {
+	    uint16_t pno = ntohs(s->d[j].program_number);
+	    
+	    if(pno == 0)
+	      continue; // network pid
+	    
+	    pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
+	    
+	    // printf("GetTtxtInfo C pmt_pid: %d, vpid: %d\n", pmt_pid, vpid); // XXXX
+	    ret = FindTtxtInfoInPMT(card_no, pmt_pid, vpid, info, &foundinfo);
+	    if(ret) {
+	      done = 1;
+	    }
+	    if(foundinfo)
+	      done = 1;
+	  }
 	}
       }
     }

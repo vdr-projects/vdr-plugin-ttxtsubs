@@ -1,6 +1,12 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2003-06-22: Version 0.0.3b
+- Work around for problem with stray segments at channel (frequency)
+  change with driver in hw_sections=0 mode
+- Removed some g++ 3.3 warnings
+- Skipping non dvb devices when calculating /dev/dvb/adapter no
+
 2003-06-20: Version 0.0.3
 - Small adjustments for VDR 1.2.1
 

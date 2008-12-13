@@ -196,7 +196,7 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
     txtlen = snprintf((char *) buf, 32, "%03x", mIndexPageNo);
     copy_inv_par(d->data + 8, buf, txtlen);
     for(int i = txtlen; i < 32; i++)
-      d->data[i+8] = invtab[' ']; // space already has correct parity
+      d->data[i+8] = invtab[(unsigned char) ' ']; // space already has correct parity
 
     //print_line((char *) mIndexPage[mIndexPageLines]); // XXX
 
@@ -208,7 +208,7 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
     txtlen = strlen(header);
     copy_inv_par(d->data, (uint8_t *) header, txtlen);
     for(int i = txtlen; i < 40; i++)
-      d->data[i] = invtab[' ']; // space already has correct parity
+      d->data[i] = invtab[(unsigned char) ' ']; // space already has correct parity
    
     //print_line((char *) mIndexPage[mIndexPageLines]); // XXX
 
@@ -221,7 +221,7 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
   if(mIndexPageCol == 0) {
     init_line(mIndexPage[mIndexPageLines], mIndexPageLines, mIndexPageNo >> 8);
     for(int i = 0; i < 40; i++)
-      d->data[i+8] = invtab[' ']; // space already has correct parity
+      d->data[i+8] = invtab[(unsigned char) ' ']; // space already has correct parity
   }
 
   if(page < 0x100)

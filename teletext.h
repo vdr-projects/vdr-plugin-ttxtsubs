@@ -98,4 +98,4 @@ void dump_hex(char *msg, const uint8_t *p, int len);
 // invert tab for last 42 bytes in packets
 extern unsigned char invtab[256];
 
-#endif __TS_TELETEXT_H
+#endif
