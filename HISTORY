@@ -1,11 +1,14 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2003-07-19: Version 0.0.4
+- Release
+
 2003-07-16: Version 0.0.3d
-- IMORTANT! Needs and upgrade to the patch! See README!
+- IMORTANT! The VDR patch has changed! See README!
 - Improved the OSD hooks to be more compatible with other plugins
 - Added a primitive Service Information caching mechanism to speed
-  up channel switching (will not refresh if channels are changed,
+  up channel switching (will not refresh if channels are modified,
   will be reset on VDR restart)
 
 2003-07-10: Version 0.0.3c
