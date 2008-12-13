@@ -1,0 +1,250 @@
+diff -upr ./DIST/vdr-1.1.25/Makefile ./Makefile
+--- ./DIST/vdr-1.1.25/Makefile	2003-01-06 13:28:09.000000000 +0100
++++ ./Makefile	2003-03-07 03:19:33.000000000 +0100
+@@ -36,7 +36,8 @@ OBJS = audio.o channels.o ci.o config.o 
+        dvbplayer.o dvbspu.o eit.o eitscan.o font.o i18n.o interface.o keys.o\
+        lirc.o menu.o menuitems.o osdbase.o osd.o player.o plugin.o rcu.o\
+        receiver.o recorder.o recording.o remote.o remux.o ringbuffer.o sources.o\
+-       spu.o status.o svdrp.o thread.o timers.o tools.o transfer.o vdr.o videodir.o
++       spu.o status.o svdrp.o thread.o timers.o tools.o transfer.o vdr.o videodir.o\
++       vdrttxtsubshooks.o
+ 
+ OSDFONT = -adobe-helvetica-medium-r-normal--23-*-100-100-p-*-iso8859-1
+ FIXFONT = -adobe-courier-bold-r-normal--25-*-100-100-m-*-iso8859-1
+diff -upr ./DIST/vdr-1.1.25/dvbplayer.c ./dvbplayer.c
+--- ./DIST/vdr-1.1.25/dvbplayer.c	2003-02-15 11:38:59.000000000 +0100
++++ ./dvbplayer.c	2003-03-07 03:52:55.000000000 +0100
+@@ -13,6 +13,7 @@
+ #include "ringbuffer.h"
+ #include "thread.h"
+ #include "tools.h"
++#include "vdrttxtsubshooks.h"
+ 
+ // --- cBackTrace ----------------------------------------------------------
+ 
+@@ -318,6 +319,12 @@ void cDvbPlayer::StripAudioPackets(uchar
+             int l = b[i + 4] * 256 + b[i + 5] + 6;
+             switch (c) {
+               case 0xBD: // dolby
++#ifdef VDRTTXTSUBSHOOKS
++		   if (b[i + 8] == 0x24 && b[i + 45] >= 0x10 && b[i + 45] < 0x20) {
++		     break; // run these through the ring buffer to get somewhat correct
++		     // timing for the subtitles
++		   } else
++#endif
+                    if (Except)
+                       PlayAudio(&b[i], l);
+                    // continue with deleting the data - otherwise it disturbs DVB replay
+@@ -347,6 +354,40 @@ void cDvbPlayer::StripAudioPackets(uchar
+      }
+ }
+ 
++#ifdef VDRTTXTSUBSHOOKS
++static void StripTtxtPackets(uchar *b, int Length)
++{
++  for (int i = 0; i < Length - 6; i++) {
++    if (b[i] == 0x00 && b[i + 1] == 0x00 && b[i + 2] == 0x01) {
++      uchar c = b[i + 3];
++      int l = b[i + 4] * 256 + b[i + 5] + 6;
++      switch (c) {
++      case 0xBD: // dolby
++	{
++	  if (b[i + 8] == 0x24 && b[i + 45] >= 0x10 && b[i + 45] < 0x20) {
++	    // EBU Teletext data, ETSI EN 300 472
++	    cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData(&b[i], l);
++	  }
++	  // continue with deleting the data - otherwise it disturbs DVB replay
++	  int n = l;
++	  for (int j = i; j < Length && n--; j++)
++	    b[j] = 0x00;
++	  break;
++	}
++      default:
++	break;
++      }
++      if (l)
++	i += l - 1; // the loop increments, too!
++    }
++    /*XXX
++      else
++      esyslog("ERROR: broken packet header");
++      XXX*/
++  }
++}
++#endif
++
+ bool cDvbPlayer::NextFile(uchar FileNumber, int FileOffset)
+ {
+   if (FileNumber > 0)
+@@ -514,6 +555,11 @@ void cDvbPlayer::Action(void)
+                  p = playFrame->Data();
+                  pc = playFrame->Count();
+                  }
++#ifdef VDRTTXTSUBSHOOKS
++	   // pick out the teletext packets here
++	      if(p)
++		StripTtxtPackets((uchar *) p, pc);
++#endif
+               if (p) {
+                  int w = PlayVideo(p, pc);
+                  if (w > 0) {
+diff -upr ./DIST/vdr-1.1.25/menu.c ./menu.c
+--- ./DIST/vdr-1.1.25/menu.c	2003-02-09 13:55:38.000000000 +0100
++++ ./menu.c	2003-03-07 03:38:14.000000000 +0100
+@@ -2931,8 +2931,18 @@ cRecordControl::cRecordControl(cDevice *
+   fileName = strdup(Recording.FileName());
+   cRecordingUserCommand::InvokeCommand(RUC_BEFORERECORDING, fileName);
+   const cChannel *ch = timer->Channel();
++#ifdef VDRTTXTSUBSHOOKS
++  cTtxtSubsRecorderBase *subsRecorder = cVDRTtxtsubsHookListener::Hook()
++    ->NewTtxtSubsRecorder(device, ch);
++  recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2(), subsRecorder);
++#else
+   recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2());
++#endif
+   if (device->AttachReceiver(recorder)) {
++#ifdef VDRTTXTSUBSHOOKS
++     if(subsRecorder)
++       subsRecorder->DeviceAttach();
++#endif
+      Recording.WriteSummary();
+      cStatus::MsgRecording(device, Recording.Name());
+      }
+diff -upr ./DIST/vdr-1.1.25/menu.h ./menu.h
+--- ./DIST/vdr-1.1.25/menu.h	2003-01-12 15:54:05.000000000 +0100
++++ ./menu.h	2003-03-07 03:33:28.000000000 +0100
+@@ -14,6 +14,7 @@
+ #include "device.h"
+ #include "osd.h"
+ #include "dvbplayer.h"
++#include "vdrttxtsubshooks.h"
+ #include "recorder.h"
+ #include "recording.h"
+ 
+diff -upr ./DIST/vdr-1.1.25/osd.c ./osd.c
+--- ./DIST/vdr-1.1.25/osd.c	2002-12-08 14:17:13.000000000 +0100
++++ ./osd.c	2003-03-07 03:55:32.000000000 +0100
+@@ -12,6 +12,7 @@
+ #include "device.h"
+ #include "i18n.h"
+ #include "status.h"
++#include "vdrttxtsubshooks.h"
+ 
+ // --- cOsd ------------------------------------------------------------------
+ 
+@@ -96,6 +97,9 @@ void cOsd::Open(int w, int h)
+   d *= lineHeight;
+   int x = (720 - w + charWidth) / 2; //TODO PAL vs. NTSC???
+   int y = (576 - Setup.OSDheight * lineHeight) / 2 + d;
++#ifdef VDRTTXTSUBSHOOKS
++  cVDRTtxtsubsHookListener::Hook()->HideOSD();
++#endif
+   //XXX
+   osd = OpenRaw(x, y);
+   //XXX TODO this should be transferred to the places where the individual windows are requested (there's too much detailed knowledge here!)
+@@ -136,6 +140,9 @@ void cOsd::Close(void)
+   delete osd;
+   osd = NULL;
+ #endif
++#ifdef VDRTTXTSUBSHOOKS
++  cVDRTtxtsubsHookListener::Hook()->ShowOSD();
++#endif
+ }
+ 
+ void cOsd::Clear(void)
+diff -upr ./DIST/vdr-1.1.25/recorder.c ./recorder.c
+--- ./DIST/vdr-1.1.25/recorder.c	2003-01-25 17:23:36.000000000 +0100
++++ ./recorder.c	2003-03-07 03:54:10.000000000 +0100
+@@ -10,6 +10,8 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <unistd.h>
++#include <stdint.h>
++#include "vdrttxtsubshooks.h"
+ #include "recorder.h"
+ 
+ // The size of the array used to buffer video data:
+@@ -19,7 +21,11 @@
+ #define MINFREEDISKSPACE    (512) // MB
+ #define DISKCHECKINTERVAL   100 // seconds
+ 
++#ifdef VDRTTXTSUBSHOOKS
++cRecorder::cRecorder(const char *FileName, int Ca, int Priority, int VPid, int APid1, int APid2, int DPid1, int DPid2, cTtxtSubsRecorderBase *tsr)
++#else
+ cRecorder::cRecorder(const char *FileName, int Ca, int Priority, int VPid, int APid1, int APid2, int DPid1, int DPid2)
++#endif
+ :cReceiver(Ca, Priority, 5, VPid, APid1, APid2, DPid1, DPid2)
+ {
+   ringBuffer = NULL;
+@@ -30,6 +36,9 @@ cRecorder::cRecorder(const char *FileNam
+   fileSize = 0;
+   active = false;
+   lastDiskSpaceCheck = time(NULL);
++#ifdef VDRTTXTSUBSHOOKS
++  ttxtSubsRecorder = tsr;
++#endif
+   isyslog("record %s", FileName);
+ 
+   // Create directories if necessary:
+@@ -57,6 +66,10 @@ cRecorder::cRecorder(const char *FileNam
+ cRecorder::~cRecorder()
+ {
+   Detach();
++#ifdef VDRTTXTSUBSHOOKS
++  if(ttxtSubsRecorder)
++    delete ttxtSubsRecorder;
++#endif
+   delete index;
+   delete fileName;
+   delete remux;
+@@ -130,6 +143,19 @@ void cRecorder::Action(void)
+                     break;
+                     }
+                  fileSize += Result;
++#ifdef VDRTTXTSUBSHOOKS
++		 // not sure if the pictureType test is needed, but it seems we can get
++		 // incomplete pes packets from remux if we are not getting pictures?
++		 if (ttxtSubsRecorder && pictureType != NO_PICTURE) {
++		    uint8_t *subsp;
++		    size_t len;
++		    if(ttxtSubsRecorder->GetPacket(&subsp, &len)) {
++		       safe_write(recordFile, subsp, len);
++		       fileSize += len;
++		       // fprintf(stderr, "cRecorder::Action: Wrote ttxtsubs data len %d\n", len); // XXX
++		       }
++		    }
++#endif
+                  }
+               else
+                  break;
+diff -upr ./DIST/vdr-1.1.25/recorder.h ./recorder.h
+--- ./DIST/vdr-1.1.25/recorder.h	2002-06-08 11:35:03.000000000 +0200
++++ ./recorder.h	2003-03-07 03:50:33.000000000 +0100
+@@ -15,6 +15,7 @@
+ #include "remux.h"
+ #include "ringbuffer.h"
+ #include "thread.h"
++#include "vdrttxtsubshooks.h"
+ 
+ class cRecorder : public cReceiver, cThread {
+ private:
+@@ -29,12 +30,19 @@ private:
+   time_t lastDiskSpaceCheck;
+   bool RunningLowOnDiskSpace(void);
+   bool NextFile(void);
++#ifdef VDRTTXTSUBSHOOKS
++  cTtxtSubsRecorderBase *ttxtSubsRecorder;
++#endif
+ protected:
+   virtual void Activate(bool On);
+   virtual void Receive(uchar *Data, int Length);
+   virtual void Action(void);
+ public:
++#ifdef VDRTTXTSUBSHOOKS
++  cRecorder(const char *FileName, int Ca, int Priority, int VPid, int APid1, int APid2, int DPid1, int DPid2, cTtxtSubsRecorderBase *tsr);
++#else
+   cRecorder(const char *FileName, int Ca, int Priority, int VPid, int APid1, int APid2, int DPid1, int DPid2);
++#endif
+                // Creates a new recorder that requires conditional access Ca, has
+                // the given Priority and will record the given PIDs into the file FileName.
+   virtual ~cRecorder();

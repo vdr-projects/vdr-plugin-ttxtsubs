@@ -1,0 +1,90 @@
+This is a "plugin" for the Video Disk Recorder (VDR).
+
+Written by:                  Ragnar Sundblad <ragge@nada.kth.se>
+
+Project's homepage:          -
+
+Latest version available at: ftp://ftp.nada.kth.se/pub/home/ragge/vdr/
+
+See the file COPYING for license information.
+
+
+Description:
+
+This plugin implements displaying, recording and replaying teletext
+based subtitles using the on screen display.
+
+
+Long Description:
+
+The teletext decoder/displayer is currently very basic and limited. It
+can't show colours and it doesn't take into account the editors
+attempts to place the text on different places on the screen.
+
+The DVB drivers from the Metzlers as of late February 2003 and
+Convergence/linuxtv.org as of March 5 2003 have firmware fixes against
+OSD problems. (Thanks a lot guys!) An upgrade to either of those is
+strongly recommended. If the plugin is used with earlier firmware,
+data may get lost when the OSD is updated possibly resulting in bad
+video and audio, especially when recording or playing recordings.
+
+Both the live displayer and the recorder finds subtitling PID and page
+for the selected language, and optionally for the hearing impaired, by
+scanning the DVB Service Information. You don't have to set up channel
+Tpids. Though, if you have set a Sid it will be used to speed up
+Service Information scanning. (Can't say it makes much of a
+difference, though).
+
+The recorder writes a filtered subset of the teletext data with only
+the subtitle pages and an index page at page 100 (or subsequent page
+if that page number is used for subtitling). The filtered stream is
+written as a private_stream_1 with subtype 0x1f (the last teletext
+subtype). An ordinary teletext PES stream recorded for example by
+setting Dpid1 to a teletext PID will typically have a subtype of
+0x10.
+
+The recording player scans the index page to find the selected
+language. (If it can't find an index page it will use the page number
+from the current channel. This may be removed in the future.) The
+index page itself can't be viewed with this plugin.
+
+If you can't select your language, look up its 3 letter acronym in
+<http://www.loc.gov/standards/iso639-2/englangn_ascii.html> and/or
+check the output from ttxtsubs, and enter the language code in your
+VDR setup.conf at ttxtsubs.language. This will hopefully be easier in
+a future release.
+
+Consider this code alpha quality. The code could use some major
+cleanup. The program design was from the beginning just not, as it
+started as a test hack, and it has from then been incompletely
+reworked a few times.
+
+
+Installation:
+
+This plugin is written for VDR 1.1.25. It currently needs a few hooks
+in, and changes to, VDR to work. A patch file is included. The patches
+should be harmless if you don't have the plugin loaded, so even if you
+patch VDR and later decide not to use this plugin you don't
+necessarily have to reinstall VDR. It is probably possible to build
+the plugin for other version of VDR, but don't count on it.
+
+Steps:
+
+As usual, unpack the plugin and make a link:
+	cd ..../vdr-1.1.25/PLUGINS/src
+	tar zxvf ..../vdr-ttxtsubs-0.0.1.tgz
+	ln -s ttxtsubs-0.0.1 ttxtsubs
+
+Go back to your VDR directory and install the patches and the new files:
+	cd ../../
+	cp PLUGINS/src/ttxtsubs-0.0.1/vdrttxtsubshooks.[ch] .
+	patch -b < PLUGINS/src/ttxtsubs-0.0.1/VDR.patch 
+
+Rebuild VDR:
+	make clean
+	make include-dir
+	make
+	make plugins
+
+Now you should be able to start VDR with "-P ttxtsubs".
