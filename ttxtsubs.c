@@ -47,7 +47,7 @@
 #define trVDR(s) tr(s)
 #endif
 
-static const char *VERSION        = "0.0.5-RRE";
+static const char *VERSION        = "0.0.6";
 static const char *DESCRIPTION    = trNOOP("Teletext subtitles");
 
 cTtxtsubsConf globals;
