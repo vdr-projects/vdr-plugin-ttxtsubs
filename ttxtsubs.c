@@ -248,20 +248,8 @@ bool cPluginTtxtsubs::Start(void)
       globals.mHearingImpaireds[0][1] = mOldHearingImpaired;
     } else {
       // get lang from OSD lang
-#if defined(APIVERSNUM) && APIVERSNUM < 10507
-      int n = Setup.OSDLanguage + 1;
-      if(n > gNumLanguages) {
-	strncpy(globals.mLanguages[0][0], "eng", 4);
-      } else {
-	strncpy(globals.mLanguages[0][0], gLanguages[n][0], 4);
-	globals.mLanguages[0][0][3] = '\0';
-	strncpy(globals.mLanguages[0][1], gLanguages[n][1], 4);
-	globals.mLanguages[0][1][3] = '\0';
-      }
-#else
       strncpy(globals.mLanguages[0][0], Setup.OSDLanguage, 4);
       globals.mLanguages[0][0][3] = '\0';
-#endif
     }
   }
 
@@ -343,9 +331,7 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "FrenchSpecial")) globals.mFrenchSpecial = atoi(Value);
   else if(!strcasecmp(Name, "LineSpacing")) globals.mLineSpacing = atoi(Value);
   else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
-#if defined(APIVERSNUM) && APIVERSNUM >= 10503
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
-#endif
   else if(!strcasecmp(Name, "FgColor")) globals.mFgColor = atoi(Value);
   else if(!strcasecmp(Name, "BgColor")) globals.mBgColor = atoi(Value);
   else if(!strcasecmp(Name, "CustomColor")) globals.mCustomColor = atoi(Value);
@@ -412,11 +398,7 @@ void cPluginTtxtsubs::Action(void)
                         globals.mI18nLanguage = i - 1;
                       }
                    }
-#if defined(APIVERSNUM) && APIVERSNUM < 10507
-                   if(globals.mI18nLanguage < 0 || globals.mI18nLanguage >= I18nNumLanguages)
-#else
                    if(globals.mI18nLanguage < 0 || globals.mI18nLanguage >= I18nLanguages()->Size())
-#endif
                      globals.mI18nLanguage = 0; // default to iso8859-1 if no predefined charset
                    StartTtxtLive(dev, c->GetChannelID(), pid, page);
                    FreeTtxtInfoData(&info);
@@ -701,9 +683,7 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mConf.mDvbSources = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("DVB Source Selection"),
                           &mConf.mDvbSources, 4, dvbSources));
-#if defined(APIVERSNUM) && APIVERSNUM >= 10503
   Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE));
-#endif
   if(mConf.mFgColor < 0 || mConf.mFgColor >= numTextColors)
     mConf.mFgColor = 1;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Text Color"), &mConf.mFgColor,
@@ -790,9 +770,7 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
   SetupStore("LineSpacing", mConf.mLineSpacing);
   SetupStore("DvbSources", mConf.mDvbSources);
-#if defined(APIVERSNUM) && APIVERSNUM >= 10503
   SetupStore("FontSize", mConf.mFontSize);
-#endif
   SetupStore("FgColor", mConf.mFgColor);
   SetupStore("BgColor", mConf.mBgColor);
   mConf.mCustomColor = (mBlue              ) | (mBlue         <<  4) |

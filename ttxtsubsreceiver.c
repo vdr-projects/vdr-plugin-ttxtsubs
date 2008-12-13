@@ -19,11 +19,7 @@ struct ringBufItem {
 
 cTtxtSubsReceiver::cTtxtSubsReceiver(tChannelID ChnId, int Ca, struct ttxtpidinfo *PI)
   :
-#if defined(APIVERSNUM) && APIVERSNUM < 10500
-  cReceiver(Ca, -1, PI->pid),
-#else
   cReceiver(ChnId, -1, PI->pid),
-#endif
   mGetMutex(),
   mGetCond(),
   mRingBuf(sizeof(ringBufItem) * 500, true),

@@ -119,14 +119,10 @@ uint16_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar)
   if(!laG0_nat_replace_map[c])
     return c;
   else
-#if defined(APIVERSNUM) && APIVERSNUM < 10503
-    return laG0_nat_opts[no][laG0_nat_replace_map[c]];
-#else
     if (cCharSetConv::SystemCharacterTable())
        return laG0_nat_opts[no][laG0_nat_replace_map[c]];
     else
        return laG0_nat_opts16[no][laG0_nat_replace_map[c]];
-#endif
 }
 
 /*

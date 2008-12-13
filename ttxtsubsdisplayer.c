@@ -75,11 +75,7 @@ void cTtxtSubsDisplayer::HideDisplay(void)
 
 cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int textpage)
   :
-#if defined(APIVERSNUM) && APIVERSNUM < 10500
-  cReceiver(0, -1, Pid),
-#else
   cReceiver(ChnId, -1, Pid),
-#endif
   cTtxtSubsDisplayer(textpage)
 {
 }

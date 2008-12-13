@@ -30,7 +30,7 @@ VDR Plugin 'ttxtsubs' Revision History
     - Added manual page selection mode
 - switched completely to VDR 1.6's I18N system and removed the old crap - no
   more support for older VDR versions!
-
+- Removed VDR < 1.6.0 support code
 
 2004-05-31: Version 0.0.5
 

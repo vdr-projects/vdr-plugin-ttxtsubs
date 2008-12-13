@@ -72,21 +72,15 @@ cTtxtSubsDisplay::cTtxtSubsDisplay(void)
   mPageState(invalid),
   mMag(0),
   mNo(0),
-#if defined(APIVERSNUM) && APIVERSNUM < 10509
-  mDoDisplay(0),
-#else
   mDoDisplay(1),
-#endif
   mOsd(NULL),
   mOsdLock(),
   mLastDataTime(NULL)
 {
   memset(&page.data, 0, sizeof(page.data));
   mLastDataTime = (struct timeval *) calloc(1, sizeof(*mLastDataTime));
-#if defined(APIVERSNUM) && APIVERSNUM >= 10503
   mOsdFont = cFont::CreateFont(Setup.FontOsd, globals.mFontSize);
   if (!mOsdFont || !mOsdFont->Height())
-#endif
      mOsdFont = cFont::GetFont(fontOsd);
 }
 
@@ -100,10 +94,8 @@ cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
     mOsd = NULL;
     delete tmp;
   }
-#if defined(APIVERSNUM) && APIVERSNUM >= 10503
   if(mOsdFont && (mOsdFont != cFont::GetFont(fontOsd)))
     delete mOsdFont;
-#endif
 }
 
 
@@ -422,27 +414,12 @@ void cTtxtSubsDisplay::ShowOSD(void)
     delete tmp;
   }
 
-#if defined(APIVERSNUM) && APIVERSNUM < 10509
-  if (cOsd::IsOpen()) {
-     //dprint("NOT displaying subtitles because of other OSD activities!\n");
-     return;
-     }
-  else {
-     mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP);
-#else
      mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP, 20); // level 20
-#endif
      if(!mOsd) {
        //dprint("Error: cOsdProvider::NewOsd() returned NULL!\n");
        return;
        }
-#if defined(APIVERSNUM) && APIVERSNUM < 10509
-     }
-#endif
 
-#if defined(APIVERSNUM) && APIVERSNUM < 10503
-  cFont::SetCode(I18nCharSets()[globals.i18nLanguage()]);
-#endif
   if(rowcount > MAXTTXTROWS)
     rowcount = MAXTTXTROWS;
   y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
@@ -465,9 +442,6 @@ void cTtxtSubsDisplay::ShowOSD(void)
     y += (ROWINCR + globals.lineSpacing());
   }
   if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
-#if defined(APIVERSNUM) && APIVERSNUM < 10503
-     cFont::SetCode(I18nCharSets()[Setup.OSDLanguage]);
-#endif
      dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
      }
   else {
@@ -492,9 +466,6 @@ void cTtxtSubsDisplay::ShowOSD(void)
       //dprint("%d/%d (%d,%d) (%d,%d): %s\n", i, rowcount-1, areas[i].x1, areas[i].y1, left + TEXTX, y + TEXTY, buf[i]);
       y += (ROWINCR + globals.lineSpacing());
       }
-#if defined(APIVERSNUM) && APIVERSNUM < 10503
-    cFont::SetCode(I18nCharSets()[Setup.OSDLanguage]);
-#endif
     mOsd->Flush();
     }
 }

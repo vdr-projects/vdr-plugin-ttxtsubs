@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2008-12-13 21:40+0100\n"
+"POT-Creation-Date: 2008-12-13 21:47+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Nicolas Huillard <nhuillard@e-dition.fr>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -22,199 +22,199 @@ msgstr ""
 msgid "Teletext subtitles"
 msgstr "Sous-titrage télétexte"
 
-#: ttxtsubs.c:291
+#: ttxtsubs.c:279
 msgid "Hide teletext subtitles"
 msgstr "Masquer le sous-titrage"
 
-#: ttxtsubs.c:293
+#: ttxtsubs.c:281
 msgid "Display teletext subtitles"
 msgstr "Afficher le sous-titrage"
 
-#: ttxtsubs.c:296
+#: ttxtsubs.c:284
 msgid "Position Teletext Subtitles for 4:3/Anamorph"
 msgstr "Position du sous-titrage pour 4:3/Anamorph"
 
-#: ttxtsubs.c:298
+#: ttxtsubs.c:286
 msgid "Position Teletext Subtitles for Letterbox"
 msgstr "Position du sous-titrage pour Letterbox"
 
-#: ttxtsubs.c:300
+#: ttxtsubs.c:288
 msgid "Page Selection"
 msgstr "Page de sélection"
 
-#: ttxtsubs.c:630
+#: ttxtsubs.c:612
 msgid "Display on/off"
 msgstr "Affichage"
 
-#: ttxtsubs.c:631
+#: ttxtsubs.c:613
 msgid "4:3/Letterbox"
 msgstr "4:3/Letterbox"
 
-#: ttxtsubs.c:632
+#: ttxtsubs.c:614
 msgid "Page Mode"
 msgstr "Mode page"
 
-#: ttxtsubs.c:635
+#: ttxtsubs.c:617
 msgid "Left"
 msgstr "Gauche"
 
-#: ttxtsubs.c:636
+#: ttxtsubs.c:618
 msgid "Center"
 msgstr "Centre"
 
-#: ttxtsubs.c:637
+#: ttxtsubs.c:619
 msgid "Right"
 msgstr "Droite"
 
-#: ttxtsubs.c:640
+#: ttxtsubs.c:622
 msgid "All"
 msgstr "Tous"
 
-#: ttxtsubs.c:641
+#: ttxtsubs.c:623
 msgid "Only DVB-S"
 msgstr "Seulement DVB-S"
 
-#: ttxtsubs.c:642
+#: ttxtsubs.c:624
 msgid "Only DVB-T"
 msgstr "Seulement DVB-T"
 
-#: ttxtsubs.c:643
+#: ttxtsubs.c:625
 msgid "Only DVB-C"
 msgstr "Seulement DVB-C"
 
-#: ttxtsubs.c:646
+#: ttxtsubs.c:628
 msgid "Black"
 msgstr "Noir"
 
-#: ttxtsubs.c:647
+#: ttxtsubs.c:629
 msgid "White"
 msgstr "Blanc"
 
-#: ttxtsubs.c:648
+#: ttxtsubs.c:630
 msgid "Red"
 msgstr "Rouge"
 
-#: ttxtsubs.c:649
+#: ttxtsubs.c:631
 msgid "Green"
 msgstr "Vert"
 
-#: ttxtsubs.c:650
+#: ttxtsubs.c:632
 msgid "Yellow"
 msgstr "Jaune"
 
-#: ttxtsubs.c:651
+#: ttxtsubs.c:633
 msgid "Magenta"
 msgstr "Magenta"
 
-#: ttxtsubs.c:652
+#: ttxtsubs.c:634
 msgid "Blue"
 msgstr "Bleu"
 
-#: ttxtsubs.c:653
+#: ttxtsubs.c:635
 msgid "Cyan"
 msgstr "Cyan"
 
-#: ttxtsubs.c:654
+#: ttxtsubs.c:636
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: ttxtsubs.c:655
+#: ttxtsubs.c:637
 msgid "Transparent"
 msgstr "Transparent"
 
-#: ttxtsubs.c:656
+#: ttxtsubs.c:638
 msgid "Grey"
 msgstr "Gris"
 
-#: ttxtsubs.c:680 ttxtsubspagemenu.c:35
+#: ttxtsubs.c:662 ttxtsubspagemenu.c:35
 msgid "Display Subtitles"
 msgstr "Afficher le sous-titrage"
 
-#: ttxtsubs.c:681
+#: ttxtsubs.c:663
 msgid "Record Subtitles"
 msgstr "Enregistrer le sous-titrage"
 
-#: ttxtsubs.c:682
+#: ttxtsubs.c:664
 msgid "Live Delay"
 msgstr ""
 
-#: ttxtsubs.c:683
+#: ttxtsubs.c:665
 msgid "Replay Delay"
 msgstr ""
 
-#: ttxtsubs.c:686
+#: ttxtsubs.c:668
 msgid "Main Menu Alternative"
 msgstr "Choix du menu principal"
 
-#: ttxtsubs.c:690
+#: ttxtsubs.c:672
 msgid "Text Horizontal Position"
 msgstr "Position horizontale du texte"
 
-#: ttxtsubs.c:692
+#: ttxtsubs.c:674
 msgid "Text Vertical Position"
 msgstr "Position verticale du texte"
 
-#: ttxtsubs.c:693
+#: ttxtsubs.c:675
 msgid "4:3/Anamorph"
 msgstr "4:3/Anamorph"
 
-#: ttxtsubs.c:693
+#: ttxtsubs.c:675
 msgid "Letterbox"
 msgstr "Letterbox"
 
-#: ttxtsubs.c:694
+#: ttxtsubs.c:676
 msgid "Text Vertical Adjust"
 msgstr "Ajustement vertical du texte"
 
-#: ttxtsubs.c:696
+#: ttxtsubs.c:678
 msgid "Line Spacing Adjust"
 msgstr "Espacement des lignes"
 
-#: ttxtsubs.c:698
+#: ttxtsubs.c:680
 msgid "Workaround for some French chns"
 msgstr "Contournement chaînes françaises"
 
-#: ttxtsubs.c:702
+#: ttxtsubs.c:684
 msgid "DVB Source Selection"
 msgstr "Sélection Source DVB"
 
-#: ttxtsubs.c:705
+#: ttxtsubs.c:686
 msgid "Font Size (pixel)"
 msgstr "Taille Police (pixel)"
 
-#: ttxtsubs.c:709
+#: ttxtsubs.c:689
 msgid "Text Color"
 msgstr "Couleur du texte"
 
-#: ttxtsubs.c:713
+#: ttxtsubs.c:693
 msgid "Background Color"
 msgstr "Couleur du fond"
 
-#: ttxtsubs.c:725
+#: ttxtsubs.c:705
 msgid "Custom Color"
 msgstr "Couleur personnalisée"
 
-#: ttxtsubs.c:730
+#: ttxtsubs.c:710
 msgid "Red Value"
 msgstr "Valeur Rouge"
 
-#: ttxtsubs.c:731
+#: ttxtsubs.c:711
 msgid "Green Value"
 msgstr "Valeur Vert"
 
-#: ttxtsubs.c:732
+#: ttxtsubs.c:712
 msgid "Blue Value"
 msgstr "Valeur Bleu"
 
-#: ttxtsubs.c:733
+#: ttxtsubs.c:713
 msgid "Transparency Value"
 msgstr "Valeur de transparence"
 
-#: ttxtsubs.c:743 ttxtsubs.c:751
+#: ttxtsubs.c:723 ttxtsubs.c:731
 msgid "Language"
 msgstr "Langues"
 
-#: ttxtsubs.c:751
+#: ttxtsubs.c:731
 msgid "Hearing Impaired"
 msgstr "Malentendant"
 

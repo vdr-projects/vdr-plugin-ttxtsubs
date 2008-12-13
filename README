@@ -62,14 +62,14 @@ reworked a few times.
 
 Installation:
 
-This plugin is for VDR 1.2.5. It currently needs a few hooks in, and
+This plugin is for VDR >= 1.6.0. It currently needs a few hooks in, and
 changes to, VDR to work. A patch file is included. The patches should
 be harmless if you don't have the plugin loaded, so even if you patch
 VDR and later decide not to use this plugin you don't necessarily have
 to reinstall VDR. It is probably possible to build the plugin for
 other version of VDR, but don't count on it.
 
-Steps:
+Steps (version numbers may differ):
 
 As usual, unpack the plugin and make a link:
 	cd ..../vdr-1.2.6/PLUGINS/src
