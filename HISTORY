@@ -1,6 +1,9 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2003-07-10: Version 0.0.3c
+- Fixed problems when used with more than one device (I hope)
+
 2003-06-22: Version 0.0.3b
 - Work around for problem with stray segments at channel (frequency)
   change with driver in hw_sections=0 mode

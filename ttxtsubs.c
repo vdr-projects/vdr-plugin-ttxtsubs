@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.16 2003/06/22 23:24:41 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.17 2003/07/10 02:36:17 ragge Exp ragge $
  */
 
 #include <vdr/plugin.h>
@@ -18,7 +18,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.3b";
+static const char *VERSION        = "0.0.3c";
 static const char *DESCRIPTION    = "Teletext subtitles";
 //static const char *MAINMENUENTRY  = "Ttxtsubs";
 
@@ -211,31 +211,35 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 
 void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 {
-  if(ChannelNumber) {
-    cChannel *c = Channels.GetByNumber(ChannelNumber);
-    if(c) {
-      struct ttxtinfo info;
-      int pid, page;
-      
-      if(GetTtxtInfo(Device->DeviceNumber(), c->Sid(), c->Vpid(), &info)) {
-	fprintf(stderr, "ttxtsubs: Error: GetTtxtInfo failed!\n");
-      } else {
-	if(FindSubs(&info, mLanguage, mHearingImpaired, &pid, &page)) {
-	  //fprintf(stderr, "CHANNELSWITCH, pid: %d page: %x\n", pid, page);
-	  mPage = page; // XXX remember this for playback (temporary hack)!
-	  StartTtxtLive(Device, pid, page);
+  if(Device->IsPrimaryDevice()) {
+    if(ChannelNumber) {
+      cChannel *c = Channels.GetByNumber(ChannelNumber);
+      if(c) {
+	struct ttxtinfo info;
+	int pid, page;
+	
+	if(GetTtxtInfo(Device->ActualDevice()->CardIndex(), c->Sid(), c->Vpid(), &info)) {
+	  fprintf(stderr, "ttxtsubs: Error: GetTtxtInfo failed!\n");
+	} else {
+	  if(FindSubs(&info, mLanguage, mHearingImpaired, &pid, &page)) {
+	    //fprintf(stderr, "CHANNELSWITCH, pid: %d page: %x\n", pid, page);
+	    mPage = page; // XXX remember this for playback (temporary hack)!
+	    StartTtxtLive(Device, pid, page);
+	  }
+	  FreeTtxtInfoData(&info);
 	}
-	FreeTtxtInfoData(&info);
       }
-    }
-  } else
-    StopTtxt();
+    } else
+      StopTtxt();
+  }
 }
 
 void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name)
 {
   StopTtxt();
-  StartTtxtPlay(mPage); // XXX should get page in some other way!
+  StartTtxtPlay(mPage);
+  // XXX this page number is just a fallback for old recordings which
+  // don't have a index page
 }
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length)
@@ -265,6 +269,12 @@ void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
 {
   //dprint("cPluginTtxtsubs::StartTtxtLive\n");
 
+  fprintf(stderr, "cPluginTtxtsubs::StartTtxtLive(%d, %d, %03x)\n",
+	  Device->DeviceNumber(), pid, page);
+  fprintf(stderr,
+	  "cPluginTtxtsubs::StartTtxtLive CurrChan: %d Prim:%d Card:%d MPG:%d HasProg:%d\n",
+	  cDevice::CurrentChannel(), Device->IsPrimaryDevice(), Device->CardIndex(),
+	  Device->HasDecoder(), const_cast < cDevice * >( Device )->HasProgramme());
 #if 0
   return; // XXX TEST - No live subs
 #endif
@@ -273,7 +283,7 @@ void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
     cTtxtSubsLiveReceiver *r;
     //dprint("teletext subtitles started on pid %d\n", pid);
     mRec = r = new cTtxtSubsLiveReceiver(pid, page);
-    if(!cDevice::PrimaryDevice()->AttachReceiver(r))
+    if(!cDevice::PrimaryDevice()->ActualDevice()->AttachReceiver(r))
       fprintf(stderr, "ttxtsubs: Error: AttachReceiver failed!\n"); //
   } else
     fprintf(stderr, "ttxtsubs: Error: StartTtxtLive called when already started!\n");
@@ -281,7 +291,7 @@ void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
 
 void cPluginTtxtsubs::StartTtxtPlay(int backup_page)
 {
-  //dprint("cPluginTtxtsubs::StartTtxtPlay\n");
+  dprint("cPluginTtxtsubs::StartTtxtPlay\n");
 
   if(!mRec) {
     dprint("ttxtsubs: teletext subtitles replayer started with initial page %03x\n", backup_page);
@@ -292,7 +302,7 @@ void cPluginTtxtsubs::StartTtxtPlay(int backup_page)
 
 void cPluginTtxtsubs::StopTtxt(void)
 {
-  //dprint("cPluginTtxtsubs::StopTtxt\n");
+  dprint("cPluginTtxtsubs::StopTtxt\n");
 
   if(mRec) {
     HideTtxt();

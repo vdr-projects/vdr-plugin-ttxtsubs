@@ -44,7 +44,7 @@ cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
 }
 
 
-void cTtxtSubsDisplay::SetPage(int Pageno)
+void cTtxtSubsDisplay::SetPage(int Pageno)  // Pageno is 0x000 to 0x799
 {
   Clear();
 
@@ -140,14 +140,16 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
       page.flags = 0;
       page.national_charset = 0;
       
-      if(fi[3] & 0x80) { // Newsflash
+      if(fi[3] & 0x80) { // Erase Page
 	page.flags |= erasepage;
 	memset(&page.data, 0, sizeof(page.data)); // only if erasepage is set?
       }
-      if(fi[5] & 0x20) // Subtitle
+      if(fi[5] & 0x20) // Newsflash
 	page.flags |= newsflash;
-      if(fi[5] & 0x80) // Suppress Header
+      if(fi[5] & 0x80) // Subtitle
 	page.flags |= subtitle;
+      if(fi[6] & 0x02) // Suppress Header
+	page.flags |= suppress_header;
       // if(fi[6] & 0x08) // Update Indicator
       // if(fi[6] & 0x20) // Interrupted Sequence
       if(fi[6] & 0x80) // Inhibit Display

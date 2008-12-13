@@ -24,7 +24,7 @@ cTtxtSubsFilter::~cTtxtSubsFilter(void)
 }
 
 
-void cTtxtSubsFilter::SetPages(int count, uint16_t *pages)
+void cTtxtSubsFilter::SetPages(size_t count, uint16_t *pages)
 {
   FreePages();
 
@@ -35,9 +35,8 @@ void cTtxtSubsFilter::SetPages(int count, uint16_t *pages)
   mCount = count;
 
   if(0) {
-    int i;
     fprintf(stderr, "SetPages: %d, ", count);
-    for(i = 0; i < count; i++)
+    for(size_t i = 0; i < count; i++)
       fprintf(stderr, "%03x ", pages[i]);
     fprintf(stderr, "\n");
   }

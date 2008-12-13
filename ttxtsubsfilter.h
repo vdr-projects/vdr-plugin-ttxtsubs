@@ -8,7 +8,7 @@ class cTtxtSubsFilter
   cTtxtSubsFilter(void);
   virtual ~cTtxtSubsFilter(void);
 
-  void SetPages(int count, uint16_t *pages);
+  void SetPages(size_t count, uint16_t *pages);
 
   // indata and outdata are pointers to a ttxt data row buffers,
   // if return value <> 0 outdata countains data to pass on

@@ -13,7 +13,7 @@ class cTtxtSubsDisplay {
   cTtxtSubsDisplay(void);
   ~cTtxtSubsDisplay(void);
 
-  void SetPage(int Pageno);
+  void SetPage(int Pageno); // Pageno is 0x000 to 0x799
   void Hide(void);
   void Show(void);
   void Clear(void);

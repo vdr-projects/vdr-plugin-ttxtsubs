@@ -429,6 +429,7 @@ static int FindTtxtInfoInPMT(int card_no, int pid, int vpid, struct ttxtinfo *in
   return ret;
 }
 
+#if 0
 /*
  * Get dvb device number from device index
  * this is needed for those having cards which aren't dvb cards, like
@@ -448,14 +449,14 @@ int DeviceToCardNo(int device_no)
 
   return card_no;
 }
-
+#endif
 
 /*
  * find the ttxt_info in the PMT via the PAT, try first with the SID
  * and if that fails with the VPID
  * return <> 0 on error;
  */
-int GetTtxtInfo(int device_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
+int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
 {
   int ret;
   char *patsects[256];
@@ -464,7 +465,6 @@ int GetTtxtInfo(int device_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *inf
   int j;
   uint16_t pmt_pid = 0;
   int foundinfo = 0;
-  int card_no;
   int retry;
 
   memset((char *) info, 0, sizeof(*info));
@@ -473,12 +473,10 @@ int GetTtxtInfo(int device_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *inf
 
     // printf("GetTtxtInfo A sid: %d, vpid: %d\n", sid, vpid); // XXXX
 
-    card_no = DeviceToCardNo(device_no);
-    if(card_no == -1) {
-      fprintf(stderr, "ttxtsubs: GetTtxtInfo - couldn't find a card for device %d\n", card_no);
-    }
-
+#if 1
+    // firmware fixed now?
     DiscardBufferedSections(card_no, 0, 0);
+#endif
     
     ret = CollectSections(card_no, 0, 0, patsects, &numsects);
     if(ret)
@@ -556,6 +554,22 @@ void FreeTtxtInfoData(struct ttxtinfo *info)
   }
 
   free((void *) info->p);
+}
+
+
+void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out)
+{
+  int i;
+
+  out->pidcount = in->pidcount;
+  out->p = (struct ttxtpidinfo *) malloc(sizeof(out->p[0]) * in->pidcount);
+
+  for(i = 0; i < in->pidcount; i++) {
+    out->p[i].pid = in->p[i].pid;
+    out->p[i].pagecount = in->p[i].pagecount;
+    out->p[i].i = (struct ttxtpageinfo *) malloc(sizeof(out->p[0].i[0]) * in->p[i].pagecount);
+    memcpy((void *) out->p[i].i, (void *) in->p[i].i, sizeof(out->p[0].i[0]) * in->p[i].pagecount);
+  }
 }
 
 

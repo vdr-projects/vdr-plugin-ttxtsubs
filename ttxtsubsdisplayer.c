@@ -224,7 +224,7 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
 		((buf[i+4] - '0') << 8) +
 		((buf[i+5] - '0') << 4) +
 		(buf[i+6] - '0');
-	      if(page >= 0x100 && page <= 0x900) {
+	      if(page >= 0x100 && page < 0x900) {
 		if(page >= 0x800)
 		  page -= 0x800;
 

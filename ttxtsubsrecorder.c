@@ -32,7 +32,7 @@ cTtxtSubsRecorder::cTtxtSubsRecorder(cDevice *dev, const cChannel *ch, char *lan
   struct ttxtpidinfo *pi = NULL;
   int pid, page;
 
-  if(GetTtxtInfo(dev->DeviceNumber(), ch->Sid(), ch->Vpid(), mTtxtinfo)) {
+  if(GetTtxtInfo(dev->CardIndex(), ch->Sid(), ch->Vpid(), mTtxtinfo)) {
     fprintf(stderr, "cTtxtSubsRecorder::cTtxtSubsRecorder: GetTtxtSubtitleInfo error!\n");
   } else {
     pi = FindSubs(mTtxtinfo, lang, HI, &pid, &page);
