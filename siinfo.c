@@ -14,6 +14,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <map>
+
 #include <vdr/device.h>
 #include <vdr/dvbdevice.h>
 
@@ -131,7 +133,7 @@ read_timeout(int fd, void *buf, size_t count, int timeout_ms) {
   if(ret < 0)
     return errno;
   if(ret == 0) { // timeout
-    fprintf(stderr, "ttxtsubs: read: timeout!\n");
+    fprintf(stderr, "ttxtsubs: Service Information read: timeout!\n");
     return -1;
   }
 
@@ -429,36 +431,19 @@ static int FindTtxtInfoInPMT(int card_no, int pid, int vpid, struct ttxtinfo *in
   return ret;
 }
 
-#if 0
-/*
- * Get dvb device number from device index
- * this is needed for those having cards which aren't dvb cards, like
- * mpeg decoders. It will probably break if there are unused devices.
- */
-int DeviceToCardNo(int device_no)
-{
-  int card_no = -1;
-  int i;
 
-  for(i = 0; i <= device_no; i++) {
-    cDevice *d = cDevice::GetDevice(i);
-    cDvbDevice *dd = dynamic_cast<cDvbDevice*>(d);
-    if(dd)
-      card_no++;
-  }
+typedef std::map < int, struct ttxtinfo > cCache;
 
-  return card_no;
-}
-#endif
+static cCache gCache;
 
 /*
  * find the ttxt_info in the PMT via the PAT, try first with the SID
  * and if that fails with the VPID
  * return <> 0 on error;
  */
-int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
+int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
 {
-  int ret;
+  int ret = -1;
   char *patsects[256];
   int numsects;
   int i;
@@ -468,6 +453,14 @@ int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
   int retry;
 
   memset((char *) info, 0, sizeof(*info));
+
+  cCache::iterator iter;
+  iter = gCache.find(channel);
+  if(iter != gCache.end()) {
+    DupTtxtInfo(&iter->second, info);
+    ret = 0;
+    return ret;
+  }
 
   for(retry = 0; retry <= 1 && !foundinfo; retry++) { // XXX retry two times due to flaky pat scanning with hw_sections=0
 
@@ -537,10 +530,17 @@ int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
 	}
       }
     }
+
+    FreeSects(patsects);
   }
     
+  if(foundinfo) {
+    struct ttxtinfo info2;
+    DupTtxtInfo(info, &info2);
+    gCache[channel] = info2;
+  }
+
 bail:
-  FreeSects(patsects);
   return ret;
 }
 
@@ -565,8 +565,7 @@ void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out)
   out->p = (struct ttxtpidinfo *) malloc(sizeof(out->p[0]) * in->pidcount);
 
   for(i = 0; i < in->pidcount; i++) {
-    out->p[i].pid = in->p[i].pid;
-    out->p[i].pagecount = in->p[i].pagecount;
+    out->p[i] = in->p[i];
     out->p[i].i = (struct ttxtpageinfo *) malloc(sizeof(out->p[0].i[0]) * in->p[i].pagecount);
     memcpy((void *) out->p[i].i, (void *) in->p[i].i, sizeof(out->p[0].i[0]) * in->p[i].pagecount);
   }

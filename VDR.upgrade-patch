@@ -1,0 +1,23 @@
+--- old-osd.c	2003-07-16 05:39:36.000000000 +0200
++++ osd.c	2003-07-16 05:38:35.000000000 +0200
+@@ -63,6 +63,10 @@ void cOsd::SetColor(eDvbColor colorFg, e
+ 
+ cOsdBase *cOsd::OpenRaw(int x, int y)
+ {
++#ifdef VDRTTXTSUBSHOOKS
++  // OSD_HOOK_2 - Information to Checkpatch.sh
++  cVDRTtxtsubsHookListener::Hook()->HideOSD();
++#endif
+ #ifdef DEBUG_OSD
+   return NULL;
+ #else
+@@ -97,9 +101,6 @@ void cOsd::Open(int w, int h)
+   d *= lineHeight;
+   int x = (720 - w + charWidth) / 2; //TODO PAL vs. NTSC???
+   int y = (576 - Setup.OSDheight * lineHeight) / 2 + d;
+-#ifdef VDRTTXTSUBSHOOKS
+-  cVDRTtxtsubsHookListener::Hook()->HideOSD();
+-#endif
+   //XXX
+   osd = OpenRaw(x, y);
+   //XXX TODO this should be transferred to the places where the individual windows are requested (there's too much detailed knowledge here!)

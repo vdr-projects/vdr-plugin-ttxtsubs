@@ -1,6 +1,6 @@
 diff -upr ./DIST/vdr-1.2.1/Makefile ./Makefile
 --- ./DIST/vdr-1.2.1/Makefile	2003-01-06 13:28:09.000000000 +0100
-+++ ./Makefile	2003-06-20 04:05:11.000000000 +0200
++++ ./Makefile	2003-07-16 05:39:36.000000000 +0200
 @@ -36,7 +36,8 @@ OBJS = audio.o channels.o ci.o config.o 
         dvbplayer.o dvbspu.o eit.o eitscan.o font.o i18n.o interface.o keys.o\
         lirc.o menu.o menuitems.o osdbase.o osd.o player.o plugin.o rcu.o\
@@ -13,7 +13,7 @@ diff -upr ./DIST/vdr-1.2.1/Makefile ./Makefile
  FIXFONT = -adobe-courier-bold-r-normal--25-*-100-100-m-*-iso8859-1
 diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
 --- ./DIST/vdr-1.2.1/dvbplayer.c	2003-05-24 11:04:26.000000000 +0200
-+++ ./dvbplayer.c	2003-06-20 04:05:11.000000000 +0200
++++ ./dvbplayer.c	2003-07-16 05:39:36.000000000 +0200
 @@ -14,6 +14,7 @@
  #include "ringbuffer.h"
  #include "thread.h"
@@ -90,7 +90,7 @@ diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
                   if (w > 0) {
 diff -upr ./DIST/vdr-1.2.1/menu.c ./menu.c
 --- ./DIST/vdr-1.2.1/menu.c	2003-06-07 14:31:57.000000000 +0200
-+++ ./menu.c	2003-06-20 04:05:11.000000000 +0200
++++ ./menu.c	2003-07-16 05:39:36.000000000 +0200
 @@ -2969,8 +2969,18 @@ cRecordControl::cRecordControl(cDevice *
  
    cRecordingUserCommand::InvokeCommand(RUC_BEFORERECORDING, fileName);
@@ -112,7 +112,7 @@ diff -upr ./DIST/vdr-1.2.1/menu.c ./menu.c
       if (!Timer && !cReplayControl::LastReplayed()) // an instant recording, maybe from cRecordControls::PauseLiveVideo()
 diff -upr ./DIST/vdr-1.2.1/menu.h ./menu.h
 --- ./DIST/vdr-1.2.1/menu.h	2003-05-24 18:35:52.000000000 +0200
-+++ ./menu.h	2003-06-20 04:05:11.000000000 +0200
++++ ./menu.h	2003-07-16 05:39:36.000000000 +0200
 @@ -14,6 +14,7 @@
  #include "device.h"
  #include "osd.h"
@@ -123,7 +123,7 @@ diff -upr ./DIST/vdr-1.2.1/menu.h ./menu.h
  
 diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
 --- ./DIST/vdr-1.2.1/osd.c	2003-06-04 18:13:00.000000000 +0200
-+++ ./osd.c	2003-06-20 04:05:11.000000000 +0200
++++ ./osd.c	2003-07-16 05:43:06.000000000 +0200
 @@ -12,6 +12,7 @@
  #include "device.h"
  #include "i18n.h"
@@ -132,17 +132,18 @@ diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
  
  // --- cOsd ------------------------------------------------------------------
  
-@@ -96,6 +97,9 @@ void cOsd::Open(int w, int h)
-   d *= lineHeight;
-   int x = (720 - w + charWidth) / 2; //TODO PAL vs. NTSC???
-   int y = (576 - Setup.OSDheight * lineHeight) / 2 + d;
+@@ -62,6 +63,10 @@ void cOsd::SetColor(eDvbColor colorFg, e
+ 
+ cOsdBase *cOsd::OpenRaw(int x, int y)
+ {
 +#ifdef VDRTTXTSUBSHOOKS
++  // OSD_HOOK_2 - Information to Checkpatch.sh
 +  cVDRTtxtsubsHookListener::Hook()->HideOSD();
 +#endif
-   //XXX
-   osd = OpenRaw(x, y);
-   //XXX TODO this should be transferred to the places where the individual windows are requested (there's too much detailed knowledge here!)
-@@ -138,6 +142,9 @@ void cOsd::Close(void)
+ #ifdef DEBUG_OSD
+   return NULL;
+ #else
+@@ -138,6 +143,9 @@ void cOsd::Close(void)
    delete osd;
    osd = NULL;
  #endif
@@ -154,7 +155,7 @@ diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
  void cOsd::Clear(void)
 diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
 --- ./DIST/vdr-1.2.1/recorder.c	2003-05-16 15:33:04.000000000 +0200
-+++ ./recorder.c	2003-06-20 04:05:11.000000000 +0200
++++ ./recorder.c	2003-07-16 05:39:36.000000000 +0200
 @@ -10,6 +10,8 @@
  #include <stdarg.h>
  #include <stdio.h>
@@ -219,7 +220,7 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
                   break;
 diff -upr ./DIST/vdr-1.2.1/recorder.h ./recorder.h
 --- ./DIST/vdr-1.2.1/recorder.h	2002-06-08 11:35:03.000000000 +0200
-+++ ./recorder.h	2003-06-20 04:05:11.000000000 +0200
++++ ./recorder.h	2003-07-16 05:39:36.000000000 +0200
 @@ -15,6 +15,7 @@
  #include "remux.h"
  #include "ringbuffer.h"

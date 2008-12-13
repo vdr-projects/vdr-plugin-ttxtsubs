@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
+#include <pthread.h>
 
 #include <vdr/osd.h>
 #include <vdr/osdbase.h>
@@ -20,6 +21,49 @@ enum {
   finished
 };
 
+
+// --------------------
+
+class cOSDSelfMemory {
+ public:
+  cOSDSelfMemory(void) : mActive(0) {}
+  ~cOSDSelfMemory() {}
+  
+  void SetActive(int a)
+    {
+      cMutexLock lock(&mLock);
+      mActive = a;
+      if(a)
+	mThr = pthread_self();
+    }
+  int IsMe(void)
+    {
+      cMutexLock lock(&mLock);
+      pthread_t thr = pthread_self();
+      if(mActive && pthread_equal(thr, mThr))
+	return 1;
+      else
+	return 0;
+    }
+
+ private:
+  cMutex mLock;
+  int mActive;
+  pthread_t mThr;
+};
+
+class cOSDSelfMemoryLock {
+ public:
+  cOSDSelfMemoryLock(cOSDSelfMemory *m) : mMem(m) { mMem->SetActive(1); }
+  ~cOSDSelfMemoryLock() { mMem->SetActive(0); }
+  
+ private:
+  cOSDSelfMemory *mMem;
+};
+
+static cOSDSelfMemory gSelfMem;
+
+// --------------------
 
 cTtxtSubsDisplay::cTtxtSubsDisplay(void)
   :
@@ -46,24 +90,36 @@ cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
 
 void cTtxtSubsDisplay::SetPage(int Pageno)  // Pageno is 0x000 to 0x799
 {
-  Clear();
-
   mMag = (Pageno >> 8) & 0xF;
   mNo = Pageno & 0xFF;
+
+  Clear();
 }
 
 
 void cTtxtSubsDisplay::Hide(void)
 {
+  if(gSelfMem.IsMe()) {
+    //dprint("cTtxtSubsDisplay::Hide - Ignoring self induced hide!\n");
+    return;
+  }
+
   //dprint("cTtxtSubsDisplay::Hide\n");
-  mDoDisplay = 0;
+  cMutexLock lock(&mOsdLock);
   ClearOSD();
+  mDoDisplay = 0;
 }
 
 
 void cTtxtSubsDisplay::Show(void)
 {
+  if(gSelfMem.IsMe()) {
+    //dprint("cTtxtSubsDisplay::Show - Ignoring self induced show!\n");
+    return;
+  }
+
   //dprint("cTtxtSubsDisplay::Show\n");
+  cMutexLock lock(&mOsdLock);
   mDoDisplay = 1;
   ShowOSD();
 }
@@ -179,8 +235,9 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
     //dump_hex("", page.data[packet], 40);
   } else {
     // packets with national characters information: X/28/0 format 1, X/28/1, X/28/4, M/29/0 M/29/4, 
-    if(packet == 28 || packet == 29)
-      dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
+    if(packet == 28 || packet == 29) {
+      //dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
+    }
     
     //if(packet == 26) {
     //  dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
@@ -251,6 +308,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
   char buf[TTXT_DISPLAYABLE_ROWS][41];
   int doneWidthWorkaround = 0;
 
+  cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
 
   if(!mDoDisplay) {
@@ -274,13 +332,13 @@ void cTtxtSubsDisplay::ShowOSD(void)
 	rowcount++;
   }
 
-#if 0
+#if 1
   mOsd = cOsd::OpenRaw(SCREENLEFT, SCREENTOP);
 #else
   mOsd = cDevice::PrimaryDevice()->NewOsd(SCREENLEFT, SCREENTOP);
 #endif
   if(mOsd == NULL) {
-    dprint("Error: cOsd::OpenRaw returned NULL!\n");
+    //dprint("Error: cOsd::OpenRaw returned NULL!\n");
     return;
   }
 
@@ -297,12 +355,12 @@ void cTtxtSubsDisplay::ShowOSD(void)
     // XXX Width calculations doesn't work before we have created a window...
     if(!doneWidthWorkaround) {
       wind = mOsd->Create(0, y, 4, ROWH, 2);
-      w = mOsd->Width(buf[i]) + 2 * TEXTX;
-      mOsd->Clear(wind);
-      mOsd->Hide(wind);
+      mOsd->Fill(0, y, 4, y + ROWH, clrWhite, wind);
+      mOsd->Fill(0, y, 4, y + ROWH, clrBackground, wind);
       doneWidthWorkaround = 1;
-    } else
-      w = mOsd->Width(buf[i]) + 2 * TEXTX;
+    }
+    
+    w = mOsd->Width(buf[i]) + 2 * TEXTX;
 
     if(w % 4)
       w += 4 - (w % 4);
@@ -322,11 +380,17 @@ void cTtxtSubsDisplay::ShowOSD(void)
 void cTtxtSubsDisplay::ClearOSD(void)
 {
   // dprint("\nClearOSD!\n");
+  cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
 
+  if(!mDoDisplay) {
+    //dprint("NOT clearing subtitles because of other OSD activities!\n");
+    return;
+  }
+  
   if(mOsd) {
 
-    mOsd->Clear(ALL_WINDOWS);
+    //mOsd->Clear(ALL_WINDOWS);
     mOsd->Hide(ALL_WINDOWS);
     mOsd->Flush();
     delete mOsd;

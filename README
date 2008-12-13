@@ -87,4 +87,12 @@ Rebuild VDR:
 	make
 	make plugins
 
+
+NOTE: If you have installed an earlier version of the patch, you
+need to upgrade it. If so, do this:
+	cd ..../vdr-1.2.1
+	patch -b < PLUGINS/src/ttxtsubs-0.0.3/VDR.upgrade-patch 
+	make
+
+
 Now you should be able to start VDR with "-P ttxtsubs".

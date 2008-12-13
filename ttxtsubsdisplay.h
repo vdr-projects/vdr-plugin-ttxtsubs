@@ -16,13 +16,13 @@ class cTtxtSubsDisplay {
   void SetPage(int Pageno); // Pageno is 0x000 to 0x799
   void Hide(void);
   void Show(void);
-  void Clear(void);
   void TtxtData(const uint8_t *);
 
  protected:
+  void Clear(void);
   void ShowOSD();
   void ClearOSD(void);
-
+  
  private:
   int mPageState;
   int mMag;

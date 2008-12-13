@@ -30,7 +30,7 @@ struct ttxtinfo {
  * and if that fails with the VPID
  * return <> 0 on error;
  */
-int GetTtxtInfo(int card_no, uint16_t sid, uint16_t vpid, struct ttxtinfo *info);
+int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct ttxtinfo *info);
 
 void FreeTtxtInfoData(struct ttxtinfo *info);
 void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out);

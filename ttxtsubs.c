@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.17 2003/07/10 02:36:17 ragge Exp ragge $
+ * $Id: ttxtsubs.c,v 1.19 2003/07/16 04:15:08 ragge Exp $
  */
 
 #include <vdr/plugin.h>
@@ -18,7 +18,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.3c";
+static const char *VERSION        = "0.0.3d";
 static const char *DESCRIPTION    = "Teletext subtitles";
 //static const char *MAINMENUENTRY  = "Ttxtsubs";
 
@@ -218,7 +218,7 @@ void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 	struct ttxtinfo info;
 	int pid, page;
 	
-	if(GetTtxtInfo(Device->ActualDevice()->CardIndex(), c->Sid(), c->Vpid(), &info)) {
+	if(GetTtxtInfo(Device->ActualDevice()->CardIndex(), ChannelNumber, c->Sid(), c->Vpid(), &info)) {
 	  fprintf(stderr, "ttxtsubs: Error: GetTtxtInfo failed!\n");
 	} else {
 	  if(FindSubs(&info, mLanguage, mHearingImpaired, &pid, &page)) {
@@ -269,12 +269,6 @@ void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
 {
   //dprint("cPluginTtxtsubs::StartTtxtLive\n");
 
-  fprintf(stderr, "cPluginTtxtsubs::StartTtxtLive(%d, %d, %03x)\n",
-	  Device->DeviceNumber(), pid, page);
-  fprintf(stderr,
-	  "cPluginTtxtsubs::StartTtxtLive CurrChan: %d Prim:%d Card:%d MPG:%d HasProg:%d\n",
-	  cDevice::CurrentChannel(), Device->IsPrimaryDevice(), Device->CardIndex(),
-	  Device->HasDecoder(), const_cast < cDevice * >( Device )->HasProgramme());
 #if 0
   return; // XXX TEST - No live subs
 #endif
