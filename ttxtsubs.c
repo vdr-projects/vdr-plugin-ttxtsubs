@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.11 2003/03/07 05:52:58 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.11 2003/03/07 05:52:58 ragge Exp ragge $
  */
 
 #include <vdr/plugin.h>
@@ -18,7 +18,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.1";
+static const char *VERSION        = "0.0.1b";
 static const char *DESCRIPTION    = "Teletext subtitles";
 //static const char *MAINMENUENTRY  = "Ttxtsubs";
 
@@ -263,6 +263,10 @@ cTtxtSubsRecorderBase *cPluginTtxtsubs::NewTtxtSubsRecorder(cDevice *dev, const 
 void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
 {
   //dprint("cPluginTtxtsubs::StartTtxtLive\n");
+
+#if 0
+  return; // XXX TEST - No live subs
+#endif
 
   if(!mRec) {
     cTtxtSubsLiveReceiver *r;

@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "linux/dvb/dmx.h"
 #include "siinfo.h"
@@ -115,6 +116,29 @@ static int SetSectFilt(int fd, uint16_t pid, uint8_t tnr, uint8_t mask)
 }
 
 
+static int
+read_timeout(int fd, void *buf, size_t count, int timeout_ms) {
+  int ret = -1;
+  struct pollfd pi;
+
+  pi.fd = fd;
+  pi.events = POLLIN | POLLERR | POLLHUP | POLLNVAL;
+
+  ret = poll(&pi, 1, timeout_ms);
+  if(ret < 0)
+    return errno;
+  if(ret == 0) { // timeout
+    fprintf(stderr, "ttxtsubs: read: timeout!\n");
+    return -1;
+  }
+
+  if(pi.revents == POLLIN) {
+    ret = read(fd, buf, count);
+    return ret;
+  } else
+    return -1;
+}
+
 /*
  * PID - pid to collect on
  * table_id - table id to filter out (H.222.0 table 2-26)
@@ -132,6 +156,7 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
   char *p = NULL;
   int n;
   char name[100];
+  time_t start_time;
 
   snprintf(name, sizeof(name), "/dev/dvb/adapter%d/demux0", card_no);
 
@@ -147,14 +172,22 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
     goto bail;
   }
 
+  start_time = time(NULL);
+
   do {
     struct sect_header *h;
     int i;
 
+    if((start_time + 5) < time(NULL)) {
+      ret = -1;
+      done = 1;
+      break;
+    }
+
     if(p == NULL)
       p = (char *) malloc(SECTSIZE);
 
-    n = read(fd, p, SECTSIZE);
+    n = read_timeout(fd, p, SECTSIZE, 250);
     if(n < 8)
       continue;
 
