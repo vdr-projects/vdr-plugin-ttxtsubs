@@ -97,7 +97,6 @@ i18n: $(I18Nmo)
 ### Targets:
 
 all: libvdr-$(PLUGIN).so i18n
-	@sh ./Checkpatch.sh
 
 libvdr-$(PLUGIN).so: $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared $(OBJS) -o $@

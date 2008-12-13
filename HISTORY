@@ -31,6 +31,8 @@ VDR Plugin 'ttxtsubs' Revision History
 - switched completely to VDR 1.6's I18N system and removed the old crap - no
   more support for older VDR versions!
 - Removed VDR < 1.6.0 support code
+- Removed VDR*.patch and Checkpatch.sh and added up-to-date VDR patches
+  into into "patches" subdirectory (thx to Rolf Ahrenberg)
 
 2004-05-31: Version 0.0.5
 
