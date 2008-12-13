@@ -22,6 +22,11 @@ enum {
   finished
 };
 
+// extra colours
+enum eMyDvbColor {
+  myClrGrey = 0xFF808080
+};
+
 
 // --------------------
 
@@ -336,6 +341,26 @@ enum {
   TEXTX = 15
 };
 
+static eDvbColor
+getcolor(int color)
+{ 
+  switch (color)
+    {
+    case 0:  return clrBlack;
+    case 1:  return clrWhite;
+    case 2:  return clrRed;
+    case 3:  return clrGreen;
+    case 4:  return clrYellow;
+    case 5:  return clrMagenta;
+    case 6:  return clrBlue;
+    case 7:  return clrCyan;
+    case 8:  return (eDvbColor) myClrGrey;
+    case 9:  return clrTransparent;
+    default: return clrBackground;
+    }
+  return clrBackground;
+}
+
 void cTtxtSubsDisplay::ShowOSD(void)
 {
   int i, y;
@@ -388,7 +413,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
   strcpy(buf[3], "1234567890123456789012345678901234567890");
 #endif
 
-  y = bottom - SCREENTOP - ROWH - (ROWINCR * (rowcount-1));
+  y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
   for(i = 0; i < rowcount; i++) {
     tWindowHandle wind;
     int w = 0;
@@ -399,8 +424,8 @@ void cTtxtSubsDisplay::ShowOSD(void)
       //wind = mOsd->Create(0, y, 4, ROWH, 2);
       //mOsd->Fill(0, y, 4, y + ROWH, clrWhite, wind);
       //mOsd->Fill(0, y, 4, y + ROWH, clrBackground, wind);
-      wind = mOsd->Create(0, 575, 4, 1, 2);
-      mOsd->Fill(0, 574, 4, 575, clrWhite, wind);
+      wind = mOsd->Create(0, 575, 4, 1, 2, false);
+      mOsd->Fill(0, 574, 4, 575, getcolor(globals.fgColor()), wind);
       mOsd->Fill(0, 574, 4, 575, clrTransparent, wind);
       doneWidthWorkaround = 1;
     }
@@ -418,12 +443,12 @@ void cTtxtSubsDisplay::ShowOSD(void)
       break;
     }
 
-    wind = mOsd->Create(left, y, w, ROWH, 2);
-    mOsd->Fill(left, y, left + w, y + ROWH, clrWhite, wind); // needed for dxr3s...
-    mOsd->Fill(left, y, left + w, y + ROWH, clrBackground, wind);
-    mOsd->Text(left + TEXTX, y + TEXTY, buf[i], clrWhite, clrBackground, wind);
+    wind = mOsd->Create(left, y, w, ROWH, 2, false);
+    mOsd->Fill(left, y, left + w, y + ROWH, getcolor(globals.fgColor()), wind); // needed for dxr3s...
+    mOsd->Fill(left, y, left + w, y + ROWH, getcolor(globals.bgColor()), wind);
+    mOsd->Text(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), wind);
 
-    y += ROWINCR;
+    y += (ROWINCR + globals.lineSpacing());
   }
 
   mOsd->Flush();

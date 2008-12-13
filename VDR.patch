@@ -1,7 +1,7 @@
-diff -upr ./DIST/vdr-1.2.5/Makefile ./Makefile
---- ./DIST/vdr-1.2.5/Makefile	2003-08-09 13:09:45.000000000 +0200
-+++ ./Makefile	2003-09-26 01:49:20.000000000 +0200
-@@ -37,7 +37,8 @@ OBJS = audio.o channels.o ci.o config.o 
+diff -upr ./DIST/vdr-1.2.1/Makefile ./Makefile
+--- ./DIST/vdr-1.2.1/Makefile	2003-01-06 13:28:09.000000000 +0100
++++ ./Makefile	2003-07-16 05:39:36.000000000 +0200
+@@ -36,7 +36,8 @@ OBJS = audio.o channels.o ci.o config.o 
         dvbplayer.o dvbspu.o eit.o eitscan.o font.o i18n.o interface.o keys.o\
         lirc.o menu.o menuitems.o osdbase.o osd.o player.o plugin.o rcu.o\
         receiver.o recorder.o recording.o remote.o remux.o ringbuffer.o sources.o\
@@ -11,9 +11,9 @@ diff -upr ./DIST/vdr-1.2.5/Makefile ./Makefile
  
  OSDFONT = -adobe-helvetica-medium-r-normal--23-*-100-100-p-*-iso8859-1
  FIXFONT = -adobe-courier-bold-r-normal--25-*-100-100-m-*-iso8859-1
-diff -upr ./DIST/vdr-1.2.5/dvbplayer.c ./dvbplayer.c
---- ./DIST/vdr-1.2.5/dvbplayer.c	2003-05-24 11:04:26.000000000 +0200
-+++ ./dvbplayer.c	2003-09-26 01:49:20.000000000 +0200
+diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
+--- ./DIST/vdr-1.2.1/dvbplayer.c	2003-05-24 11:04:26.000000000 +0200
++++ ./dvbplayer.c	2003-07-16 05:39:36.000000000 +0200
 @@ -14,6 +14,7 @@
  #include "ringbuffer.h"
  #include "thread.h"
@@ -88,31 +88,31 @@ diff -upr ./DIST/vdr-1.2.5/dvbplayer.c ./dvbplayer.c
                if (p) {
                   int w = PlayVideo(p, pc);
                   if (w > 0) {
-diff -upr ./DIST/vdr-1.2.5/menu.c ./menu.c
---- ./DIST/vdr-1.2.5/menu.c	2003-09-14 12:49:28.000000000 +0200
-+++ ./menu.c	2003-09-26 01:50:59.000000000 +0200
-@@ -3014,8 +3014,18 @@ cRecordControl::cRecordControl(cDevice *
-   isyslog("record %s", fileName);
-   if (MakeDirs(fileName, true)) {
-      const cChannel *ch = timer->Channel();
+diff -upr ./DIST/vdr-1.2.1/menu.c ./menu.c
+--- ./DIST/vdr-1.2.1/menu.c	2003-06-07 14:31:57.000000000 +0200
++++ ./menu.c	2003-07-16 05:39:36.000000000 +0200
+@@ -2969,8 +2969,18 @@ cRecordControl::cRecordControl(cDevice *
+ 
+   cRecordingUserCommand::InvokeCommand(RUC_BEFORERECORDING, fileName);
+   const cChannel *ch = timer->Channel();
 +#ifdef VDRTTXTSUBSHOOKS
-+     cTtxtSubsRecorderBase *subsRecorder = cVDRTtxtsubsHookListener::Hook()
-+       ->NewTtxtSubsRecorder(device, ch);
-+     recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2(), subsRecorder);
++  cTtxtSubsRecorderBase *subsRecorder = cVDRTtxtsubsHookListener::Hook()
++    ->NewTtxtSubsRecorder(device, ch);
++  recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2(), subsRecorder);
 +#else
-      recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2());
+   recorder = new cRecorder(fileName, ch->Ca(), timer->Priority(), ch->Vpid(), ch->Apid1(), ch->Apid2(), ch->Dpid1(), ch->Dpid2());
 +#endif
-      if (device->AttachReceiver(recorder)) {
+   if (device->AttachReceiver(recorder)) {
 +#ifdef VDRTTXTSUBSHOOKS
-+       if(subsRecorder)
-+	 subsRecorder->DeviceAttach();
++     if(subsRecorder)
++       subsRecorder->DeviceAttach();
 +#endif
-         Recording.WriteSummary();
-         cStatus::MsgRecording(device, Recording.Name());
-         if (!Timer && !cReplayControl::LastReplayed()) // an instant recording, maybe from cRecordControls::PauseLiveVideo()
-diff -upr ./DIST/vdr-1.2.5/menu.h ./menu.h
---- ./DIST/vdr-1.2.5/menu.h	2003-08-03 11:37:18.000000000 +0200
-+++ ./menu.h	2003-09-26 01:49:20.000000000 +0200
+      Recording.WriteSummary();
+      cStatus::MsgRecording(device, Recording.Name());
+      if (!Timer && !cReplayControl::LastReplayed()) // an instant recording, maybe from cRecordControls::PauseLiveVideo()
+diff -upr ./DIST/vdr-1.2.1/menu.h ./menu.h
+--- ./DIST/vdr-1.2.1/menu.h	2003-05-24 18:35:52.000000000 +0200
++++ ./menu.h	2003-07-16 05:39:36.000000000 +0200
 @@ -14,6 +14,7 @@
  #include "device.h"
  #include "osd.h"
@@ -121,9 +121,9 @@ diff -upr ./DIST/vdr-1.2.5/menu.h ./menu.h
  #include "recorder.h"
  #include "recording.h"
  
-diff -upr ./DIST/vdr-1.2.5/osd.c ./osd.c
---- ./DIST/vdr-1.2.5/osd.c	2003-06-04 18:13:00.000000000 +0200
-+++ ./osd.c	2003-09-26 01:49:20.000000000 +0200
+diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
+--- ./DIST/vdr-1.2.1/osd.c	2003-06-04 18:13:00.000000000 +0200
++++ ./osd.c	2003-07-16 05:43:06.000000000 +0200
 @@ -12,6 +12,7 @@
  #include "device.h"
  #include "i18n.h"
@@ -153,9 +153,9 @@ diff -upr ./DIST/vdr-1.2.5/osd.c ./osd.c
  }
  
  void cOsd::Clear(void)
-diff -upr ./DIST/vdr-1.2.5/recorder.c ./recorder.c
---- ./DIST/vdr-1.2.5/recorder.c	2003-08-02 15:01:19.000000000 +0200
-+++ ./recorder.c	2003-09-26 01:52:35.000000000 +0200
+diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
+--- ./DIST/vdr-1.2.1/recorder.c	2003-05-16 15:33:04.000000000 +0200
++++ ./recorder.c	2003-07-16 05:39:36.000000000 +0200
 @@ -10,6 +10,8 @@
  #include <stdarg.h>
  #include <stdio.h>
@@ -184,10 +184,10 @@ diff -upr ./DIST/vdr-1.2.5/recorder.c ./recorder.c
 +#ifdef VDRTTXTSUBSHOOKS
 +  ttxtSubsRecorder = tsr;
 +#endif
+   isyslog("record %s", FileName);
  
-   // Make sure the disk is up and running:
- 
-@@ -55,6 +64,10 @@ cRecorder::cRecorder(const char *FileNam
+   // Create directories if necessary:
+@@ -61,6 +70,10 @@ cRecorder::cRecorder(const char *FileNam
  cRecorder::~cRecorder()
  {
    Detach();
@@ -198,7 +198,7 @@ diff -upr ./DIST/vdr-1.2.5/recorder.c ./recorder.c
    delete index;
    delete fileName;
    delete remux;
-@@ -129,6 +142,19 @@ void cRecorder::Action(void)
+@@ -135,6 +148,19 @@ void cRecorder::Action(void)
                      break;
                      }
                   fileSize += Result;
@@ -218,9 +218,9 @@ diff -upr ./DIST/vdr-1.2.5/recorder.c ./recorder.c
                   }
                else
                   break;
-diff -upr ./DIST/vdr-1.2.5/recorder.h ./recorder.h
---- ./DIST/vdr-1.2.5/recorder.h	2002-06-08 11:35:03.000000000 +0200
-+++ ./recorder.h	2003-09-26 01:49:20.000000000 +0200
+diff -upr ./DIST/vdr-1.2.1/recorder.h ./recorder.h
+--- ./DIST/vdr-1.2.1/recorder.h	2002-06-08 11:35:03.000000000 +0200
++++ ./recorder.h	2003-07-16 05:39:36.000000000 +0200
 @@ -15,6 +15,7 @@
  #include "remux.h"
  #include "ringbuffer.h"

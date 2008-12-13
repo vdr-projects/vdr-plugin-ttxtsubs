@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.22 2004/03/01 04:36:32 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.23 2004/03/02 01:08:45 ragge Exp $
  */
 
 #include <vdr/plugin.h>
@@ -15,11 +15,12 @@
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplayer.h"
 #include "ttxtsubsrecorder.h"
+#include "ttxtsubsi18n.h"
 #include "utils.h"
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.5pre1";
+static const char *VERSION        = "0.0.5pre2";
 static const char *DESCRIPTION    = "Teletext subtitles";
 
 cTtxtsubsConf globals;
@@ -38,7 +39,7 @@ char *gLanguages[][2] = {
   "por","",    //Portuguese
   "fre","fra", //French
   "nor","",    //Norwegian
-  "fin","",    //Finnish
+  "fin","suo", //Finnish
   "pol","",    //Polish
   "spa","esl", //Spanish
   "gre","ell", //Greek
@@ -46,6 +47,9 @@ char *gLanguages[][2] = {
   "ron","rum", //Romanian
   "hun","",    //Hungarian
   "cat","",    //Catalanian
+#if VDRVERSNUM >= 10300
+  "rus","",    //Russian
+#endif
   // Not in translations!
   "dan","" //Danish
 };
@@ -67,6 +71,10 @@ const char *gLanguageNames[] = {
   "Romaneste",
   "Magyar",
   "Catal‡",
+#if VDRVERSNUM >= 10300
+  "¿„··⁄ÿŸ",
+#endif
+  // Not in translations!
   "Dansk"
 };
 int gNumLanguages = sizeof(gLanguages) / sizeof(gLanguages[0]);
@@ -78,7 +86,7 @@ public:
 
   // -- cPlugin
   virtual const char *Version(void) { return VERSION; }
-  virtual const char *Description(void) { return DESCRIPTION; }
+  virtual const char *Description(void) { return tr(DESCRIPTION); }
   virtual const char *CommandLineHelp(void);
   virtual bool ProcessArgs(int argc, char *argv[]);
   virtual bool Start(void);
@@ -180,6 +188,8 @@ bool cPluginTtxtsubs::ProcessArgs(int argc, char *argv[])
 bool cPluginTtxtsubs::Start(void)
 {
   // Start any background activities the plugin shall perform.
+
+  RegisterI18n(Phrases);
 
   if(!memcmp(globals.mLanguages[0][0], "unk", 3)) {
     // no language found in setup
@@ -283,6 +293,9 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "BottomLB")) globals.mBottomLB = atoi(Value);
   else if(!strcasecmp(Name, "BottomAdj")) globals.mBottomAdj = atoi(Value);
   else if(!strcasecmp(Name, "FrenchSpecial")) globals.mFrenchSpecial = atoi(Value);
+  else if(!strcasecmp(Name, "LineSpacing")) globals.mLineSpacing = atoi(Value);
+  else if(!strcasecmp(Name, "FgColor")) globals.mFgColor = atoi(Value);
+  else if(!strcasecmp(Name, "BgColor")) globals.mBgColor = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
   else if(!strcasecmp(Name, "HearingImpaireds")) parseHIs(Value);
   // Handle old settings
@@ -470,6 +483,10 @@ void cMenuSetupTtxtsubsLanguages::Store(void)
   fprintf(stderr, "cMenuSetupTtxtsubsLanguages::Store\n");
 }
 
+const char * mainMenuAlts[4] = {NULL, NULL, NULL, NULL};
+const char * textPosAlts[4];
+const char * textColors[12];
+
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
   mTtxtsubs(ttxtsubs),
@@ -478,10 +495,33 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
 {
   //static char *mainMenuAlts[] = {"off", "Display on/off", "4:3/Letterbox", "This menu"};
   // can't get it to store changes in file
-  static char *mainMenuAlts[] = {"off", "Display on/off", "4:3/Letterbox"};
-  static int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]);
-  static char *textPosAlts[] = {"Left", "Center", "Right"};
-  static int numTextPosAlts = sizeof(textPosAlts) / sizeof(textPosAlts[0]);
+  if(mainMenuAlts[0] == NULL) {
+    mainMenuAlts[0] = tr("off");
+    mainMenuAlts[1] = tr("Display on/off");
+    mainMenuAlts[2] = tr("4:3/Letterbox");
+    mainMenuAlts[3] = NULL;
+
+    textPosAlts[0] = tr("Left");
+    textPosAlts[1] = tr("Center");
+    textPosAlts[2] = tr("Right");
+    textPosAlts[3] = NULL;
+
+    textColors[0] = tr("Black");
+    textColors[1] = tr("White");
+    textColors[2] = tr("Red");
+    textColors[3] = tr("Green");
+    textColors[4] = tr("Yellow");
+    textColors[5] = tr("Magenta");
+    textColors[6] = tr("Blue");
+    textColors[7] = tr("Cyan");
+    textColors[8] = tr("Grey");
+    textColors[9] = tr("Transparent");
+    textColors[10] = tr("Background");
+    textColors[11] = NULL;
+  }
+  const int numTextPosAlts = sizeof(textPosAlts) / sizeof(textPosAlts[0]) - 1;
+  const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
+  const int numTextColors = sizeof(textColors) / sizeof(textColors[0]) - 1;
 
   mSavedFrenchSpecial = mConf.mFrenchSpecial;
 
@@ -512,6 +552,16 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
 			    &mConf.mBottomLB, tr("4:3/Anamorph"), tr("Letterbox")));
   Add(new cMenuEditIntItem(tr("Text Vertical Adjust"),
 			    &mConf.mBottomAdj, -100, 45));
+  Add(new cMenuEditIntItem( tr("Line Spacing Adjust"),
+			    &mConf.mLineSpacing, -25, 25));
+  if(mConf.mFgColor < 0 || mConf.mFgColor >= numTextColors)
+    mConf.mFgColor = 1;  // menu item segfaults if out of range
+  Add(new cMenuEditStraItem(tr("Text Color"), &mConf.mFgColor,
+			    numTextColors, textColors));
+  if(mConf.mBgColor < 0 || mConf.mBgColor >= numTextColors)
+    mConf.mBgColor = 0;  // menu item segfaults if out of range
+  Add(new cMenuEditStraItem(tr("Background Color"), &mConf.mBgColor,
+			    numTextColors, textColors));
   Add(new cMenuEditBoolItem(tr("Workaround for some French chns"),
 			    &mConf.mFrenchSpecial, tr("no"), tr("yes")));
 
@@ -523,16 +573,16 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     item->SetColor(clrCyan);
     Add(item);
 
-    sprintf(str, "Language %d", n + 1);
+    sprintf(str, "%s %d", tr("Language"), n + 1);
     if(mLanguageNo[n] >= 0) {
-      Add(new cMenuEditStraItem(tr(str), &mLanguageNo[n], gNumLanguages, gLanguageNames));
+      Add(new cMenuEditStraItem(str, &mLanguageNo[n], gNumLanguages, gLanguageNames));
     } else {
-      Add(new cMenuEditStrItem(tr(str), mConf.mLanguages[n][0], 4, allowedc));
-      Add(new cMenuEditStrItem(tr(str), mConf.mLanguages[n][1], 4, allowedc));
+      Add(new cMenuEditStrItem(str, mConf.mLanguages[n][0], 4, allowedc));
+      Add(new cMenuEditStrItem(str, mConf.mLanguages[n][1], 4, allowedc));
     }
 
-    sprintf(str, "Language %d Hearing Impaired", n + 1);
-    Add(new cMenuEditBoolItem(tr(str), &(mConf.mHearingImpaireds[n][0]),
+    sprintf(str, "%s %d %s", tr("Language"), n + 1, tr("Hearing Impaired"));
+    Add(new cMenuEditBoolItem(str, &(mConf.mHearingImpaireds[n][0]),
 			      tr("no"), tr("yes")));
   }
 
@@ -572,6 +622,9 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("BottomAdj", mConf.mBottomAdj);
   SetupStore("FrenchSpecial", mConf.mFrenchSpecial);
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
+  SetupStore("LineSpacing", mConf.mLineSpacing);
+  SetupStore("FgColor", mConf.mFgColor);
+  SetupStore("BgColor", mConf.mBgColor);
 
   char lstr[MAXLANGUAGES*2*4 + 1];
   char histr[MAXLANGUAGES*2 + 1];

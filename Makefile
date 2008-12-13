@@ -1,7 +1,7 @@
 #
 # Makefile for a Video Disk Recorder plugin
 #
-# $Id: Makefile,v 1.19 2004/03/01 04:41:13 ragge Exp ragge $
+# $Id: Makefile,v 1.21 2004/03/02 01:08:45 ragge Exp $
 
 # The official name of this plugin.
 # This name will be used in the '-P...' option of VDR to load the plugin.
@@ -48,7 +48,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 ### The object files (add further files here):
 
 OBJS = $(PLUGIN).o ttxtsubsdisplayer.o ttxtsubsdisplay.o teletext.o siinfo.o \
-	ttxtsubsfilter.o ttxtsubsrecorder.o ttxtsubsreceiver.o
+	ttxtsubsfilter.o ttxtsubsrecorder.o ttxtsubsreceiver.o ttxtsubsi18n.o
 
 SOURCEFILES = *.c *.h [A-Z]???*
 

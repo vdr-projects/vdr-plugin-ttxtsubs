@@ -553,7 +553,7 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
     FreeSects(patsects);
   }
     
-  if(foundinfo) {
+  if(foundinfo || (ret == 0 && retry == 2)) {
     struct ttxtinfo info2;
     DupTtxtInfo(info, &info2);
     gCache[channel] = info2;

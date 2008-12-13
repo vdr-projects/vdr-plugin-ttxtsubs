@@ -1,6 +1,25 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2004-03-02: Version 0.0.5pre2
+
+- New features
+  - Text colours can be set and row spacing can be adjusted.
+    (The usual semitransparent "background" colour appearently
+     doesn't work with the ElchiAIO patch, don't know why.)
+    Thanks to Rolf Ahrenberg for the patch!
+  - ttxtsubs menus can now be translated to different languages.
+    Thanks to Rolf Ahrenberg for the patch!
+    English, Finnish and Swedish now included, others are welcome!
+- Bugs fixed:
+  - Information for channels with no teletext at all is now cached
+    too, making channel switches to such channels faster.
+
+- Note:
+  - The VDR 1.2.x patch "VDR.patch" is the same as in ttxtsubs 0.0.4b,
+    and the 0.0.4 and 0.0.3d patch should work equally well - there is
+    no need to repatch if you previously used any of those.
+
 2004-03-01: Version 0.0.5pre1
 
 - New features:
