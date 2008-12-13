@@ -5,7 +5,29 @@ VDR Plugin 'ttxtsubs' Revision History
 - Applied patch from Rolf Ahrenberg (vdr-ttxtsubs-0.0.5-raastinrauta-edition.diff.gz)
   which introduces the following changes:
   - Support for VDR >= 1.6.x
-  - TODO
+  - Rolf Ahrenberg
+    - Updated the core patch and Makefile against VDR's current API
+    - Added font, color, and DVB source selection
+    - Added UTF8 support
+    - Added layered OSD support
+    - Fixed EPG scan hiccups
+    - Fixed several race conditions in destructors
+    - Silenced compilation warnings
+  - Vyacheslav Diconov
+    - Russian translation
+  - Ville Skyttä
+    - fixed crash in plugin shutdown
+    - cleaned up logging to use syslog
+  - Thomas Günther
+    - German translation
+  - Michaël Nival
+    - Added missing const declarations
+    - French translation
+  - Luca Olivetti
+    - Fixed displaying subtitles setting
+    - Added a thread based subtitles scanner
+    - Added delay settings
+    - Added manual page selection mode
 
 2004-05-31: Version 0.0.5
 
