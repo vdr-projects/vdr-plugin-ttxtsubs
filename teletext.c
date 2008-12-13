@@ -484,7 +484,7 @@ ttxt_packet_in(int data_unit_id, int mag, int pack, uint8_t *data)
     //if(data[7] & 0x02) // Magazine Serial
     
     p.national_charset = 
-      ((data[7] & 0x80) >> 5) + ((data[7] & 0x20) >> 4) + ((data[7] & 0x08) >> 3);
+      ((data[7] & 0x80) >> 7) + ((data[7] & 0x20) >> 4) + ((data[7] & 0x08) >> 1);
 
     valid = 1;
 

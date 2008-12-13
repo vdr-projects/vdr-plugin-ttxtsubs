@@ -1,6 +1,11 @@
 
 class cRingBufferFrame;
 
+struct encodedPTS {
+  uint8_t valid;
+  uint8_t data[5];
+};
+
 class cTtxtSubsReceiver : public cReceiver
 {
  public:
@@ -8,7 +13,7 @@ class cTtxtSubsReceiver : public cReceiver
   virtual ~cTtxtSubsReceiver();
 
   // returns pointer buf if there is new data
-  uint8_t *Get(uint8_t *buf);
+  uint8_t *Get(uint8_t *buf, encodedPTS *pts = NULL);
   // wait for more data
   void Wait(void);
 
@@ -31,4 +36,5 @@ class cTtxtSubsReceiver : public cReceiver
   uint8_t mIndexPageLines;
   uint8_t mIndexPageCol;
   uint16_t mIndexPageNo;
+  encodedPTS mPTS;
 };

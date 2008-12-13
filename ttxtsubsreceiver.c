@@ -10,6 +10,11 @@
 
 #define MAXINDEXPAGELINES 24
 
+struct ringBufItem {
+  encodedPTS pts;
+  uint8_t data[46];
+};
+
 // ----- cTtxtSubsReceiver -----
 
 cTtxtSubsReceiver::cTtxtSubsReceiver(int Ca, struct ttxtpidinfo *PI)
@@ -17,7 +22,7 @@ cTtxtSubsReceiver::cTtxtSubsReceiver(int Ca, struct ttxtpidinfo *PI)
   cReceiver(Ca, -1, 1, PI->pid),
   mGetMutex(),
   mGetCond(),
-  mRingBuf(46 * 500, true),
+  mRingBuf(sizeof(ringBufItem) * 500, true),
   mPI(*PI),
   mIndexPageLines(0),
   mIndexPageCol(0),
@@ -25,6 +30,8 @@ cTtxtSubsReceiver::cTtxtSubsReceiver(int Ca, struct ttxtpidinfo *PI)
 {
   int count = 0;
   uint16_t *pages = (uint16_t *) malloc(sizeof(uint16_t) * mPI.pagecount);
+
+  mPTS.valid = 0;
 
   // find a free page to put the index page on
   mIndexPageNo = 0x100;
@@ -70,13 +77,18 @@ cTtxtSubsReceiver::~cTtxtSubsReceiver()
 
 
 // returns pointer buf if there is new data
-uint8_t *cTtxtSubsReceiver::Get(uint8_t *buf)
+uint8_t *cTtxtSubsReceiver::Get(uint8_t *buf, encodedPTS *pts)
 {
   cFrame *f;
 
   f = mRingBuf.Get();
   if(f) {
-    memcpy(buf, f->Data(), 46);
+    ringBufItem *i = (ringBufItem*) f->Data();
+    if(pts) {
+      *pts = i->pts;
+    }
+
+    memcpy(buf, i->data, 46);
     mRingBuf.Drop(f);
     // fprintf(stderr, "cTtxtSubsReceiver::Get: returned data!\n");
     return buf;
@@ -117,7 +129,7 @@ void cTtxtSubsReceiver::Activate(bool On)
 // XXX We should do some filtering here to avoid unneccessary load!
 void cTtxtSubsReceiver::Receive(uchar *Data, int Length)
 {
-  int i;
+  int i = 0;
 
   if(Length != 188) // should never happen
     return;
@@ -125,19 +137,37 @@ void cTtxtSubsReceiver::Receive(uchar *Data, int Length)
   if(Data[1] & 0x80) // transport_error_indicator
     return;
 
+  if((Data[3] & 0x30) != 0x10)  // only accept TS packets with data and no adaption field
+    return;                     // (ETSI EN 300 472 $4.1)
+
+  if(Data[1] & 0x40) {          // payload_unit_start_indicator
+    if(((Data[11] >> 6) & 0x02) == 0x02) { // PTS_DTS_flags
+      mPTS.data[0] = Data[13];
+      mPTS.data[1] = Data[14];
+      mPTS.data[2] = Data[15];
+      mPTS.data[3] = Data[16];
+      mPTS.data[4] = Data[17];
+      mPTS.valid = 1;
+    } else {
+      mPTS.valid = 0;
+    }
+  }
+
+  ringBufItem it;
+  it.pts = mPTS;
+
   // payload_unit_start_indicator
   for(i = (Data[1] & 0x40) ? 1 : 0; i < 4; i++) {
-    char buf[46];
 
     if(0xff == Data[4 + i*46]) // stuffing data
       continue;
 
-    if(mFilter.Filter((char *) Data + 4 + i*46, buf)) {
+    if(mFilter.Filter((char *) Data + 4 + i*46, (char *) it.data)) {
       // fprintf(stderr, "Forward Packet:\n");
       // print_line((char *) Data + 4 + i*46);
       // print_line(buf);
 
-      cFrame *f = new cFrame((uchar *) buf, 46);
+      cFrame *f = new cFrame((uchar *) &it, sizeof(ringBufItem));
       mRingBuf.Put(f);
       mGetCond.Broadcast();
     }

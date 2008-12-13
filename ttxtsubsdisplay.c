@@ -10,6 +10,7 @@
 #include <vdr/osdbase.h>
 #include <vdr/thread.h>
 
+#include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplay.h"
 #include "utils.h"
 
@@ -213,7 +214,7 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
       // if(fi[7] & 0x02) // Magazine Serial
       
       page.national_charset = ((fi[7] & 0x80) >> 5) +
-	((fi[7] & 0x20) >> 4) + ((fi[7] & 0x08) >> 3);
+	((fi[7] & 0x20) >> 4) + ((fi[7] & 0x08) >> 1);
       
       mPageState = collecting;
       gettimeofday(mLastDataTime, NULL);
@@ -287,8 +288,23 @@ ttxt2la1(uint8_t *p, char *buf, int natopts)
     return NULL;
 }
 
+#if 0
+
+#define TEST_CENTER 0
+#if TEST_CENTER
+#define SCREENLEFT 0
+#define SCREENWIDTH 720
+#else
 #define SCREENLEFT 125
+#endif
+
+#define TEST_169 0
+#if TEST_169
+#define SCREENBOT 480
+#else
 #define SCREENBOT 540
+#endif
+
 #if 0
 #define ROWINCR 45
 #define ROWH 36
@@ -299,7 +315,26 @@ ttxt2la1(uint8_t *p, char *buf, int natopts)
 #define TEXTY 3
 #endif
 #define TEXTX 15
-#define SCREENTOP (SCREENBOT - MAXTTXTROWS * ROWINCR)
+//#define SCREENTOP (SCREENBOT - MAXTTXTROWS * ROWINCR)
+#define SCREENTOP 100
+
+#endif
+
+enum {
+  SCREENLEFT = 0,
+  SCREENRIGHT = 719,
+  SCREENTOP = 150,
+  SCREENBOTTOM = 575,
+  
+  SIDEMARGIN = 125,
+  BOTNORM = 540,
+  BOTLETTERBOX = 482,
+
+  ROWINCR = 43,
+  ROWH = 34,
+  TEXTY = 3,
+  TEXTX = 15
+};
 
 void cTtxtSubsDisplay::ShowOSD(void)
 {
@@ -307,6 +342,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
   int rowcount = 0;
   char buf[TTXT_DISPLAYABLE_ROWS][41];
   int doneWidthWorkaround = 0;
+  int bottom = globals.bottomAdj() + (globals.bottomLB() ? BOTLETTERBOX : BOTNORM);
 
   cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
@@ -332,11 +368,8 @@ void cTtxtSubsDisplay::ShowOSD(void)
 	rowcount++;
   }
 
-#if 1
   mOsd = cOsd::OpenRaw(SCREENLEFT, SCREENTOP);
-#else
-  mOsd = cDevice::PrimaryDevice()->NewOsd(SCREENLEFT, SCREENTOP);
-#endif
+
   if(mOsd == NULL) {
     //dprint("Error: cOsd::OpenRaw returned NULL!\n");
     return;
@@ -347,29 +380,48 @@ void cTtxtSubsDisplay::ShowOSD(void)
   if(rowcount > MAXTTXTROWS)
     rowcount = MAXTTXTROWS;
 
-  y = SCREENBOT - SCREENTOP - ROWH - (ROWINCR * (rowcount-1));
+#if 0 // XXXX
+  rowcount = 4;
+  strcpy(buf[0], "1234567890123456789012345678901234567890");
+  strcpy(buf[1], "1234567890123456789012345678901234567890");
+  strcpy(buf[2], "1234567890123456789012345678901234567890");
+  strcpy(buf[3], "1234567890123456789012345678901234567890");
+#endif
+
+  y = bottom - SCREENTOP - ROWH - (ROWINCR * (rowcount-1));
   for(i = 0; i < rowcount; i++) {
     tWindowHandle wind;
-    int w = 0; // XXX should be text width - not %4!
+    int w = 0;
+    int left = SIDEMARGIN;
 
     // XXX Width calculations doesn't work before we have created a window...
     if(!doneWidthWorkaround) {
-      wind = mOsd->Create(0, y, 4, ROWH, 2);
-      mOsd->Fill(0, y, 4, y + ROWH, clrWhite, wind);
-      mOsd->Fill(0, y, 4, y + ROWH, clrBackground, wind);
+      //wind = mOsd->Create(0, y, 4, ROWH, 2);
+      //mOsd->Fill(0, y, 4, y + ROWH, clrWhite, wind);
+      //mOsd->Fill(0, y, 4, y + ROWH, clrBackground, wind);
+      wind = mOsd->Create(0, 575, 4, 1, 2);
+      mOsd->Fill(0, 574, 4, 575, clrWhite, wind);
+      mOsd->Fill(0, 574, 4, 575, clrTransparent, wind);
       doneWidthWorkaround = 1;
     }
-    
-    w = mOsd->Width(buf[i]) + 2 * TEXTX;
 
+    w = mOsd->Width(buf[i]) + 2 * TEXTX;
     if(w % 4)
       w += 4 - (w % 4);
 
-    wind = mOsd->Create(0, y, w, ROWH, 2);
-    //dprint("W: %d\n", w);
-    mOsd->Fill(0, y, w, y + ROWH, clrWhite, wind); // needed for dxr3s...
-    mOsd->Fill(0, y, w, y + ROWH, clrBackground, wind);
-    mOsd->Text(TEXTX, y + TEXTY, buf[i], clrWhite, clrBackground, wind);
+    switch(globals.textPos()) {
+    case 1:
+      left = (SCREENRIGHT - w) / 2;
+      break;
+    case 2:
+      left = SCREENRIGHT - SIDEMARGIN - w;
+      break;
+    }
+
+    wind = mOsd->Create(left, y, w, ROWH, 2);
+    mOsd->Fill(left, y, left + w, y + ROWH, clrWhite, wind); // needed for dxr3s...
+    mOsd->Fill(left, y, left + w, y + ROWH, clrBackground, wind);
+    mOsd->Text(left + TEXTX, y + TEXTY, buf[i], clrWhite, clrBackground, wind);
 
     y += ROWINCR;
   }
@@ -392,8 +444,11 @@ void cTtxtSubsDisplay::ClearOSD(void)
   if(mOsd) {
 
     //mOsd->Clear(ALL_WINDOWS);
+#if 0
+    // not needed, windows are removed in mOsd destructor
     mOsd->Hide(ALL_WINDOWS);
     mOsd->Flush();
+#endif
     delete mOsd;
     mOsd = NULL;
   }

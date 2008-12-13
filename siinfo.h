@@ -35,4 +35,6 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
 void FreeTtxtInfoData(struct ttxtinfo *info);
 void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out);
 
-struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, char *lang, int HI, int *pid, int *pageno);
+struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno);
+
+void ClearSICache(void);

@@ -1,7 +1,7 @@
 #
 # Makefile for a Video Disk Recorder plugin
 #
-# $Id: Makefile,v 1.18 2003/07/16 04:01:44 ragge Exp $
+# $Id: Makefile,v 1.19 2004/03/01 04:41:13 ragge Exp ragge $
 
 # The official name of this plugin.
 # This name will be used in the '-P...' option of VDR to load the plugin.
@@ -83,7 +83,7 @@ dist: clean
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
 	@echo Distribution package created as $(PACKAGE).tgz
 
-bup: clean patch
+bup: clean
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
 	@mkdir $(TMPDIR)/$(ARCHIVE)
 	@cp -a $(SOURCEFILES) RCS $(TMPDIR)/$(ARCHIVE)

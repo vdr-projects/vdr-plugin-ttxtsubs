@@ -33,15 +33,14 @@ class cTtxtSubsLiveReceiver : public cReceiver, public cTtxtSubsDisplayer {
 
 class cTtxtSubsPlayer : public cTtxtSubsDisplayer {
  public:
-  cTtxtSubsPlayer(char *lang, int HI, int backup_textpage);
+  cTtxtSubsPlayer(int backup_textpage);
   virtual void PES_data(uchar *Data, int Length);
 
  private:
   void SearchLanguagePage(uint8_t *p, int len);
   
-  char mLanguage[4];
-  int mHearingImpaired;
   int mHasFilteredStream;
   int mFoundLangPage;
+  int mLangChoise;
   int mLangInfoState;
 };

@@ -6,7 +6,7 @@ struct ttxtinfo;
 
 class cTtxtSubsRecorder : public cTtxtSubsRecorderBase {
  public:
-  cTtxtSubsRecorder(cDevice *dev, const cChannel *ch, char *lang, int HI);
+  cTtxtSubsRecorder(cDevice *dev, const cChannel *ch);
   virtual ~cTtxtSubsRecorder();
 
   // returns a PES packet if there is data to add to the recording

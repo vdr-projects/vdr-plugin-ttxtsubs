@@ -22,6 +22,8 @@
 #include "linux/dvb/dmx.h"
 #include "siinfo.h"
 
+#include "ttxtsubsglobals.h"
+
 #define DESCR_TELETEXT 0x56
 #define DESCR_DVBSUBTITLES 0x59
 
@@ -329,6 +331,23 @@ static void addpageinfo(struct ttxtinfo *info, uint16_t pid, struct ttxt_descr *
   pa->type = descr->d[descr_index].type_mag >> 3;
   pa->mag = descr->d[descr_index].type_mag & 0x7;
   pa->page = descr->d[descr_index].page_no;
+
+  if(globals.frenchSpecial()) {
+    /* By some silly reason some French channels (Canal+ and CanalSatellite)
+       announce subtitles with the page number in decimal, for example
+       page 859 when they really are on page 889. */
+    uint8_t newpage = pa->page;
+    if(pa->page >= 0x50 && pa->page <= 0x59)
+      newpage += 0x30;
+    if(pa->page != newpage) {
+      uint8_t mag = pa->mag;
+      if(mag == 0)
+	mag = 8;
+      fprintf(stderr, "Warning: Remapped page number %01x%02x to %01x%02x!\n",
+	      mag, pa->page, mag, newpage);
+      pa->page = newpage;
+    }
+  }
 }
 
 
@@ -343,7 +362,7 @@ static int HasVPID(int vpid, char **pmtsects, int numsects)
     char *end;
 
     psect = (struct PMT_sect *) pmtsects[i];
-    end = pmtsects[i] + (psect->syntax_len & 0x3ff) - 7;
+    end = pmtsects[i] + (ntohs(psect->syntax_len) & 0x3ff) - 7;
     // skip extra program info
     sp = ((char *) &(psect->s)) + (ntohs(psect->res_program_info_length) & 0xfff);
     
@@ -374,7 +393,7 @@ static void ExtractTtxtInfo(char **pmtsects, int numsects, struct ttxtinfo *info
     char *end;
 
     psect = (struct PMT_sect *) pmtsects[i];
-    end = pmtsects[i] + (psect->syntax_len & 0x3ff) - 7;
+    end = pmtsects[i] + (ntohs(psect->syntax_len) & 0x3ff) - 7;
     // skip extra program info
     sp = ((char *) &(psect->s)) + (ntohs(psect->res_program_info_length) & 0xfff);
     
@@ -572,52 +591,47 @@ void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out)
 }
 
 
-struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, char *lang, int HI, int *pid, int *pageno)
+struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno)
 {
-  struct ttxtpidinfo *foundNonHIInfo = NULL;
-  int foundNonHIPid = 0;
-  int foundNonHIPage = -1;
+  struct ttxtpidinfo *foundPI = NULL;
+  int foundChoise = 1000;
 
+  // walk through all available languages and remember most preferred one
   for(int i = 0; i < info->pidcount; i++) {
     for(int j = 0; j < info->p[i].pagecount; j++) {
-      if(info->p[i].i[j].lang[0] == lang[0] &&
-	 info->p[i].i[j].lang[1] == lang[1] &&
-	 info->p[i].i[j].lang[2] == lang[2]) {
-	if((!HI && info->p[i].i[j].type == TTXT_SUBTITLE_PAGE) ||
-	   (HI && info->p[i].i[j].type == TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE)) {
+      if((info->p[i].i[j].type != TTXT_SUBTITLE_PAGE) &&
+	 (info->p[i].i[j].type != TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE))
+	continue;
+
+      int ch = globals.langChoise(info->p[i].i[j].lang,
+	  info->p[i].i[j].type == TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE);
+      if(ch != -1) {
+	if(ch < foundChoise) {
+	  foundChoise = ch;
 	  *pid = info->p[i].pid;
 	  *pageno = info->p[i].i[j].mag * 0x100 + info->p[i].i[j].page;
-	  fprintf(stderr, "ttxtsubs: Found selected subtitles on PID %d, page %03x\n", *pid,
-		  *pageno < 0x100 ? *pageno + 0x800 : *pageno);
-	  return &(info->p[i]);
-	} else if(HI && info->p[i].i[j].type == TTXT_SUBTITLE_PAGE) {
-	  foundNonHIPid = info->p[i].pid;
-	  foundNonHIPage = info->p[i].i[j].mag * 0x100 + info->p[i].i[j].page;
-	  foundNonHIInfo = &(info->p[i]);
+	  foundPI = &(info->p[i]);
 	}
       }
     }
   }
 
-  if(foundNonHIInfo) {
-    *pid = foundNonHIPid;
-    *pageno = foundNonHIPage;
-    fprintf(stderr, "ttxtsubs: Found non HI subtitles on PID %d, page %03x\n", *pid,
-	    *pageno < 0x100 ? *pageno + 0x800 : *pageno);
-    return foundNonHIInfo;
+  if(foundPI) {
+    return foundPI;
   }
 
   if(info->pidcount == 0)
     fprintf(stderr, "ttxtsubs: No teletext subtitles on channel.\n");
   else {
-    fprintf(stderr, "ttxtsubs: Subtitles for language \"%c%c%c\" not found on channel, available languages:\n", lang[0], lang[1], lang[2]);
+    fprintf(stderr, "ttxtsubs: Wanted subtitle language(s) not found on channel, available languages:\n");
     for(int i = 0; i < info->pidcount; i++) {
       for(int j = 0; j < info->p[i].pagecount; j++) {
 	int page = info->p[i].i[j].mag * 0x100 + info->p[i].i[j].page;
 	int type = info->p[i].i[j].type;
 	if(page < 0x100)
 	  page += 0x800;
-	fprintf(stderr, "          %03x: %c%c%c %s\n", page, info->p[i].i[j].lang[0], info->p[i].i[j].lang[1], info->p[i].i[j].lang[2],
+	fprintf(stderr, "          %03x: %c%c%c %s\n", page, info->p[i].i[j].lang[0],
+		info->p[i].i[j].lang[1], info->p[i].i[j].lang[2],
 		type == TTXT_INITIAL_PAGE ? "(Initial Page (The teletext start page, not a subtitles page!))" :
 		type == TTXT_SUBTITLE_PAGE ? "(Subtitles)" :
 		type == TTXT_ADDITIONAL_INFO_PAGE ? "(Additional Info Page)" :
@@ -630,6 +644,13 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, char *lang, int HI, int *pid
   *pid = 0;
   *pageno = -1;
   return NULL;
+}
+
+
+void
+ClearSICache(void)
+{
+  gCache.clear();
 }
 
 

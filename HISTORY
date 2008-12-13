@@ -1,6 +1,29 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2004-03-01: Version 0.0.5pre1
+
+- New features:
+  - More than one language can be chosen, they are used in order of preference
+  - Handles languages with two ISO 639-2 identifiers (as ger/deu, fre/fra)
+  - Subtitles can now be turned on or off
+  - Optional main menu alternative for easy access
+  - Selectable vertical position of text for 4:3/Anamorphic or Letterbox 
+  - Left, Center or Right horizontal position of text
+  - Remapping option for those French channels that incorrectly
+    sends teletext page numbers in decimal instead of hexadecimal.
+    Very moderate remapping done at the moment, I hope it is enough.
+  - Subtitles are now recorded with their PTS (timestamps). Not that
+    the timestamps are completely wrong on some channels, this
+    may confuse uncareful subtitle extracting software.
+  - Included patch for VDR 1.3.5 - untested!
+- Bugs fixed:
+  - Fixed a net-to-host-order bug in the si parser that could make it
+    incorrectly think that there are no subtitles on a channel.
+    Thanks to Nicolas "tarass"!
+  - Fixed a bit swapping bug causing incorrect character encoding for
+    some languages. Thanks to Nicolas "tarass"!
+
 2003-09-26: Version 0.0.4b
 - Fix patch for VDR 1.2.5
 - Minor bug fix for dxr3 display

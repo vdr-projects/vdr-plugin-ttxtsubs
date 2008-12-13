@@ -126,6 +126,11 @@ void cTtxtSubsFilter::MakeY0(char *outdata, char *indata, uint16_t newpageno)
   struct ttxt_data_field *o = (struct ttxt_data_field *) outdata;
   uint8_t hambuf[2];
 
+  o->data_unit_id = 3; // EBU Teletxt subtitle data
+  o->data_unit_length = 44;
+  o->par_loff = 0xc0; // reserved bits + unknown line
+  o->framing_code = 0xe4;
+
   // new magazine number (Y = 0)
   ham8_4byte((newpageno >> 8) & 0x7, hambuf);
   o->mag_addr_ham[0] = invtab[hambuf[0]];

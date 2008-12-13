@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "ttxtsubs.h"
 #include "siinfo.h"
+#include "ttxtsubsglobals.h"
 
 // ----- class cTtxtSubsDisplayer -----
 
@@ -17,7 +18,6 @@ cTtxtSubsDisplayer::cTtxtSubsDisplayer(int textpage)
 {
   mDisp = new cTtxtSubsDisplay();
   mDisp->SetPage(textpage);
-  ShowDisplay();
 
   mRun = 1;
   this->Start(); // start thread
@@ -108,16 +108,14 @@ void cTtxtSubsLiveReceiver::Receive(uchar *Data, int Length)
 
 // ----- class cTtxtSubsPlayer -----
 
-cTtxtSubsPlayer::cTtxtSubsPlayer(char *lang, int HI, int backup_textpage)
+cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
   :
   cTtxtSubsDisplayer(backup_textpage),
-  mHearingImpaired(HI),
   mHasFilteredStream(0),
   mFoundLangPage(0),
+  mLangChoise(1000),
   mLangInfoState(0)
 {
-  memcpy(mLanguage, lang, 3);
-  mLanguage[3] = '\0';
 }
 
 // Take PES packets and break out the teletext data
@@ -169,8 +167,6 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
 {
   char *infoline = "Subtitles Index Page";
   int foundlines = 0;
-  unsigned int foundNonHIPage = 0;
-  int foundNonHI = 0; // 1 = found non hearing impaired
 
   if(len < (3*46))
      return;
@@ -201,25 +197,26 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
       break;
     case 2:
       mLangInfoState++;
-      if(mLangInfoState == 3)
-	fprintf(stderr, "ttxtsubs: Language \"%c%c%c\" not found in recording, available languages:\n",
-		mLanguage[0], mLanguage[1], mLanguage[2]);
-
       if(packet < 2) // need a Y2 or more
 	return;
+      if(mLangInfoState == 3)
+	fprintf(stderr, "ttxtsubs: Chosen Language not found in recording, available languages:\n");
       copy_inv_strip_par(buf, d->data, sizeof(buf));
       for(size_t i = 0; i < 40; i += 8) {
 	if(mLangInfoState == 3 && buf[i] >= 'a' && buf[i] <= 'z')
-	  fprintf(stderr, "          %c%c%c: %c%c%c %s\n", buf[i+4], buf[i+5], buf[i+6],  buf[i], buf[i+1], buf[i+2],
-		  buf[i+3] == ' ' ? "" : buf[i+3] == 'h' ? "(Hearing Impaired)" : "(Unknown type)");
-	if(buf[i] == mLanguage[0] &&
-	   buf[i+1] == mLanguage[1] &&
-	   buf[i+2] == mLanguage[2] &&
+	  fprintf(stderr, "          %c%c%c: %c%c%c %s\n", buf[i+4], buf[i+5], buf[i+6],
+		  buf[i], buf[i+1], buf[i+2], buf[i+3] == ' ' ? "" :
+		  buf[i+3] == 'h' ? "(Hearing Impaired)" : "(Unknown type)");
+
+	if(buf[i] >= 'a' && buf[i] <= 'z' &&
+	   buf[i+1] >= 'a' && buf[i+1] <= 'z' &&
+	   buf[i+2] >= 'a' && buf[i+2] <= 'z' &&
 	   ((buf[i+3] == ' ') || (buf[i+3] == 'h')) &&
 	   buf[i+4] >= '1' && buf[i+4] <= '8' && 
 	   buf[i+5] >= '0' && buf[i+5] <= '9' && 
 	   buf[i+6] >= '0' && buf[i+6] <= '9' && 
 	   buf[i+7] == ' ') {
+	      int ch = globals.langChoise((char *)buf+i, buf[i+3] == 'h');
 	      unsigned int page =
 		((buf[i+4] - '0') << 8) +
 		((buf[i+5] - '0') << 4) +
@@ -228,29 +225,16 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
 		if(page >= 0x800)
 		  page -= 0x800;
 
-		if(((!mHearingImpaired) && (buf[3+i] == ' ')) ||
-		   (mHearingImpaired && (buf[3+i] == 'h'))) {
+		if(ch >= 0 && ch < mLangChoise) {
+		  mLangChoise = ch;
 		  mDisp->SetPage(page);
 		  mFoundLangPage = 1;
-		  fprintf(stderr, "FOUND subtitle page: %03x\n", page); // XXX
-		  return;
-		}
-		if(mHearingImpaired && (buf[3+i] == ' ')) {
-		  foundNonHIPage = page;
-		  foundNonHI = 1;
-		  fprintf(stderr, "FOUND non hi subtitle page, remembering: %03x\n", page); // XXX
+		  fprintf(stderr, "Found subtitle page: %03x\n", page); // XXX
 		}
 	      }
 	}
       }
       break;
     }
-  }
-
-  if(foundNonHI) {
-    mDisp->SetPage(foundNonHIPage);
-    mFoundLangPage = 1;
-    fprintf(stderr, "Didn't find HI page, but found right language: %03x\n", foundNonHIPage); // XXX
-    return;
   }
 }
