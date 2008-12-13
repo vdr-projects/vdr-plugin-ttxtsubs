@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.13 2003/05/04 22:38:35 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.15 2003/06/20 02:35:37 ragge Exp $
  */
 
 #include <vdr/plugin.h>
@@ -18,7 +18,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.2";
+static const char *VERSION        = "0.0.3";
 static const char *DESCRIPTION    = "Teletext subtitles";
 //static const char *MAINMENUENTRY  = "Ttxtsubs";
 
@@ -38,9 +38,10 @@ char *gLanguages[] =
     "pol", //Polish
     "spa", //Spanish
     "gre", //Greek
-    "swe", //Swedish
+    "swe", //"sve? Swedish
     "rom", //Romanian
     "hun", //Hungarian
+    "cat", //Catalanian
   // Not in translations!
   "dan" //Danish
     };

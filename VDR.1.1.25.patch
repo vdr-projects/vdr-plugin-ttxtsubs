@@ -1,6 +1,6 @@
-diff -upr ./DIST/vdr-1.2.1/Makefile ./Makefile
---- ./DIST/vdr-1.2.1/Makefile	2003-01-06 13:28:09.000000000 +0100
-+++ ./Makefile	2003-06-20 04:05:11.000000000 +0200
+diff -upr ./DIST/vdr-1.1.25/Makefile ./Makefile
+--- ./DIST/vdr-1.1.25/Makefile	2003-01-06 13:28:09.000000000 +0100
++++ ./Makefile	2003-03-07 03:19:33.000000000 +0100
 @@ -36,7 +36,8 @@ OBJS = audio.o channels.o ci.o config.o 
         dvbplayer.o dvbspu.o eit.o eitscan.o font.o i18n.o interface.o keys.o\
         lirc.o menu.o menuitems.o osdbase.o osd.o player.o plugin.o rcu.o\
@@ -11,10 +11,10 @@ diff -upr ./DIST/vdr-1.2.1/Makefile ./Makefile
  
  OSDFONT = -adobe-helvetica-medium-r-normal--23-*-100-100-p-*-iso8859-1
  FIXFONT = -adobe-courier-bold-r-normal--25-*-100-100-m-*-iso8859-1
-diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
---- ./DIST/vdr-1.2.1/dvbplayer.c	2003-05-24 11:04:26.000000000 +0200
-+++ ./dvbplayer.c	2003-06-20 04:05:11.000000000 +0200
-@@ -14,6 +14,7 @@
+diff -upr ./DIST/vdr-1.1.25/dvbplayer.c ./dvbplayer.c
+--- ./DIST/vdr-1.1.25/dvbplayer.c	2003-02-15 11:38:59.000000000 +0100
++++ ./dvbplayer.c	2003-03-07 03:52:55.000000000 +0100
+@@ -13,6 +13,7 @@
  #include "ringbuffer.h"
  #include "thread.h"
  #include "tools.h"
@@ -22,7 +22,7 @@ diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
  
  // --- cBackTrace ----------------------------------------------------------
  
-@@ -323,6 +324,12 @@ void cDvbPlayer::StripAudioPackets(uchar
+@@ -318,6 +319,12 @@ void cDvbPlayer::StripAudioPackets(uchar
              int l = b[i + 4] * 256 + b[i + 5] + 6;
              switch (c) {
                case 0xBD: // dolby
@@ -35,7 +35,7 @@ diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
                     if (Except)
                        PlayAudio(&b[i], l);
                     // continue with deleting the data - otherwise it disturbs DVB replay
-@@ -349,6 +356,40 @@ void cDvbPlayer::StripAudioPackets(uchar
+@@ -347,6 +354,40 @@ void cDvbPlayer::StripAudioPackets(uchar
       }
  }
  
@@ -76,9 +76,9 @@ diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
  bool cDvbPlayer::NextFile(uchar FileNumber, int FileOffset)
  {
    if (FileNumber > 0)
-@@ -524,6 +565,11 @@ void cDvbPlayer::Action(void)
-                        StripAudioPackets(p, pc, AudioTrack);
-                     }
+@@ -514,6 +555,11 @@ void cDvbPlayer::Action(void)
+                  p = playFrame->Data();
+                  pc = playFrame->Count();
                   }
 +#ifdef VDRTTXTSUBSHOOKS
 +	   // pick out the teletext packets here
@@ -88,11 +88,11 @@ diff -upr ./DIST/vdr-1.2.1/dvbplayer.c ./dvbplayer.c
                if (p) {
                   int w = PlayVideo(p, pc);
                   if (w > 0) {
-diff -upr ./DIST/vdr-1.2.1/menu.c ./menu.c
---- ./DIST/vdr-1.2.1/menu.c	2003-06-07 14:31:57.000000000 +0200
-+++ ./menu.c	2003-06-20 04:05:11.000000000 +0200
-@@ -2969,8 +2969,18 @@ cRecordControl::cRecordControl(cDevice *
- 
+diff -upr ./DIST/vdr-1.1.25/menu.c ./menu.c
+--- ./DIST/vdr-1.1.25/menu.c	2003-02-09 13:55:38.000000000 +0100
++++ ./menu.c	2003-03-07 03:38:14.000000000 +0100
+@@ -2931,8 +2931,18 @@ cRecordControl::cRecordControl(cDevice *
+   fileName = strdup(Recording.FileName());
    cRecordingUserCommand::InvokeCommand(RUC_BEFORERECORDING, fileName);
    const cChannel *ch = timer->Channel();
 +#ifdef VDRTTXTSUBSHOOKS
@@ -109,10 +109,10 @@ diff -upr ./DIST/vdr-1.2.1/menu.c ./menu.c
 +#endif
       Recording.WriteSummary();
       cStatus::MsgRecording(device, Recording.Name());
-      if (!Timer && !cReplayControl::LastReplayed()) // an instant recording, maybe from cRecordControls::PauseLiveVideo()
-diff -upr ./DIST/vdr-1.2.1/menu.h ./menu.h
---- ./DIST/vdr-1.2.1/menu.h	2003-05-24 18:35:52.000000000 +0200
-+++ ./menu.h	2003-06-20 04:05:11.000000000 +0200
+      }
+diff -upr ./DIST/vdr-1.1.25/menu.h ./menu.h
+--- ./DIST/vdr-1.1.25/menu.h	2003-01-12 15:54:05.000000000 +0100
++++ ./menu.h	2003-03-07 03:33:28.000000000 +0100
 @@ -14,6 +14,7 @@
  #include "device.h"
  #include "osd.h"
@@ -121,9 +121,9 @@ diff -upr ./DIST/vdr-1.2.1/menu.h ./menu.h
  #include "recorder.h"
  #include "recording.h"
  
-diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
---- ./DIST/vdr-1.2.1/osd.c	2003-06-04 18:13:00.000000000 +0200
-+++ ./osd.c	2003-06-20 04:05:11.000000000 +0200
+diff -upr ./DIST/vdr-1.1.25/osd.c ./osd.c
+--- ./DIST/vdr-1.1.25/osd.c	2002-12-08 14:17:13.000000000 +0100
++++ ./osd.c	2003-03-07 03:55:32.000000000 +0100
 @@ -12,6 +12,7 @@
  #include "device.h"
  #include "i18n.h"
@@ -142,7 +142,7 @@ diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
    //XXX
    osd = OpenRaw(x, y);
    //XXX TODO this should be transferred to the places where the individual windows are requested (there's too much detailed knowledge here!)
-@@ -138,6 +142,9 @@ void cOsd::Close(void)
+@@ -136,6 +140,9 @@ void cOsd::Close(void)
    delete osd;
    osd = NULL;
  #endif
@@ -152,9 +152,9 @@ diff -upr ./DIST/vdr-1.2.1/osd.c ./osd.c
  }
  
  void cOsd::Clear(void)
-diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
---- ./DIST/vdr-1.2.1/recorder.c	2003-05-16 15:33:04.000000000 +0200
-+++ ./recorder.c	2003-06-20 04:05:11.000000000 +0200
+diff -upr ./DIST/vdr-1.1.25/recorder.c ./recorder.c
+--- ./DIST/vdr-1.1.25/recorder.c	2003-01-25 17:23:36.000000000 +0100
++++ ./recorder.c	2003-03-07 03:54:10.000000000 +0100
 @@ -10,6 +10,8 @@
  #include <stdarg.h>
  #include <stdio.h>
@@ -164,7 +164,7 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
  #include "recorder.h"
  
  // The size of the array used to buffer video data:
-@@ -23,7 +25,11 @@
+@@ -19,7 +21,11 @@
  #define MINFREEDISKSPACE    (512) // MB
  #define DISKCHECKINTERVAL   100 // seconds
  
@@ -176,7 +176,7 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
  :cReceiver(Ca, Priority, 5, VPid, APid1, APid2, DPid1, DPid2)
  {
    ringBuffer = NULL;
-@@ -34,6 +40,9 @@ cRecorder::cRecorder(const char *FileNam
+@@ -30,6 +36,9 @@ cRecorder::cRecorder(const char *FileNam
    fileSize = 0;
    active = false;
    lastDiskSpaceCheck = time(NULL);
@@ -186,7 +186,7 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
    isyslog("record %s", FileName);
  
    // Create directories if necessary:
-@@ -61,6 +70,10 @@ cRecorder::cRecorder(const char *FileNam
+@@ -57,6 +66,10 @@ cRecorder::cRecorder(const char *FileNam
  cRecorder::~cRecorder()
  {
    Detach();
@@ -197,7 +197,7 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
    delete index;
    delete fileName;
    delete remux;
-@@ -135,6 +148,19 @@ void cRecorder::Action(void)
+@@ -130,6 +143,19 @@ void cRecorder::Action(void)
                      break;
                      }
                   fileSize += Result;
@@ -217,9 +217,9 @@ diff -upr ./DIST/vdr-1.2.1/recorder.c ./recorder.c
                   }
                else
                   break;
-diff -upr ./DIST/vdr-1.2.1/recorder.h ./recorder.h
---- ./DIST/vdr-1.2.1/recorder.h	2002-06-08 11:35:03.000000000 +0200
-+++ ./recorder.h	2003-06-20 04:05:11.000000000 +0200
+diff -upr ./DIST/vdr-1.1.25/recorder.h ./recorder.h
+--- ./DIST/vdr-1.1.25/recorder.h	2002-06-08 11:35:03.000000000 +0200
++++ ./recorder.h	2003-03-07 03:50:33.000000000 +0100
 @@ -15,6 +15,7 @@
  #include "remux.h"
  #include "ringbuffer.h"

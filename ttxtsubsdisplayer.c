@@ -40,7 +40,7 @@ cTtxtSubsDisplayer::~cTtxtSubsDisplayer(void)
 void cTtxtSubsDisplayer::Action(void)
 {
   while(mRun) {
-    const cFrame *f;
+    cFrame *f;
 
     f = mRingBuf.Get();
 

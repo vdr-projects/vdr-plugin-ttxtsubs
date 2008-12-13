@@ -72,7 +72,7 @@ cTtxtSubsReceiver::~cTtxtSubsReceiver()
 // returns pointer buf if there is new data
 uint8_t *cTtxtSubsReceiver::Get(uint8_t *buf)
 {
-  const cFrame *f;
+  cFrame *f;
 
   f = mRingBuf.Get();
   if(f) {

@@ -1,9 +1,12 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2003-06-20: Version 0.0.3
+- Small adjustments for VDR 1.2.1
+
 2003-05-05: Version 0.0.2
-- Bug fix: Could miss to display subtitles on channels with "Parallel Magazine"
-  transmission. Thanks to Antti Lammi!
+- Bug fix: Could miss to display subtitles on channels with
+  "Parallel Magazine" transmission. Thanks to Antti Lammi!
 
 2003-04-28: Version 0.0.1b
 - Timeout on SI table reads
