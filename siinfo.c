@@ -515,7 +515,7 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, char *lang, int HI, int *pid
 	if(page < 0x100)
 	  page += 0x800;
 	fprintf(stderr, "          %03x: %c%c%c %s\n", page, info->p[i].i[j].lang[0], info->p[i].i[j].lang[1], info->p[i].i[j].lang[2],
-		type == TTXT_INITIAL_PAGE ? "(Initial Page)" :
+		type == TTXT_INITIAL_PAGE ? "(Initial Page (The teletext start page, not a subtitles page!))" :
 		type == TTXT_SUBTITLE_PAGE ? "(Subtitles)" :
 		type == TTXT_ADDITIONAL_INFO_PAGE ? "(Additional Info Page)" :
 		type == TTXT_PROGRAMME_SCHEDULE_PAGE ? "(Programme Schedule Page)" :

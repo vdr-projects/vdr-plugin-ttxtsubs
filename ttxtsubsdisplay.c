@@ -118,13 +118,15 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
     for(i = 0; i < 8; i++)
       fi[i] = invtab[d->data[i]];
 
-    if(mPageState == collecting) {
-      mPageState = finished;
-      ClearOSD();
-      ShowOSD();
+    if(mag == mMag) { /* XXX: && ! magazine_serial */
+      if(mPageState == collecting) {
+	mPageState = finished;
+	ClearOSD();
+	ShowOSD();
+      }
+      if(mPageState == interimshow)
+	mPageState = finished;
     }
-    if(mPageState == interimshow)
-      mPageState = finished;
 
     no = unham(fi[0], fi[1]);
 
