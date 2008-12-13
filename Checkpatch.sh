@@ -23,18 +23,18 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-grep OSD_HOOK_2 "$DIR/../../../osd.c" >> /dev/null;
-if [ $? -ne 0 ]; then
-    echo
-    echo
-    echo "Error while building ttxtsubs plugin:"
-    echo "       You have an older version of the VDR patch installed!"
-    echo "       You need to upgrade it."
-    echo "       Please do:"
-    echo "        cd /path/to/vdr    [ replace with your path ]"
-    echo "        patch -b < PLUGINS/src/ttxtsubs/VDR.upgrade-patch"
-    echo "        make"
-    echo
-    exit 1;
-fi
+#grep OSD_HOOK_2 "$DIR/../../../osd.c" >> /dev/null;
+#if [ $? -ne 0 ]; then
+#    echo
+#    echo
+#    echo "Error while building ttxtsubs plugin:"
+#    echo "       You have an older version of the VDR patch installed!"
+#    echo "       You need to upgrade it."
+#    echo "       Please do:"
+#    echo "        cd /path/to/vdr    [ replace with your path ]"
+#    echo "        patch -b < PLUGINS/src/ttxtsubs/VDR.upgrade-patch"
+#    echo "        make"
+#    echo
+#    exit 1;
+#fi
 

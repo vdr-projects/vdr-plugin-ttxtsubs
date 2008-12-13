@@ -18,11 +18,13 @@
 
 #include <vdr/device.h>
 #include <vdr/dvbdevice.h>
+#include <vdr/channels.h>
 
 #include "linux/dvb/dmx.h"
 #include "siinfo.h"
 
 #include "ttxtsubsglobals.h"
+#include "ttxtsubschannelsettings.h"
 
 #define DESCR_TELETEXT 0x56
 #define DESCR_DVBSUBTITLES 0x59
@@ -32,57 +34,57 @@
 
 
 // ETSI 300468 6.2.40
-struct ttxt_descr {
-  uint8_t tag   PACK;
-  uint8_t length   PACK;
-  struct {
-    uint8_t lang[3]   PACK;
-    uint8_t type_mag   PACK; // 5 bits type, 3 bits mag
-    uint8_t page_no   PACK;
-  } d[1]   PACK;
+struct PACK ttxt_descr {
+  uint8_t tag;
+  uint8_t length;
+  struct PACK {
+    uint8_t lang[3];
+    uint8_t type_mag; // 5 bits type, 3 bits mag
+    uint8_t page_no;
+  } d[1];
 };
 
-struct sect_header {
-  uint8_t table_id   PACK;
-  uint16_t syntax_len   PACK;
-  uint16_t transport_stream_id   PACK;
-  uint8_t ver_cur   PACK;
-  uint8_t section_number   PACK;
-  uint8_t last_section_number   PACK;
+struct PACK sect_header {
+  uint8_t table_id;
+  uint16_t syntax_len;
+  uint16_t transport_stream_id;
+  uint8_t ver_cur;
+  uint8_t section_number;
+  uint8_t last_section_number;
 };
 
 // H.222.0 2.4.4.3, Table 2-25
-struct PAT_sect {
-  uint8_t table_id   PACK;
-  uint16_t syntax_len   PACK;
-  uint16_t transport_stream_id   PACK;
-  uint8_t vers_curr   PACK;
-  uint8_t sect_no   PACK;
-  uint8_t last_sect   PACK;
-  struct {
-    uint16_t program_number   PACK;
-    uint16_t res_PMTPID   PACK;
-  } d[1] PACK;
+struct PACK PAT_sect {
+  uint8_t table_id;
+  uint16_t syntax_len;
+  uint16_t transport_stream_id;
+  uint8_t vers_curr;
+  uint8_t sect_no;
+  uint8_t last_sect;
+  struct PACK {
+    uint16_t program_number;
+    uint16_t res_PMTPID;
+  } d[1];
 };
 
 // H.222.0 2.4.4.8, Table 2-28
-struct PMT_stream {
-  uint8_t stream_type   PACK;
-  uint16_t res_PID   PACK;
-  uint16_t res_ES_info_len   PACK;
-  uint8_t descrs[2]   PACK;
+struct PACK PMT_stream {
+  uint8_t stream_type;
+  uint16_t res_PID;
+  uint16_t res_ES_info_len;
+  uint8_t descrs[2];
 };
 
-struct PMT_sect {
-  uint8_t table_id   PACK;
-  uint16_t syntax_len   PACK;
-  uint16_t program_number   PACK;
-  uint8_t vers_curr   PACK;
-  uint8_t sect_no   PACK;
-  uint8_t last_sect   PACK;
-  uint16_t res_pcr   PACK;
-  uint16_t res_program_info_length   PACK;
-  struct PMT_stream s   PACK;
+struct PACK PMT_sect {
+  uint8_t table_id;
+  uint16_t syntax_len;
+  uint16_t program_number;
+  uint8_t vers_curr;
+  uint8_t sect_no;
+  uint8_t last_sect;
+  uint16_t res_pcr;
+  uint16_t res_program_info_length;
+  struct PMT_stream s;
 };
 
 
@@ -135,7 +137,7 @@ read_timeout(int fd, void *buf, size_t count, int timeout_ms) {
   if(ret < 0)
     return errno;
   if(ret == 0) { // timeout
-    fprintf(stderr, "ttxtsubs: Service Information read: timeout!\n");
+    esyslog("ttxtsubs: Service Information read: timeout!");
     return -1;
   }
 
@@ -187,7 +189,7 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
     struct sect_header *h;
     int i;
 
-    if((start_time + 5) < time(NULL)) {
+    if((start_time + 1) < time(NULL)) {
       ret = -1;
       done = 1;
       break;
@@ -204,7 +206,7 @@ static int CollectSections(int card_no, int pid, int table_id, char **sects, int
     h = (struct sect_header *) p;
 
     if(n != ((ntohs(h->syntax_len) & 0xfff) + 3)) {
-      fprintf(stderr, "bad section length: %x / %x!\n", n, ntohs(h->syntax_len) & 0xfff);
+      esyslog("ttxtsubs: bad section length: %x / %x!\n", n, ntohs(h->syntax_len) & 0xfff);
       continue;
     }
 
@@ -354,7 +356,7 @@ static void addpageinfo(struct ttxtinfo *info, uint16_t pid, struct ttxt_descr *
       uint8_t mag = pa->mag;
       if(mag == 0)
 	mag = 8;
-      fprintf(stderr, "Warning: Remapped page number %01x%02x to %01x%02x!\n",
+      esyslog("ttxtsubs: Warning: Remapped page number %01x%02x to %01x%02x!\n",
 	      mag, pa->page, mag, newpage);
       pa->page = newpage;
     }
@@ -462,16 +464,12 @@ static int FindTtxtInfoInPMT(int card_no, int pid, int vpid, struct ttxtinfo *in
 }
 
 
-typedef std::map < int, struct ttxtinfo > cCache;
-
-static cCache gCache;
-
 /*
  * find the ttxt_info in the PMT via the PAT, try first with the SID
  * and if that fails with the VPID
  * return <> 0 on error;
  */
-int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct ttxtinfo *info)
+int GetTtxtInfo(int card_no, const cChannel *c, struct ttxtinfo *info)
 {
   int ret = -1;
   char *patsects[256];
@@ -484,13 +482,51 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
 
   memset((char *) info, 0, sizeof(*info));
 
-  cCache::iterator iter;
-  iter = gCache.find(channel);
-  if(iter != gCache.end()) {
-    DupTtxtInfo(&iter->second, info);
-    ret = 0;
-    return ret;
+#if 1
+  // <manual page selection patch>
+  cTtxtSubsChannelSetting *cs = 
+    TtxtSubsChannelSettings.Get(c);
+    
+  if (cs && cs->PageMode() == PAGE_MODE_MANUAL) {
+    struct ttxt_descr descr;
+ 
+    if (cs->PageNumber() > 0) {
+      int temp = cs->PageNumber();
+      if (temp>=800) temp-=800;
+      char langs[MAXLANGUAGES][2][4];
+      char hi[MAXLANGUAGES][2];
+      //put as the first language the first one configured,
+      //so that FindSubs will later accept it
+      memcpy(langs,globals.languages(),sizeof(langs));
+      memcpy(hi,globals.hearingImpaireds(),sizeof(hi));
+      for (i = 0; i < MAXLANGUAGES; i++) {
+        for (j = 0; j < 2 ; j++) {
+          if (!langs[i][j][0]) continue;
+         
+          descr.d[0].lang[0] = langs[i][j][0];
+          descr.d[0].lang[1] = langs[i][j][1];
+          descr.d[0].lang[2] = langs[i][j][2];
+          if (hi[i][j]) 
+            descr.d[0].type_mag = (TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE << 3) + (temp / 100); 
+          else 
+            descr.d[0].type_mag = (TTXT_SUBTITLE_PAGE << 3) + (temp / 100);
+
+          temp = temp % 100;
+          descr.d[0].page_no = ((temp / 10) << 4) + (temp % 10);
+      
+          addpageinfo(info, c->Tpid(), &descr, 0);
+          return 0;
+        }
+      }
+      //no language configured
+      return -1;       
+    }
   }
+  if (cs && cs->PageMode() == PAGE_MODE_DISABLED) {
+    return -1;
+  }
+  // </manual page selection patch>
+#endif
 
   for(retry = 0; retry <= 1 && !foundinfo; retry++) { // XXX retry two times due to flaky pat scanning with hw_sections=0
 
@@ -505,7 +541,7 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
     if(ret)
       goto bail;
     
-    if(sid != 0) {
+    if(c->Sid() != 0) {
       int found;
       
       for(i = 0, found = 0; i < numsects && !found; i++) {
@@ -520,7 +556,7 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
 	  if(pno == 0)
 	    continue; // network pid
 	  
-	  if(pno == sid) {
+	  if(pno == c->Sid()) {
 	    pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
 	    found = 1;
 	  }
@@ -533,7 +569,7 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
       ret = FindTtxtInfoInPMT(card_no, pmt_pid, 0, info, &foundinfo);
     } else {
       // SID not found, try searching VID in all SIDS
-      if(vpid != 0) {
+      if(c->Vpid() != 0) {
 	int done;
 	for(i = 0, done = 0; i < numsects && !done; i++) {
 	  int numdescrs;
@@ -550,7 +586,7 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
 	    pmt_pid = ntohs(s->d[j].res_PMTPID) & 0x1fff;
 	    
 	    // printf("GetTtxtInfo C pmt_pid: %d, vpid: %d\n", pmt_pid, vpid); // XXXX
-	    ret = FindTtxtInfoInPMT(card_no, pmt_pid, vpid, info, &foundinfo);
+	    ret = FindTtxtInfoInPMT(card_no, pmt_pid, c->Vpid(), info, &foundinfo);
 	    if(ret) {
 	      done = 1;
 	    }
@@ -562,12 +598,6 @@ int GetTtxtInfo(int card_no, int channel, uint16_t sid, uint16_t vpid, struct tt
     }
 
     FreeSects(patsects);
-  }
-    
-  if(foundinfo || (ret == 0 && retry == 2)) {
-    struct ttxtinfo info2;
-    DupTtxtInfo(info, &info2);
-    gCache[channel] = info2;
   }
 
 bail:
@@ -602,7 +632,7 @@ void DupTtxtInfo(struct ttxtinfo *in, struct ttxtinfo *out)
 }
 
 
-struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno)
+struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno, char *lang)
 {
   struct ttxtpidinfo *foundPI = NULL;
   int foundChoise = 1000;
@@ -621,6 +651,7 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno)
 	  foundChoise = ch;
 	  *pid = info->p[i].pid;
 	  *pageno = info->p[i].i[j].mag * 0x100 + info->p[i].i[j].page;
+	  strncpy(lang, info->p[i].i[j].lang, 3);
 	  foundPI = &(info->p[i]);
 	}
       }
@@ -632,16 +663,16 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno)
   }
 
   if(info->pidcount == 0)
-    fprintf(stderr, "ttxtsubs: No teletext subtitles on channel.\n");
+    isyslog("ttxtsubs: No teletext subtitles on channel.");
   else {
-    fprintf(stderr, "ttxtsubs: Wanted subtitle language(s) not found on channel, available languages:\n");
+    isyslog("ttxtsubs: Wanted subtitle language(s) not found on channel, available languages:");
     for(int i = 0; i < info->pidcount; i++) {
       for(int j = 0; j < info->p[i].pagecount; j++) {
 	int page = info->p[i].i[j].mag * 0x100 + info->p[i].i[j].page;
 	int type = info->p[i].i[j].type;
 	if(page < 0x100)
 	  page += 0x800;
-	fprintf(stderr, "          %03x: %c%c%c %s\n", page, info->p[i].i[j].lang[0],
+	isyslog("ttxtsubs:     %03x: %c%c%c %s", page, info->p[i].i[j].lang[0],
 		info->p[i].i[j].lang[1], info->p[i].i[j].lang[2],
 		type == TTXT_INITIAL_PAGE ? "(Initial Page (The teletext start page, not a subtitles page!))" :
 		type == TTXT_SUBTITLE_PAGE ? "(Subtitles)" :
@@ -655,13 +686,6 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno)
   *pid = 0;
   *pageno = -1;
   return NULL;
-}
-
-
-void
-ClearSICache(void)
-{
-  gCache.clear();
 }
 
 
@@ -683,7 +707,7 @@ int XX_GetTtxtSubtitleInfo(uint16_t pid, int card_no, struct ttxtinfo *info)
     return len;
 
   if(len != ((ntohs(p->syntax_len) & 0xfff) + 3)) {
-    fprintf(stderr, "bad lengt: %x / %x!\n", len, ntohs(p->syntax_len));
+    dprint("bad length: %x / %x!\n", len, ntohs(p->syntax_len));
     return -1;
   }
 

@@ -1,0 +1,242 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@cadsoft.de>
+# This file is distributed under the same license as the VDR package.
+# Marc Rovira Vall <tm05462@salleURL.edu>, 2003
+# Ramon Roca <ramon.roca@xcombo.com>, 2003
+# Jordi Vilà <jvila@tinet.org>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <author>\n"
+"POT-Creation-Date: 2007-09-25 21:58+0300\n"
+"PO-Revision-Date: 2007-08-24 23:49+0300\n"
+"Last-Translator: Jordi Vilà <jvila@tinet.org>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ttxtsubs.c:51
+msgid "Teletext subtitles"
+msgstr "Subtítols teletext"
+
+#: ttxtsubs.c:302
+msgid "Hide teletext subtitles"
+msgstr "Amaga subtítols teletext"
+
+#: ttxtsubs.c:304
+msgid "Display teletext subtitles"
+msgstr "Visualitza subtítols teletext"
+
+#: ttxtsubs.c:307
+msgid "Position Teletext Subtitles for 4:3/Anamorph"
+msgstr "Posiciona subtítols teletext per a 4:3/anamòrfic"
+
+#: ttxtsubs.c:309
+msgid "Position Teletext Subtitles for Letterbox"
+msgstr "Posiciona subtítols teletext per a Letterbox"
+
+#: ttxtsubs.c:311
+msgid "Page Selection"
+msgstr "Selecció pàgina subtítols"
+
+#: ttxtsubs.c:641
+msgid "Display on/off"
+msgstr "Visualitza si/no"
+
+#: ttxtsubs.c:642
+msgid "4:3/Letterbox"
+msgstr "4:3/Letterbox"
+
+#: ttxtsubs.c:643
+msgid "Page Mode"
+msgstr "Modalitat pàgina"
+
+#: ttxtsubs.c:646
+msgid "Left"
+msgstr "Esquerra"
+
+#: ttxtsubs.c:647
+msgid "Center"
+msgstr "Centre"
+
+#: ttxtsubs.c:648
+msgid "Right"
+msgstr "Dreta"
+
+#: ttxtsubs.c:651
+msgid "All"
+msgstr "Totes"
+
+#: ttxtsubs.c:652
+msgid "Only DVB-S"
+msgstr "Només DVB-S"
+
+#: ttxtsubs.c:653
+msgid "Only DVB-T"
+msgstr "Només DVB-T"
+
+#: ttxtsubs.c:654
+msgid "Only DVB-C"
+msgstr "Només DVB-C"
+
+#: ttxtsubs.c:657
+msgid "Black"
+msgstr "Negre"
+
+#: ttxtsubs.c:658
+msgid "White"
+msgstr "Blanc"
+
+#: ttxtsubs.c:659
+msgid "Red"
+msgstr "Vermell"
+
+#: ttxtsubs.c:660
+msgid "Green"
+msgstr "Verd"
+
+#: ttxtsubs.c:661
+msgid "Yellow"
+msgstr "Groc"
+
+#: ttxtsubs.c:662
+msgid "Magenta"
+msgstr "Magenta"
+
+#: ttxtsubs.c:663
+msgid "Blue"
+msgstr "Blau"
+
+#: ttxtsubs.c:664
+msgid "Cyan"
+msgstr "Cian"
+
+#: ttxtsubs.c:665
+msgid "Custom"
+msgstr "Personalitzat"
+
+#: ttxtsubs.c:666
+msgid "Transparent"
+msgstr "Transparent"
+
+#: ttxtsubs.c:667
+msgid "Grey"
+msgstr "Gris"
+
+#: ttxtsubs.c:691 ttxtsubspagemenu.c:36
+msgid "Display Subtitles"
+msgstr "Visualitza subtítols"
+
+#: ttxtsubs.c:692
+msgid "Record Subtitles"
+msgstr "Grava subtítols"
+
+#: ttxtsubs.c:693
+msgid "Live Delay"
+msgstr "Retard en directe"
+
+#: ttxtsubs.c:694
+msgid "Replay Delay"
+msgstr "Retard en reproducció"
+
+#: ttxtsubs.c:697
+msgid "Main Menu Alternative"
+msgstr "Alternativa del menú principal"
+
+#: ttxtsubs.c:701
+msgid "Text Horizontal Position"
+msgstr "Posició horitzontal del text "
+
+#: ttxtsubs.c:703
+msgid "Text Vertical Position"
+msgstr "Posición vertical del text"
+
+#: ttxtsubs.c:704
+msgid "4:3/Anamorph"
+msgstr "4:3/Anamòrfic"
+
+#: ttxtsubs.c:704
+msgid "Letterbox"
+msgstr "Letterbox"
+
+#: ttxtsubs.c:705
+msgid "Text Vertical Adjust"
+msgstr "Ajustament vertical del text"
+
+#: ttxtsubs.c:707
+msgid "Line Spacing Adjust"
+msgstr "Ajustament distancia entre línies"
+
+#: ttxtsubs.c:709
+msgid "Workaround for some French chns"
+msgstr "Correcció per a canals francesos"
+
+#: ttxtsubs.c:713
+msgid "DVB Source Selection"
+msgstr "Selecció font DVB"
+
+#: ttxtsubs.c:716
+msgid "Font Size (pixel)"
+msgstr ""
+
+#: ttxtsubs.c:720
+msgid "Text Color"
+msgstr "Color del text"
+
+#: ttxtsubs.c:724
+msgid "Background Color"
+msgstr "Color de fons"
+
+#: ttxtsubs.c:736
+msgid "Custom Color"
+msgstr "Color personalitzat"
+
+#: ttxtsubs.c:741
+msgid "Red Value"
+msgstr "Valor vermell"
+
+#: ttxtsubs.c:742
+msgid "Green Value"
+msgstr "Valor vert"
+
+#: ttxtsubs.c:743
+msgid "Blue Value"
+msgstr "Valor blau"
+
+#: ttxtsubs.c:744
+msgid "Transparency Value"
+msgstr "Valor transparència"
+
+#: ttxtsubs.c:754 ttxtsubs.c:762
+msgid "Language"
+msgstr "Idioma"
+
+#: ttxtsubs.c:762
+msgid "Hearing Impaired"
+msgstr "Discapacitats auditius"
+
+#: ttxtsubspagemenu.c:17
+msgid "Subtitle Page Settings"
+msgstr "Opcions pàgina subtítols"
+
+#: ttxtsubspagemenu.c:31
+msgid "Auto"
+msgstr "Automàtic"
+
+#: ttxtsubspagemenu.c:32
+msgid "Manual"
+msgstr "Manual"
+
+#: ttxtsubspagemenu.c:33
+msgid "Disabled"
+msgstr "Desactivats"
+
+#: ttxtsubspagemenu.c:37
+msgid "Subtitle Mode"
+msgstr "Modalitat subtítols"
+
+#: ttxtsubspagemenu.c:38
+msgid "Manual Subtitle Page"
+msgstr "Pàgina manual subtítols"

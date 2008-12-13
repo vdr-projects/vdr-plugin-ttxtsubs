@@ -9,6 +9,8 @@
 #include <vdr/osd.h>
 #include <vdr/osdbase.h>
 #include <vdr/thread.h>
+#include <vdr/font.h>
+#include <vdr/config.h>
 
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplay.h"
@@ -21,12 +23,6 @@ enum {
   interimshow,
   finished
 };
-
-// extra colours
-enum eMyDvbColor {
-  myClrGrey = 0xFF808080
-};
-
 
 // --------------------
 
@@ -76,13 +72,22 @@ cTtxtSubsDisplay::cTtxtSubsDisplay(void)
   mPageState(invalid),
   mMag(0),
   mNo(0),
+#if defined(APIVERSNUM) && APIVERSNUM < 10509
   mDoDisplay(0),
+#else
+  mDoDisplay(1),
+#endif
   mOsd(NULL),
   mOsdLock(),
   mLastDataTime(NULL)
 {
   memset(&page.data, 0, sizeof(page.data));
   mLastDataTime = (struct timeval *) calloc(1, sizeof(*mLastDataTime));
+#if defined(APIVERSNUM) && APIVERSNUM >= 10503
+  mOsdFont = cFont::CreateFont(Setup.FontOsd, globals.mFontSize);
+  if (!mOsdFont || !mOsdFont->Height())
+#endif
+     mOsdFont = cFont::GetFont(fontOsd);
 }
 
 
@@ -90,7 +95,15 @@ cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
 {
   if(mLastDataTime)
     free(mLastDataTime);
-  ClearOSD();
+  if(mOsd) {
+    cOsd* tmp = mOsd;
+    mOsd = NULL;
+    delete tmp;
+  }
+#if defined(APIVERSNUM) && APIVERSNUM >= 10503
+  if(mOsdFont && (mOsdFont != cFont::GetFont(fontOsd)))
+    delete mOsdFont;
+#endif
 }
 
 
@@ -112,8 +125,8 @@ void cTtxtSubsDisplay::Hide(void)
 
   //dprint("cTtxtSubsDisplay::Hide\n");
   cMutexLock lock(&mOsdLock);
-  ClearOSD();
   mDoDisplay = 0;
+  ClearOSD();
 }
 
 
@@ -138,7 +151,7 @@ void cTtxtSubsDisplay::Clear(void)
 }
 
 
-void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
+void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 {
   int mp;
   int mag; // X in ETSI EN 300 706
@@ -221,6 +234,12 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
       page.national_charset = ((fi[7] & 0x80) >> 7) +
 	((fi[7] & 0x20) >> 4) + ((fi[7] & 0x08) >> 1);
       
+      if(mPageState != collecting) {
+        int diff = sched_time - cTimeMs::Now();
+        //printf("Got sched_time %llx, diff %d\n", sched_time, diff);
+        if (diff > 10) cCondWait::SleepMs(diff);
+      }
+
       mPageState = collecting;
       gettimeofday(mLastDataTime, NULL);
 
@@ -279,7 +298,10 @@ ttxt2la1(uint8_t *p, char *buf, int natopts)
       continue;
 
     if(c >= 0x20) {
-      buf[j++] = ttxt_laG0_la1_char(0, natopts, c);
+      uint16_t aux = ttxt_laG0_la1_char(0, natopts, c);
+      if (aux & 0xff00)
+         buf[j++] = (aux & 0xff00) >> 8;
+      buf[j++] = aux & 0x00ff;
     }
   }
 
@@ -341,7 +363,7 @@ enum {
   TEXTX = 15
 };
 
-static eDvbColor
+static tColor
 getcolor(int color)
 { 
   switch (color)
@@ -354,24 +376,30 @@ getcolor(int color)
     case 5:  return clrMagenta;
     case 6:  return clrBlue;
     case 7:  return clrCyan;
-    case 8:  return (eDvbColor) myClrGrey;
+    case 8:  return globals.customColor();
     case 9:  return clrTransparent;
-    default: return clrBackground;
+    default: return clrGray50;
     }
-  return clrBackground;
+  return clrGray50;
 }
 
 void cTtxtSubsDisplay::ShowOSD(void)
 {
   int i, y;
   int rowcount = 0;
-  char buf[TTXT_DISPLAYABLE_ROWS][41];
-  int doneWidthWorkaround = 0;
+  char buf[TTXT_DISPLAYABLE_ROWS][82];
   int bottom = globals.bottomAdj() + (globals.bottomLB() ? BOTLETTERBOX : BOTNORM);
+  tArea areas[MAXOSDAREAS];
+  int numAreas = 0;
 
   cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
 
+  if(!globals.mRealDoDisplay) {
+    //dprint("NOT displaying subtitles because disabled!\n");
+    return;
+  }
+ 
   if(!mDoDisplay) {
     //dprint("NOT displaying subtitles because of other OSD activities!\n");
     return;
@@ -382,76 +410,93 @@ void cTtxtSubsDisplay::ShowOSD(void)
     return;
   }
 
-  if(mOsd != NULL)
-    ClearOSD();
-
-  //print_page(&page);
-
   for(i = 1; i < 24; i++) {
     if(page.data[i][0] != 0) // anything on this line?
       if(ttxt2la1(page.data[i], buf[rowcount], page.national_charset))
 	rowcount++;
   }
 
-  mOsd = cOsd::OpenRaw(SCREENLEFT, SCREENTOP);
-
-  if(mOsd == NULL) {
-    //dprint("Error: cOsd::OpenRaw returned NULL!\n");
-    return;
+  if(mOsd) {
+    cOsd* tmp = mOsd;
+    mOsd = NULL;
+    delete tmp;
   }
 
-  mOsd->SetFont(fontOsd);
-  
-  if(rowcount > MAXTTXTROWS)
-    rowcount = MAXTTXTROWS;
-
-#if 0 // XXXX
-  rowcount = 4;
-  strcpy(buf[0], "1234567890123456789012345678901234567890");
-  strcpy(buf[1], "1234567890123456789012345678901234567890");
-  strcpy(buf[2], "1234567890123456789012345678901234567890");
-  strcpy(buf[3], "1234567890123456789012345678901234567890");
+#if defined(APIVERSNUM) && APIVERSNUM < 10509
+  if (cOsd::IsOpen()) {
+     //dprint("NOT displaying subtitles because of other OSD activities!\n");
+     return;
+     }
+  else {
+     mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP);
+#else
+     mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP, 20); // level 20
+#endif
+     if(!mOsd) {
+       //dprint("Error: cOsdProvider::NewOsd() returned NULL!\n");
+       return;
+       }
+#if defined(APIVERSNUM) && APIVERSNUM < 10509
+     }
 #endif
 
+#if defined(APIVERSNUM) && APIVERSNUM < 10503
+  cFont::SetCode(I18nCharSets()[globals.i18nLanguage()]);
+#endif
+  if(rowcount > MAXTTXTROWS)
+    rowcount = MAXTTXTROWS;
   y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
   for(i = 0; i < rowcount; i++) {
-    tWindowHandle wind;
     int w = 0;
     int left = SIDEMARGIN;
-
-    // XXX Width calculations doesn't work before we have created a window...
-    if(!doneWidthWorkaround) {
-      //wind = mOsd->Create(0, y, 4, ROWH, 2);
-      //mOsd->Fill(0, y, 4, y + ROWH, clrWhite, wind);
-      //mOsd->Fill(0, y, 4, y + ROWH, clrBackground, wind);
-      wind = mOsd->Create(0, 575, 4, 1, 2, false);
-      mOsd->Fill(0, 574, 4, 575, getcolor(globals.fgColor()), wind);
-      mOsd->Fill(0, 574, 4, 575, clrTransparent, wind);
-      doneWidthWorkaround = 1;
-    }
-
-    w = mOsd->Width(buf[i]) + 2 * TEXTX;
+    w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
     if(w % 4)
       w += 4 - (w % 4);
-
     switch(globals.textPos()) {
-    case 1:
-      left = (SCREENRIGHT - w) / 2;
-      break;
-    case 2:
-      left = SCREENRIGHT - SIDEMARGIN - w;
-      break;
-    }
-
-    wind = mOsd->Create(left, y, w, ROWH, 2, false);
-    mOsd->Fill(left, y, left + w, y + ROWH, getcolor(globals.fgColor()), wind); // needed for dxr3s...
-    mOsd->Fill(left, y, left + w, y + ROWH, getcolor(globals.bgColor()), wind);
-    mOsd->Text(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), wind);
-
+      case 1:
+        left = (SCREENRIGHT - w) / 2;
+        break;
+      case 2:
+        left = SCREENRIGHT - SIDEMARGIN - w;
+        break;
+      }
+    tArea area = {left, y, left+w-1, y+ROWH-1, 2};
+    areas[numAreas++] = area;
     y += (ROWINCR + globals.lineSpacing());
   }
-
-  mOsd->Flush();
+  if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
+#if defined(APIVERSNUM) && APIVERSNUM < 10503
+     cFont::SetCode(I18nCharSets()[Setup.OSDLanguage]);
+#endif
+     dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
+     }
+  else {
+    mOsd->SetAreas(areas, numAreas);
+    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
+    for(i = 0; i < rowcount; i++) {
+      int w = 0;
+      int left = SIDEMARGIN;
+      w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+      if(w % 4)
+        w += 4 - (w % 4);
+      switch(globals.textPos()) {
+        case 1:
+          left = (SCREENRIGHT - w) / 2;
+          break;
+        case 2:
+          left = SCREENRIGHT - SIDEMARGIN - w;
+          break;
+        }
+      mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
+      mOsd->DrawText(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
+      //dprint("%d/%d (%d,%d) (%d,%d): %s\n", i, rowcount-1, areas[i].x1, areas[i].y1, left + TEXTX, y + TEXTY, buf[i]);
+      y += (ROWINCR + globals.lineSpacing());
+      }
+#if defined(APIVERSNUM) && APIVERSNUM < 10503
+    cFont::SetCode(I18nCharSets()[Setup.OSDLanguage]);
+#endif
+    mOsd->Flush();
+    }
 }
 
 
@@ -461,20 +506,9 @@ void cTtxtSubsDisplay::ClearOSD(void)
   cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
 
-  if(!mDoDisplay) {
-    //dprint("NOT clearing subtitles because of other OSD activities!\n");
-    return;
-  }
-  
   if(mOsd) {
-
-    //mOsd->Clear(ALL_WINDOWS);
-#if 0
-    // not needed, windows are removed in mOsd destructor
-    mOsd->Hide(ALL_WINDOWS);
-    mOsd->Flush();
-#endif
-    delete mOsd;
+    cOsd* tmp = mOsd;
     mOsd = NULL;
+    delete tmp;
   }
 }

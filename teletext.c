@@ -12,6 +12,7 @@
 
 //#include <linux/dvb/dmx.h>
 //#include <vdr/osd.h>
+#include <vdr/config.h>
 
 #include "teletext.h"
 #include "teletext-tables.h"
@@ -28,7 +29,7 @@ unsigned char unham(unsigned char a,unsigned char b)
   c1=unhamtab[a];
   c2=unhamtab[b];
 //  if ((c1|c2)&0x40) 
-//      fprintf(stderr,"bad ham!");
+//      dprint("bad ham!");
   return (c2<<4)|(0x0f&c1);
 }
 
@@ -43,17 +44,17 @@ void ham8_4byte(uint8_t in, uint8_t *out)
   if (1) { // XXX debug
     int a;
     if(unham(out[0], out[1]) != in) {
-      fprintf(stderr, "ham8_4: 1 - result not correct %02x -> %02x %02x!\n", in, out[0], out[1]);
+      dprint("ham8_4: 1 - result not correct %02x -> %02x %02x!\n", in, out[0], out[1]);
     }
     a = unhamtab[out[0]];
     a ^= 0x80;
     if(a & 0xf0 || (a != (in & 0xF))) {
-      fprintf(stderr, "ham8_4: 2 - result not correct %02x -> %02x %02x, %02x!\n", in, out[0], out[1], a);
+      dprint("ham8_4: 2 - result not correct %02x -> %02x %02x, %02x!\n", in, out[0], out[1], a);
     }
     a = unhamtab[out[1]];
     a ^= 0x80;
     if(a & 0xf0 || (a != (in >> 4))) {
-      fprintf(stderr, "ham8_4: 3 - result not correct %02x -> %02x %02x, %02x!\n", in, out[0], out[1], a);
+      dprint("ham8_4: 3 - result not correct %02x -> %02x %02x, %02x!\n", in, out[0], out[1], a);
     }
   }
 }
@@ -108,7 +109,7 @@ uint8_t ham8_4nibble(uint8_t in)
  * Also strips parity
  */
 
-uint8_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar)
+uint16_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar)
 {
   int no = laG0_nat_opts_lookup[Gtriplet & 0xf][natopts & 0x7];
   uint8_t c = inchar & 0x7f;
@@ -118,14 +119,21 @@ uint8_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar)
   if(!laG0_nat_replace_map[c])
     return c;
   else
+#if defined(APIVERSNUM) && APIVERSNUM < 10503
     return laG0_nat_opts[no][laG0_nat_replace_map[c]];
+#else
+    if (cCharSetConv::SystemCharacterTable())
+       return laG0_nat_opts[no][laG0_nat_replace_map[c]];
+    else
+       return laG0_nat_opts16[no][laG0_nat_replace_map[c]];
+#endif
 }
 
 /*
  * Map Latin G2 teletext characters into a ISO-8859-1 approximation.
  * Trying to use similar looking or similar meaning characters.
  */
-uint8_t ttxt_laG2_la1_char(uint8_t inchar)
+uint16_t ttxt_laG2_la1_char(uint8_t inchar)
 {
   return laG2_la1_table[inchar & 0x7f];
 }

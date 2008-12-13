@@ -34,12 +34,12 @@ void cTtxtSubsFilter::SetPages(size_t count, uint16_t *pages)
 
   mCount = count;
 
-  if(0) {
-    fprintf(stderr, "SetPages: %d, ", count);
+#if 0
+    dprint("SetPages: %d, ", count);
     for(size_t i = 0; i < count; i++)
-      fprintf(stderr, "%03x ", pages[i]);
-    fprintf(stderr, "\n");
-  }
+      dprint("%03x ", pages[i]);
+    dprint("\n");
+#endif
 }
 
 // XXX IF MERGING PAGES FROM SEVERAL PIDS (which we currently don't)
@@ -61,14 +61,14 @@ int cTtxtSubsFilter::Filter(char *indata, char *outdata)
   mag = mp & 0x7;
   packet = (mp >> 3) & 0x1f;
 
-  if (0) { // XXX
+#if 0 // XXX
     uint8_t buf[2];
     ham8_4byte(mp, buf);
-    fprintf(stderr, "unham %02x %02x -> %02x, ham: %02x %02x\n",
+    dprint("unham %02x %02x -> %02x, ham: %02x %02x\n",
 	    invtab[d->mag_addr_ham[0]], invtab[d->mag_addr_ham[1]],
 	    mp,
 	    buf[0], buf[1]);
-  }
+#endif
 
   // packet 0, change page no in this magazine
   if(packet == 0) {
@@ -80,7 +80,7 @@ int cTtxtSubsFilter::Filter(char *indata, char *outdata)
     mMagPage[mag] = newindex = Find(mCount, mPages, (mag << 8) | no);
 
     if(newindex != -1) {
-      //fprintf(stderr, "Filter: %x%02x (%d)\n", mag, no, newindex); // XXX
+      //dprint("Filter: %x%02x (%d)\n", mag, no, newindex); // XXX
 
       MakeY0(outdata, indata, mPages[newindex]);
       result = 1;

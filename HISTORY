@@ -1,6 +1,12 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2008-12-??: Version 0.0.6
+- Applied patch from Rolf Ahrenberg (vdr-ttxtsubs-0.0.5-raastinrauta-edition.diff.gz)
+  which introduces the following changes:
+  - Support for VDR >= 1.6.x
+  - TODO
+
 2004-05-31: Version 0.0.5
 
 - Note:

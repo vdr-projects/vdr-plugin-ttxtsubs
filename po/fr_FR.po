@@ -1,0 +1,243 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@cadsoft.de>
+# This file is distributed under the same license as the VDR package.
+# Jean-Claude Repetto <jc@repetto.org>, 2001
+# Olivier Jacques <jacquesolivier@hotmail.com>, 2003
+# Gregoire Favre <greg@magma.unil.ch>, 2003
+# Nicolas Huillard <nhuillard@e-dition.fr>, 2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <author>\n"
+"POT-Creation-Date: 2007-09-25 21:58+0300\n"
+"PO-Revision-Date: 2007-08-24 23:49+0300\n"
+"Last-Translator: Nicolas Huillard <nhuillard@e-dition.fr>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ttxtsubs.c:51
+msgid "Teletext subtitles"
+msgstr "Sous-titrage télétexte"
+
+#: ttxtsubs.c:302
+msgid "Hide teletext subtitles"
+msgstr "Masquer le sous-titrage"
+
+#: ttxtsubs.c:304
+msgid "Display teletext subtitles"
+msgstr "Afficher le sous-titrage"
+
+#: ttxtsubs.c:307
+msgid "Position Teletext Subtitles for 4:3/Anamorph"
+msgstr "Position du sous-titrage pour 4:3/Anamorph"
+
+#: ttxtsubs.c:309
+msgid "Position Teletext Subtitles for Letterbox"
+msgstr "Position du sous-titrage pour Letterbox"
+
+#: ttxtsubs.c:311
+msgid "Page Selection"
+msgstr "Page de sélection"
+
+#: ttxtsubs.c:641
+msgid "Display on/off"
+msgstr "Affichage"
+
+#: ttxtsubs.c:642
+msgid "4:3/Letterbox"
+msgstr "4:3/Letterbox"
+
+#: ttxtsubs.c:643
+msgid "Page Mode"
+msgstr "Mode page"
+
+#: ttxtsubs.c:646
+msgid "Left"
+msgstr "Gauche"
+
+#: ttxtsubs.c:647
+msgid "Center"
+msgstr "Centre"
+
+#: ttxtsubs.c:648
+msgid "Right"
+msgstr "Droite"
+
+#: ttxtsubs.c:651
+msgid "All"
+msgstr "Tous"
+
+#: ttxtsubs.c:652
+msgid "Only DVB-S"
+msgstr "Seulement DVB-S"
+
+#: ttxtsubs.c:653
+msgid "Only DVB-T"
+msgstr "Seulement DVB-T"
+
+#: ttxtsubs.c:654
+msgid "Only DVB-C"
+msgstr "Seulement DVB-C"
+
+#: ttxtsubs.c:657
+msgid "Black"
+msgstr "Noir"
+
+#: ttxtsubs.c:658
+msgid "White"
+msgstr "Blanc"
+
+#: ttxtsubs.c:659
+msgid "Red"
+msgstr "Rouge"
+
+#: ttxtsubs.c:660
+msgid "Green"
+msgstr "Vert"
+
+#: ttxtsubs.c:661
+msgid "Yellow"
+msgstr "Jaune"
+
+#: ttxtsubs.c:662
+msgid "Magenta"
+msgstr "Magenta"
+
+#: ttxtsubs.c:663
+msgid "Blue"
+msgstr "Bleu"
+
+#: ttxtsubs.c:664
+msgid "Cyan"
+msgstr "Cyan"
+
+#: ttxtsubs.c:665
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: ttxtsubs.c:666
+msgid "Transparent"
+msgstr "Transparent"
+
+#: ttxtsubs.c:667
+msgid "Grey"
+msgstr "Gris"
+
+#: ttxtsubs.c:691 ttxtsubspagemenu.c:36
+msgid "Display Subtitles"
+msgstr "Afficher le sous-titrage"
+
+#: ttxtsubs.c:692
+msgid "Record Subtitles"
+msgstr "Enregistrer le sous-titrage"
+
+#: ttxtsubs.c:693
+msgid "Live Delay"
+msgstr ""
+
+#: ttxtsubs.c:694
+msgid "Replay Delay"
+msgstr ""
+
+#: ttxtsubs.c:697
+msgid "Main Menu Alternative"
+msgstr "Choix du menu principal"
+
+#: ttxtsubs.c:701
+msgid "Text Horizontal Position"
+msgstr "Position horizontale du texte"
+
+#: ttxtsubs.c:703
+msgid "Text Vertical Position"
+msgstr "Position verticale du texte"
+
+#: ttxtsubs.c:704
+msgid "4:3/Anamorph"
+msgstr "4:3/Anamorph"
+
+#: ttxtsubs.c:704
+msgid "Letterbox"
+msgstr "Letterbox"
+
+#: ttxtsubs.c:705
+msgid "Text Vertical Adjust"
+msgstr "Ajustement vertical du texte"
+
+#: ttxtsubs.c:707
+msgid "Line Spacing Adjust"
+msgstr "Espacement des lignes"
+
+#: ttxtsubs.c:709
+msgid "Workaround for some French chns"
+msgstr "Contournement chaînes françaises"
+
+#: ttxtsubs.c:713
+msgid "DVB Source Selection"
+msgstr "Sélection Source DVB"
+
+#: ttxtsubs.c:716
+msgid "Font Size (pixel)"
+msgstr "Taille Police (pixel)"
+
+#: ttxtsubs.c:720
+msgid "Text Color"
+msgstr "Couleur du texte"
+
+#: ttxtsubs.c:724
+msgid "Background Color"
+msgstr "Couleur du fond"
+
+#: ttxtsubs.c:736
+msgid "Custom Color"
+msgstr "Couleur personnalisée"
+
+#: ttxtsubs.c:741
+msgid "Red Value"
+msgstr "Valeur Rouge"
+
+#: ttxtsubs.c:742
+msgid "Green Value"
+msgstr "Valeur Vert"
+
+#: ttxtsubs.c:743
+msgid "Blue Value"
+msgstr "Valeur Bleu"
+
+#: ttxtsubs.c:744
+msgid "Transparency Value"
+msgstr "Valeur de transparence"
+
+#: ttxtsubs.c:754 ttxtsubs.c:762
+msgid "Language"
+msgstr "Langues"
+
+#: ttxtsubs.c:762
+msgid "Hearing Impaired"
+msgstr "Malentendant"
+
+#: ttxtsubspagemenu.c:17
+msgid "Subtitle Page Settings"
+msgstr "Conf. Page sous-titres TXT"
+
+#: ttxtsubspagemenu.c:31
+msgid "Auto"
+msgstr "Auto"
+
+#: ttxtsubspagemenu.c:32
+msgid "Manual"
+msgstr "Manuel"
+
+#: ttxtsubspagemenu.c:33
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: ttxtsubspagemenu.c:37
+msgid "Subtitle Mode"
+msgstr "Mode de sous-titres TXT"
+
+#: ttxtsubspagemenu.c:38
+msgid "Manual Subtitle Page"
+msgstr "Page des sous-titres"

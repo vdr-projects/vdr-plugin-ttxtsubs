@@ -9,8 +9,7 @@
 #include "ttxtsubsi18n.h"
 #include <stdio.h>
 
-const tI18nPhrase Phrases[] =
-{
+const tI18nPhrase Phrases[] = {
   { "Teletext subtitles", // English
     "Videotextuntertitel", // German - Tobias Grimm 2004-05-21
     "", // Slovenian
@@ -21,15 +20,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Tekstitys (Teksti-TV)", // Finnish - Rolf Ahrenberg 2004-03-01
     "", // Polish
-    "", // Spanish
+    "SubtÌtulos teletexto", // Spanish
     "", // Greek
     "Textning (Text-TV)", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalanian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "SubtÌtols teletext", // Catalanian
+    "¬’€’‚’⁄·‚-·„—‚ÿ‚‡Î", // Russian - Vyacheslav Dikonov 2004-xx-xx
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Hide teletext subtitles", // English
     "Verstecke Videotextuntertitel", // German
@@ -41,15 +41,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Piilota tekstitys (Teksti-TV)", // Finnish
     "", // Polish
-    "", // Spanish
+    "Esconde subtÌtulos teletexto", // Spanish
     "", // Greek
     "Gˆm textning (Text-TV)", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Amaga subtÌtols teletext", // Catalenian
+    "¡⁄‡Î‚Ï ·„—‚ÿ‚‡Î", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Display teletext subtitles", // English
     "Zeige Videotextuntertitel", // German
@@ -61,15 +62,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "N‰yt‰ tekstitys (Teksti-TV)", // Finnish
     "", // Polish
-    "", // Spanish
+    "Visualiza subtÌtulos teletexto", // Spanish
     "", // Greek
     "Visa textning (Text-TV)", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Visualitza subtÌtols teletext", // Catalenian
+    "øﬁ⁄–◊Î“–‚Ï ·„—‚ÿ‚‡Î", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Position Teletext Subtitles for 4:3/Anamorph", // English
     "Positioniere Videotext-Untertitel f¸r 4:3/Anamorph", // German
@@ -81,15 +83,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "4:3/Anamorfinen tekstitys (Teksti-TV)", // Finnish
     "", // Polish
-    "", // Spanish
+    "Posiciona subtÌtulos teletexto para 4:3/anamÛrfico", // Spanish
     "", // Greek
     "Textning fˆr 4:3/anamorf (Text-TV)", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Posiciona subtÌtols teletext per a 4:3/anamÚrfic", // Catalenian
+    "¡„—‚ÿ‚‡Î “ ⁄–‘‡’ 4:3", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Position Teletext Subtitles for Letterbox", // English
     "Positioniere Videotext-Untertitel f¸r Letterbox", // German
@@ -101,15 +104,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Letterbox tekstitys (Teksti-TV)", // Finnish
     "", // Polish
-    "", // Spanish
+    "PosiciÛna subtÌtulos teletexto para Letterbox", // Spanish
     "", // Greek
     "Textning fˆr brevlÂdeformat (Text-TV)", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Posiciona subtÌtols teletext per a Letterbox", // Catalenian
+    "¡„—‚ÿ‚‡Î “ ⁄–‘‡’ Ëÿ‡ﬁ⁄ﬁÌ⁄‡–››ﬁ”ﬁ ‰ÿ€Ï‹–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Display Subtitles", // English
     "Zeige Untertitel", // German
@@ -121,15 +125,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "N‰yt‰ tekstitykset", // Finnish
     "", // Polish
-    "", // Spanish
+    "Visualiza subtÌtulos", // Spanish
     "", // Greek
     "Visa textning", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Visualitza subtÌtols", // Catalenian
+    "øﬁ⁄–◊Î“–‚Ï ·„—‚ÿ‚‡Î", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Record Subtitles", // English
     "Nimm Untertitel auf", // German
@@ -141,15 +146,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Tallenna tekstitykset", // Finnish
     "", // Polish
-    "", // Spanish
+    "Graba subtÌtulos", // Spanish
     "", // Greek
     "Spela in textning", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Grava subtÌtols", // Catalenian
+    "∑–ﬂÿ·Î“–‚Ï ·„—‚ÿ‚‡Î", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Main Menu Alternative", // English
     "Hauptmenu Alternative", // German
@@ -161,15 +167,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "P‰‰valikon toiminnot", // Finnish
     "", // Polish
-    "", // Spanish
+    "Alternativa del men˙ principal", // Spanish
     "", // Greek
     "Huvudmenyalternativ", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Alternativa del men˙ principal", // Catalenian
+    "∫ﬁ‹–›‘– “ ”€–“›ﬁ‹ ‹’›Ó", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Display on/off", // English
     "Anzeige ein/aus", // German
@@ -181,15 +188,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "aktivointi", // Finnish
     "", // Polish
-    "", // Spanish
+    "Visualiza sÌ/no", // Spanish
     "", // Greek
     "Visa textning pÂ/av", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Visualitza si/no", // Catalenian
+    "“⁄€ÓÁÿ‚Ï/“Î⁄€ÓÁÿ‚Ï", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "4:3/Letterbox", // English
     "4:3/Letterbox",
@@ -201,15 +209,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "kuvasuhde", // Finnish
     "", // Polish
-    "", // Spanish
+    "4:3/Letterbox", // Spanish
     "", // Greek
     "4:3/brevlÂdeformat", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "4:3/Letterbox", // Catalenian
+    "4:3/Ëÿ‡ﬁ⁄ÿŸ Ì⁄‡–›", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Text Horizontal Position", // English
     "Horizontale Textposition", // German
@@ -221,15 +230,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Vaakatasaus", // Finnish
     "", // Polish
-    "", // Spanish
+    "¥PosiciÛn horizontal del texto", // Spanish
     "", // Greek
     "Horisontell position", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "PosiciÛ horitzontal del text ", // Catalenian
+    "¿–◊‹’È’›ÿ’ ‚’⁄·‚– ﬂﬁ ”ﬁ‡ÿ◊ﬁ›‚–€ÿ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Left", // English
     "Links", // German
@@ -241,15 +251,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "vasen", // Finnish
     "", // Polish
-    "", // Spanish
+    "Izquierda", // Spanish
     "", // Greek
     "v‰nster", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Esquerra", // Catalenian
+    "·€’“–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Center", // English
     "Mitte", // German
@@ -261,15 +272,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "keskit‰", // Finnish
     "", // Polish
-    "", // Spanish
+    "Centro", // Spanish
     "", // Greek
     "centrerad", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Centre", // Catalenian
+    "“ Ê’›‚‡’", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Right", // English
     "Rechts", // German
@@ -281,15 +293,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "oikea", // Finnish
     "", // Polish
-    "", // Spanish
+    "Derecha", // Spanish
     "", // Greek
     "hˆger", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Dreta", // Catalenian
+    "·ﬂ‡–“–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Text Vertical Position", // English
     "Vertikale Textposition", // German
@@ -301,15 +314,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Pystytasaus", // Finnish
     "", // Polish
-    "", // Spanish
+    "PosiciÛn vertical del texto", // Spanish
     "", // Greek
     "Vertikal positon", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "PosiciÛn vertical del text", // Catalenian
+    "¿–◊‹’È’›ÿ’ ‚’⁄·‚– ﬂﬁ “’‡‚ÿ⁄–€ÿ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "4:3/Anamorph", // English
     "4:3/Anamorph", // German
@@ -321,15 +335,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "4:3/anamorfinen", // Finnish
     "", // Polish
-    "", // Spanish
+    "4:3/AnamÛrfico", // Spanish
     "", // Greek
     "4:3/anamorf", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "4:3/AnamÚrfic", // Catalenian
+    "4:3", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Letterbox", // English
     "Letterbox", // German
@@ -341,15 +356,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "letterbox", // Finnish
     "", // Polish
-    "", // Spanish
+    "Letterbox", // Spanish
     "", // Greek
     "brevlÂdeformat", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Letterbox", // Catalenian
+    "Ëÿ‡ﬁ⁄ÿŸ Ì⁄‡–›", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Text Vertical Adjust", // English
     "Text vertikal verschieben", // German
@@ -361,15 +377,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Pystytasauksen hienos‰‰tˆ", // Finnish
     "", // Polish
-    "", // Spanish
+    "Ajuste vertical del texto", // Spanish
     "", // Greek
     "Vertikal justering", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Ajustament vertical del text", // Catalenian
+    "≤’‡‚ÿ⁄–€Ï›ÎŸ ·‘“ÿ” ‚’⁄·‚–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Line Spacing Adjust", // English
     "Zeilenabstand einstellen", // German
@@ -381,15 +398,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Riviv‰lin hienos‰‰tˆ", // Finnish
     "", // Polish
-    "", // Spanish
+    "Ajuste distancia entre lÌneas", // Spanish
     "", // Greek
     "RadavstÂnd", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Ajustament distancia entre lÌnies", // Catalenian
+    "¿–··‚ﬁÔ›ÿ’ ‹’÷‘„ ·‚‡ﬁ⁄–‹ÿ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Workaround for some French chns", // English
     "Workaround f¸r franzˆsische Kan‰le", // German
@@ -401,15 +419,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Ranskalainen silm‰nk‰‰ntˆtemppu", // Finnish
     "", // Polish
-    "", // Spanish
+    "CorrecciÛn para canales franceses", // Spanish
     "", // Greek
     "Fix fˆr vissa franska kanaler", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "CorrecciÛ per a canals francesos", // Catalenian
+    "¡ﬂ’Ê. ›–·‚‡ﬁŸ⁄ÿ ‘€Ô ‰‡–›Ê. ⁄–›–€ﬁ“", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Language", // English
     "Sprache", // German
@@ -421,15 +440,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Tekstityskieli", // Finnish
     "", // Polish
-    "", // Spanish
+    "Idioma", // Spanish
     "", // Greek
     "SprÂk", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Idioma", // Catalenian
+    "œ◊Î⁄", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Hearing Impaired", // English
     "Gehˆrlose", // German
@@ -441,15 +461,37 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "kuulorajoitteisille", // Finnish
     "", // Polish
-    "", // Spanish
+    "No oyente", // Spanish
     "", // Greek
     "Nedsatt hˆrsel", // Swedish
     "", // Romanian
     "", // Hungarian
+    "Discapacitats auditius", // Catalenian
+    "‘€Ô ·€–—ﬁ·€ÎË–ÈÿÂ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Font Size (pixel)", // English
+    "", // German
+    "", // Slovenian
+    "", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Taille Police (pixel)", // French
+    "", // Norwegian
+    "Kirjasintyypin koko (px)", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
     "", // Catalenian
-#if VDRVERSNUM >= 10300
     "", // Russian
-#endif
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Text Color", // English
     "Textfarbe", // German
@@ -461,15 +503,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Kirjasimen v‰ri", // Finnish
     "", // Polish
-    "", // Spanish
+    "Color del texto", // Spanish
     "", // Greek
     "F‰rg pÂ text", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Color del text", // Catalenian
+    "∆“’‚ ‚’⁄·‚–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Background Color", // English
     "Hintergrundfarbe", // German
@@ -481,15 +524,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "Taustav‰ri", // Finnish
     "", // Polish
-    "", // Spanish
+    "Color de fondo", // Spanish
     "", // Greek
     "F‰rg pÂ bakgrund", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Color de fons", // Catalenian
+    "∆“’‚ ‰ﬁ›–", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Black", // English
     "Schwarz", // German
@@ -501,15 +545,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "musta", // Finnish
     "", // Polish
-    "", // Spanish
+    "Negro", // Spanish
     "", // Greek
     "svart", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Negre", // Catalenian
+    "ÁÒ‡›ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "White", // English
     "Weiss", // German
@@ -521,15 +566,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "valkoinen", // Finnish
     "", // Polish
-    "", // Spanish
+    "Blanco", // Spanish
     "", // Greek
     "vit", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Blanc", // Catalenian
+    "—’€ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Red", // English
     "Rot", // German
@@ -541,15 +587,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "punainen", // Finnish
     "", // Polish
-    "", // Spanish
+    "Rojo", // Spanish
     "", // Greek
     "rˆd", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Vermell", // Catalenian
+    "⁄‡–·›ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Green", // English
     "Gr¸n", // German
@@ -561,15 +608,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "vihre‰", // Finnish
     "", // Polish
-    "", // Spanish
+    "Verde", // Spanish
     "", // Greek
     "grˆn", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Verd", // Catalenian
+    "◊’€Ò›ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Yellow", // English
     "Gelb", // German
@@ -581,15 +629,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "keltainen", // Finnish
     "", // Polish
-    "", // Spanish
+    "Amarillo", // Spanish
     "", // Greek
     "gul", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Groc", // Catalenian
+    "÷Ò€‚ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Magenta", // English
     "Magenta", // German
@@ -601,15 +650,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "magenta", // Finnish
     "", // Polish
-    "", // Spanish
+    "Magenta", // Spanish
     "", // Greek
     "magenta", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Magenta", // Catalenian
+    "ﬂ„‡ﬂ„‡›ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Blue", // English
     "Blau", // German
@@ -621,15 +671,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "sininen", // Finnish
     "", // Polish
-    "", // Spanish
+    "Azul", // Spanish
     "", // Greek
     "blÂ", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Blau", // Catalenian
+    "·ÿ›ÿŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Cyan", // English
     "T¸rkis", // German
@@ -641,15 +692,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "syaani", // Finnish
     "", // Polish
-    "", // Spanish
+    "Cian", // Spanish
     "", // Greek
     "cyan", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Cian", // Catalenian
+    "”ﬁ€„—ﬁŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Grey", // English
     "Grau", // German
@@ -661,15 +713,16 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "harmaa", // Finnish
     "", // Polish
-    "", // Spanish
+    "Gris", // Spanish
     "", // Greek
     "grÂ", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Gris", // Catalenian
+    "·’‡ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { "Transparent", // English
     "Transparent", // German
@@ -681,35 +734,457 @@ const tI18nPhrase Phrases[] =
     "", // Norwegian
     "l‰pin‰kyv‰", // Finnish
     "", // Polish
-    "", // Spanish
+    "Transparente", // Spanish
     "", // Greek
     "transparent", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
-    "", // Russian
-#endif
+    "Transparent", // Catalenian
+    "ﬂ‡ﬁ◊‡–Á›ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
-  { "Background", // English
-    "Hintergrund", // German
+  { "Custom Color", // English
+    "Benutzerdefinierte Farbe", // German
     "", // Slovenian
-    "Sfondo", // Italian
+    "Colore personalizzato", // Italian
     "", // Dutch
     "", // Portuguese
-    "Fond", // French
+    "Couleur personnalisÈe", // French
     "", // Norwegian
-    "tausta", // Finnish
+    "Muokattava v‰ri", // Finnish
     "", // Polish
-    "", // Spanish
+    "Color personalizado", // Spanish
     "", // Greek
-    "bakgrund", // Swedish
+    "", // Swedish
     "", // Romanian
     "", // Hungarian
-    "", // Catalenian
-#if VDRVERSNUM >= 10300
+    "Color personalitzat", // Catalenian
+    "Ω–·‚‡–ÿ“–’‹ÎŸ Ê“’‚", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Custom", // English
+    "Benutzerdefiniert", // German
+    "", // Slovenian
+    "Personalizzato", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "PersonnalisÈ", // French
+    "", // Norwegian
+    "muokattava", // Finnish
+    "", // Polish
+    "Personalizado", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Personalitzat", // Catalenian
+    "›–·‚‡–ÿ“–’‹ÎŸ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Red Value", // English
+    "Roter Wert", // German
+    "", // Slovenian
+    "Valore rosso", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Valeur Rouge", // French
+    "", // Norwegian
+    "Punainen", // Finnish
+    "", // Polish
+    "Valor rojo", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Valor vermell", // Catalenian
+    "√‡ﬁ“’›Ï ⁄‡–·›ﬁ”ﬁ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Green Value", // English
+    "Gr¸ner Wert", // German
+    "", // Slovenian
+    "Valore verde", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Valeur Vert", // French
+    "", // Norwegian
+    "Vihre‰", // Finnish
+    "", // Polish
+    "Valor verde", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Valor vert", // Catalenian
+    "√‡ﬁ“’›Ï ◊’€Ò›ﬁ”ﬁ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Blue Value", // English
+    "Blauer Wert", // German
+    "", // Slovenian
+    "Valore azzurro", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Valeur Bleu", // French
+    "", // Norwegian
+    "Sininen", // Finnish
+    "", // Polish
+    "Valor azul", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Valor blau", // Catalenian
+    "√‡ﬁ“’›Ï ·ÿ›’”ﬁ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Transparency Value", // English
+    "Transparenter Wert", // German
+    "", // Slovenian
+    "Valore trasparenza", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Valeur de transparence", // French
+    "", // Norwegian
+    "L‰pin‰kyvyys", // Finnish
+    "", // Polish
+    "Valor transparencia", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Valor transparËncia", // Catalenian
+    "¡‚’ﬂ’›Ï ﬂ‡ﬁ◊‡–Á›ﬁ·‚ÿ", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "DVB Source Selection", // English
+    "DVB Quelle Auswahl", // German
+    "", // Slovenian
+    "Selezione sorgente DVB", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "SÈlection Source DVB", // French
+    "", // Norwegian
+    "Tekstitysl‰hteen valinta", // Finnish
+    "", // Polish
+    "SelecciÛn fuente DVB", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "SelecciÛ font DVB", // Catalenian
     "", // Russian
-#endif
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "All", // English
+    "Alle", // German
+    "", // Slovenian
+    "Tutte", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Tous", // French
+    "", // Norwegian
+    "kaikki", // Finnish
+    "", // Polish
+    "Todas", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Totes", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Only DVB-S", // English
+    "Nur DVB-S", // German
+    "", // Slovenian
+    "Solo DVB-S", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Seulement DVB-S", // French
+    "", // Norwegian
+    "vain DVB-S", // Finnish
+    "", // Polish
+    "SÛlo DVB-S", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "NomÈs DVB-S", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Only DVB-T", // English
+    "Nur DVB-T", // German
+    "", // Slovenian
+    "Solo DVB-T", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Seulement DVB-T", // French
+    "", // Norwegian
+    "vain DVB-T", // Finnish
+    "", // Polish
+    "SÛlo DVB-T", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "NomÈs DVB-T", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Only DVB-C", // English
+    "Nur DVB-C", // German
+    "", // Slovenian
+    "Solo DVB-C", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Seulement DVB-C", // French
+    "", // Norwegian
+    "vain DVB-C", // Finnish
+    "", // Polish
+    "SÛlo DVB-C", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "NomÈs DVB-C", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Page Mode", // English
+    "Seitenmodus", // German
+    "", // Slovenian
+    "Modo pagina", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Mode page", // French
+    "", // Norwegian
+    "sivun valinta", // Finnish
+    "", // Polish
+    "Modo p·gina", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Modalitat p‡gina", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Page Selection", // English
+    "Seitenauswahl", // German
+    "", // Slovenian
+    "Selezione pagina", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Page de sÈlection", // French
+    "", // Norwegian
+    "Tekstityssivun valinta", // Finnish
+    "", // Polish
+    "SelecciÛn p·gina subtÌtulos", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "SelecciÛ p‡gina subtÌtols", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Subtitle Mode", // English
+    "Untertitelmodus", // German
+    "", // Slovenian
+    "Modo sottotitoli", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Mode de sous-titres TXT", // French
+    "", // Norwegian
+    "Tekstitystapa", // Finnish
+    "", // Polish
+    "Modo subtÌtulos", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Modalitat subtÌtols", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Manual Subtitle Page", // English
+    "Manuelle Untertitelseite", // German
+    "", // Slovenian
+    "Pagina manuale sottotitoli", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Page des sous-titres", // French
+    "", // Norwegian
+    "Asetettu tekstityssivu", // Finnish
+    "", // Polish
+    "P·gina manual subtÌtulos", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "P‡gina manual subtÌtols", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Subtitle Page Settings", // English
+    "Untertitelseiten Einstellung", // German
+    "", // Slovenian
+    "Settaggi pagina sottotitoli", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Conf. Page sous-titres TXT", // French
+    "", // Norwegian
+    "Tekstityssivun asetukset", // Finnish
+    "", // Polish
+    "Opciones p·gina subtÌtulos", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Opcions p‡gina subtÌtols", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Auto", // English
+    "Automatisch", // German
+    "", // Slovenian
+    "Automatico", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Auto", // French
+    "", // Norwegian
+    "automaattinen", // Finnish
+    "", // Polish
+    "Autom·tico", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Autom‡tic", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Manual", // English
+    "Manuell", // German
+    "", // Slovenian
+    "Manuale", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Manuel", // French
+    "", // Norwegian
+    "manuaalinen", // Finnish
+    "", // Polish
+    "Manual", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Manual", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Disabled", // English
+    "Deaktiviert", // German
+    "", // Slovenian
+    "Disattivati", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "DÈsactivÈ", // French
+    "", // Norwegian
+    "pois", // Finnish
+    "", // Polish
+    "Desactivados", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Desactivats", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Live Delay", // English
+    "Live Verzˆgerung", // German
+    "", // Slovenian
+    "Ritardo in diretta", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "", // French
+    "", // Norwegian
+    "Viive Live-l‰hetyksess‰", // Finnish
+    "", // Polish
+    "Retardo en directo", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Retard en directe", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
+  },
+  { "Replay Delay", // English
+    "Wiedergabe Verzˆgerung", // German
+    "", // Slovenian
+    "Ritardo in riproduzione", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "", // French
+    "", // Norwegian
+    "Viive toistossa", // Finnish
+    "", // Polish
+    "Retardo en reproducciÛn", // Spanish
+    "", // Greek
+    "", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "Retard en reproducciÛ", // Catalenian
+    "", // Russian
+    "", // Croatian
+    "", // Eesti
+    "", // Dansk
   },
   { NULL }
 };

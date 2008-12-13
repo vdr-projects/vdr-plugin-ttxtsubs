@@ -1,0 +1,241 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@cadsoft.de>
+# This file is distributed under the same license as the VDR package.
+# Tomas Prybil <tomas@prybil.se>, 2002
+# Jan Ekholm <chakie@infa.abo.fi>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <author>\n"
+"POT-Creation-Date: 2007-09-25 21:58+0300\n"
+"PO-Revision-Date: 2007-08-24 23:49+0300\n"
+"Last-Translator: Tomas Prybil <tomas@prybil.se>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ttxtsubs.c:51
+msgid "Teletext subtitles"
+msgstr "Textning (Text-TV)"
+
+#: ttxtsubs.c:302
+msgid "Hide teletext subtitles"
+msgstr "Göm textning (Text-TV)"
+
+#: ttxtsubs.c:304
+msgid "Display teletext subtitles"
+msgstr "Visa textning (Text-TV)"
+
+#: ttxtsubs.c:307
+msgid "Position Teletext Subtitles for 4:3/Anamorph"
+msgstr "Textning för 4:3/anamorf (Text-TV)"
+
+#: ttxtsubs.c:309
+msgid "Position Teletext Subtitles for Letterbox"
+msgstr "Textning för brevlådeformat (Text-TV)"
+
+#: ttxtsubs.c:311
+msgid "Page Selection"
+msgstr ""
+
+#: ttxtsubs.c:641
+msgid "Display on/off"
+msgstr "Visa textning på/av"
+
+#: ttxtsubs.c:642
+msgid "4:3/Letterbox"
+msgstr "4:3/brevlådeformat"
+
+#: ttxtsubs.c:643
+msgid "Page Mode"
+msgstr ""
+
+#: ttxtsubs.c:646
+msgid "Left"
+msgstr "vänster"
+
+#: ttxtsubs.c:647
+msgid "Center"
+msgstr "centrerad"
+
+#: ttxtsubs.c:648
+msgid "Right"
+msgstr "höger"
+
+#: ttxtsubs.c:651
+msgid "All"
+msgstr ""
+
+#: ttxtsubs.c:652
+msgid "Only DVB-S"
+msgstr ""
+
+#: ttxtsubs.c:653
+msgid "Only DVB-T"
+msgstr ""
+
+#: ttxtsubs.c:654
+msgid "Only DVB-C"
+msgstr ""
+
+#: ttxtsubs.c:657
+msgid "Black"
+msgstr "svart"
+
+#: ttxtsubs.c:658
+msgid "White"
+msgstr "vit"
+
+#: ttxtsubs.c:659
+msgid "Red"
+msgstr "röd"
+
+#: ttxtsubs.c:660
+msgid "Green"
+msgstr "grön"
+
+#: ttxtsubs.c:661
+msgid "Yellow"
+msgstr "gul"
+
+#: ttxtsubs.c:662
+msgid "Magenta"
+msgstr "magenta"
+
+#: ttxtsubs.c:663
+msgid "Blue"
+msgstr "blå"
+
+#: ttxtsubs.c:664
+msgid "Cyan"
+msgstr "cyan"
+
+#: ttxtsubs.c:665
+msgid "Custom"
+msgstr ""
+
+#: ttxtsubs.c:666
+msgid "Transparent"
+msgstr "transparent"
+
+#: ttxtsubs.c:667
+msgid "Grey"
+msgstr "grå"
+
+#: ttxtsubs.c:691 ttxtsubspagemenu.c:36
+msgid "Display Subtitles"
+msgstr "Visa textning"
+
+#: ttxtsubs.c:692
+msgid "Record Subtitles"
+msgstr "Spela in textning"
+
+#: ttxtsubs.c:693
+msgid "Live Delay"
+msgstr ""
+
+#: ttxtsubs.c:694
+msgid "Replay Delay"
+msgstr ""
+
+#: ttxtsubs.c:697
+msgid "Main Menu Alternative"
+msgstr "Huvudmenyalternativ"
+
+#: ttxtsubs.c:701
+msgid "Text Horizontal Position"
+msgstr "Horisontell position"
+
+#: ttxtsubs.c:703
+msgid "Text Vertical Position"
+msgstr "Vertikal positon"
+
+#: ttxtsubs.c:704
+msgid "4:3/Anamorph"
+msgstr "4:3/anamorf"
+
+#: ttxtsubs.c:704
+msgid "Letterbox"
+msgstr "brevlådeformat"
+
+#: ttxtsubs.c:705
+msgid "Text Vertical Adjust"
+msgstr "Vertikal justering"
+
+#: ttxtsubs.c:707
+msgid "Line Spacing Adjust"
+msgstr "Radavstånd"
+
+#: ttxtsubs.c:709
+msgid "Workaround for some French chns"
+msgstr "Fix för vissa franska kanaler"
+
+#: ttxtsubs.c:713
+msgid "DVB Source Selection"
+msgstr ""
+
+#: ttxtsubs.c:716
+msgid "Font Size (pixel)"
+msgstr ""
+
+#: ttxtsubs.c:720
+msgid "Text Color"
+msgstr "Färg på text"
+
+#: ttxtsubs.c:724
+msgid "Background Color"
+msgstr "Färg på bakgrund"
+
+#: ttxtsubs.c:736
+msgid "Custom Color"
+msgstr ""
+
+#: ttxtsubs.c:741
+msgid "Red Value"
+msgstr ""
+
+#: ttxtsubs.c:742
+msgid "Green Value"
+msgstr ""
+
+#: ttxtsubs.c:743
+msgid "Blue Value"
+msgstr ""
+
+#: ttxtsubs.c:744
+msgid "Transparency Value"
+msgstr ""
+
+#: ttxtsubs.c:754 ttxtsubs.c:762
+msgid "Language"
+msgstr "Språk"
+
+#: ttxtsubs.c:762
+msgid "Hearing Impaired"
+msgstr "Nedsatt hörsel"
+
+#: ttxtsubspagemenu.c:17
+msgid "Subtitle Page Settings"
+msgstr ""
+
+#: ttxtsubspagemenu.c:31
+msgid "Auto"
+msgstr ""
+
+#: ttxtsubspagemenu.c:32
+msgid "Manual"
+msgstr ""
+
+#: ttxtsubspagemenu.c:33
+msgid "Disabled"
+msgstr ""
+
+#: ttxtsubspagemenu.c:37
+msgid "Subtitle Mode"
+msgstr ""
+
+#: ttxtsubspagemenu.c:38
+msgid "Manual Subtitle Page"
+msgstr ""

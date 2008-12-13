@@ -31,8 +31,9 @@ cTtxtSubsDisplayer::~cTtxtSubsDisplayer(void)
   this->Cancel(5);
 
   if(mDisp) {
-    delete mDisp;
+    cTtxtSubsDisplay *tmp = mDisp;
     mDisp = NULL;
+    delete tmp;
   }
 }
 
@@ -45,7 +46,9 @@ void cTtxtSubsDisplayer::Action(void)
     f = mRingBuf.Get();
 
     if(f) {
-      mDisp->TtxtData(f->Data());
+      uint64_t sched_time;
+      memcpy(&sched_time, f->Data() + 46, sizeof(sched_time));
+      mDisp->TtxtData(f->Data(), sched_time);
       mRingBuf.Drop(f);
     } else {
       // wait for more data
@@ -70,11 +73,20 @@ void cTtxtSubsDisplayer::HideDisplay(void)
 
 // ----- class cTtxtSubsLiveReceiver -----
 
-cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(int Pid, int textpage)
+cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int textpage)
   :
-  cReceiver(0, -1, 1, Pid),
+#if defined(APIVERSNUM) && APIVERSNUM < 10500
+  cReceiver(0, -1, Pid),
+#else
+  cReceiver(ChnId, -1, Pid),
+#endif
   cTtxtSubsDisplayer(textpage)
 {
+}
+
+cTtxtSubsLiveReceiver::~cTtxtSubsLiveReceiver(void)
+{
+  Detach();
 }
 
 void cTtxtSubsLiveReceiver::Activate(bool On)
@@ -100,7 +112,9 @@ void cTtxtSubsLiveReceiver::Receive(uchar *Data, int Length)
     if(0xff == Data[4 + i*46]) // stuffing data
       continue;
 
-    cFrame *f = new cFrame(Data + 4 + i*46, 46);
+    uint64_t sched_time = cTimeMs::Now() + globals.liveDelay(); 
+    cFrame *f = new cFrame(Data + 4 + i*46, 46 + sizeof(sched_time));
+    memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
     mRingBuf.Put(f);
     mGetCond.Broadcast();
   }
@@ -150,7 +164,9 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length)
     if(0xff == p[i*46]) // stuffing data
       continue;
 
-    cFrame *f = new cFrame(p + i*46, 46);
+    uint64_t sched_time=cTimeMs::Now() + globals.replayDelay(); 
+    cFrame *f = new cFrame(p + i*46, 46 + sizeof(sched_time));
+    memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
     mRingBuf.Put(f);
     mGetCond.Broadcast();
   }
@@ -165,7 +181,7 @@ static void copy_inv_strip_par(uint8_t *dest, uint8_t *src, size_t len)
 
 void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
 {
-  char *infoline = "Subtitles Index Page";
+  const char *infoline = "Subtitles Index Page";
   int foundlines = 0;
 
   if(len < (3*46))

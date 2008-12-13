@@ -17,9 +17,13 @@ struct ringBufItem {
 
 // ----- cTtxtSubsReceiver -----
 
-cTtxtSubsReceiver::cTtxtSubsReceiver(int Ca, struct ttxtpidinfo *PI)
+cTtxtSubsReceiver::cTtxtSubsReceiver(tChannelID ChnId, int Ca, struct ttxtpidinfo *PI)
   :
-  cReceiver(Ca, -1, 1, PI->pid),
+#if defined(APIVERSNUM) && APIVERSNUM < 10500
+  cReceiver(Ca, -1, PI->pid),
+#else
+  cReceiver(ChnId, -1, PI->pid),
+#endif
   mGetMutex(),
   mGetCond(),
   mRingBuf(sizeof(ringBufItem) * 500, true),
@@ -73,6 +77,7 @@ cTtxtSubsReceiver::~cTtxtSubsReceiver()
 {
   // get any waiting threads going
   mGetCond.Broadcast();
+  Detach();
 }
 
 
@@ -90,7 +95,7 @@ uint8_t *cTtxtSubsReceiver::Get(uint8_t *buf, encodedPTS *pts)
 
     memcpy(buf, i->data, 46);
     mRingBuf.Drop(f);
-    // fprintf(stderr, "cTtxtSubsReceiver::Get: returned data!\n");
+    // dprint("cTtxtSubsReceiver::Get: returned data!\n");
     return buf;
   } else {
     return NULL;
@@ -163,7 +168,7 @@ void cTtxtSubsReceiver::Receive(uchar *Data, int Length)
       continue;
 
     if(mFilter.Filter((char *) Data + 4 + i*46, (char *) it.data)) {
-      // fprintf(stderr, "Forward Packet:\n");
+      // dprint("Forward Packet:\n");
       // print_line((char *) Data + 4 + i*46);
       // print_line(buf);
 
@@ -199,10 +204,10 @@ static void copy_inv_par(uint8_t *dest, uint8_t *src, int count)
 
 void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
 {
-  //fprintf(stderr, "AddIndexInfo: %c%c%c/%d/%03x\n", lang[0], lang[1], lang[2], type, page); // XXX
+  //dprint("AddIndexInfo: %c%c%c/%d/%03x\n", lang[0], lang[1], lang[2], type, page); // XXX
 
   if(mIndexPageLines == MAXINDEXPAGELINES) {
-    fprintf(stderr, "cTtxtSubsReceiver::AddIndexInfo: Index page full!\n");
+    esyslog("ttxtsubs: cTtxtSubsReceiver::AddIndexInfo: Index page full!");
     return;
   }
 
@@ -234,7 +239,7 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
 
     init_line(mIndexPage[mIndexPageLines], mIndexPageLines, mIndexPageNo >> 8);
     d = (struct ttxt_data_field *) mIndexPage[mIndexPageLines];
-    char *header = "Subtitles Index Page";
+    const char *header = "Subtitles Index Page";
     txtlen = strlen(header);
     copy_inv_par(d->data, (uint8_t *) header, txtlen);
     for(int i = txtlen; i < 40; i++)

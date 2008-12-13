@@ -1,0 +1,243 @@
+# VDR plugin language source file.
+# Copyright (C) 2007 Klaus Schmidinger <kls@cadsoft.de>
+# This file is distributed under the same license as the VDR package.
+# Hannu Savolainen <hannu@opensound.com>, 2002
+# Jaakko Hyvätti <jaakko@hyvatti.iki.fi>, 2002
+# Niko Tarnanen <niko.tarnanen@hut.fi>, 2003
+# Rolf Ahrenberg <rahrenbe@cc.hut.fi>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <author>\n"
+"POT-Creation-Date: 2007-09-25 21:58+0300\n"
+"PO-Revision-Date: 2007-08-24 23:49+0300\n"
+"Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
+"Language-Team: <vdr@linuxtv.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ttxtsubs.c:51
+msgid "Teletext subtitles"
+msgstr "Tekstitys (Teksti-TV)"
+
+#: ttxtsubs.c:302
+msgid "Hide teletext subtitles"
+msgstr "Piilota tekstitys (Teksti-TV)"
+
+#: ttxtsubs.c:304
+msgid "Display teletext subtitles"
+msgstr "Näytä tekstitys (Teksti-TV)"
+
+#: ttxtsubs.c:307
+msgid "Position Teletext Subtitles for 4:3/Anamorph"
+msgstr "4:3/Anamorfinen tekstitys (Teksti-TV)"
+
+#: ttxtsubs.c:309
+msgid "Position Teletext Subtitles for Letterbox"
+msgstr "Letterbox tekstitys (Teksti-TV)"
+
+#: ttxtsubs.c:311
+msgid "Page Selection"
+msgstr "Tekstityssivun valinta"
+
+#: ttxtsubs.c:641
+msgid "Display on/off"
+msgstr "aktivointi"
+
+#: ttxtsubs.c:642
+msgid "4:3/Letterbox"
+msgstr "kuvasuhde"
+
+#: ttxtsubs.c:643
+msgid "Page Mode"
+msgstr "sivun valinta"
+
+#: ttxtsubs.c:646
+msgid "Left"
+msgstr "vasen"
+
+#: ttxtsubs.c:647
+msgid "Center"
+msgstr "keskitä"
+
+#: ttxtsubs.c:648
+msgid "Right"
+msgstr "oikea"
+
+#: ttxtsubs.c:651
+msgid "All"
+msgstr "kaikki"
+
+#: ttxtsubs.c:652
+msgid "Only DVB-S"
+msgstr "vain DVB-S"
+
+#: ttxtsubs.c:653
+msgid "Only DVB-T"
+msgstr "vain DVB-T"
+
+#: ttxtsubs.c:654
+msgid "Only DVB-C"
+msgstr "vain DVB-C"
+
+#: ttxtsubs.c:657
+msgid "Black"
+msgstr "musta"
+
+#: ttxtsubs.c:658
+msgid "White"
+msgstr "valkoinen"
+
+#: ttxtsubs.c:659
+msgid "Red"
+msgstr "punainen"
+
+#: ttxtsubs.c:660
+msgid "Green"
+msgstr "vihreä"
+
+#: ttxtsubs.c:661
+msgid "Yellow"
+msgstr "keltainen"
+
+#: ttxtsubs.c:662
+msgid "Magenta"
+msgstr "magenta"
+
+#: ttxtsubs.c:663
+msgid "Blue"
+msgstr "sininen"
+
+#: ttxtsubs.c:664
+msgid "Cyan"
+msgstr "syaani"
+
+#: ttxtsubs.c:665
+msgid "Custom"
+msgstr "muokattava"
+
+#: ttxtsubs.c:666
+msgid "Transparent"
+msgstr "läpinäkyvä"
+
+#: ttxtsubs.c:667
+msgid "Grey"
+msgstr "harmaa"
+
+#: ttxtsubs.c:691 ttxtsubspagemenu.c:36
+msgid "Display Subtitles"
+msgstr "Näytä tekstitykset"
+
+#: ttxtsubs.c:692
+msgid "Record Subtitles"
+msgstr "Tallenna tekstitykset"
+
+#: ttxtsubs.c:693
+msgid "Live Delay"
+msgstr "Viive Live-lähetyksessä"
+
+#: ttxtsubs.c:694
+msgid "Replay Delay"
+msgstr "Viive toistossa"
+
+#: ttxtsubs.c:697
+msgid "Main Menu Alternative"
+msgstr "Päävalikon toiminnot"
+
+#: ttxtsubs.c:701
+msgid "Text Horizontal Position"
+msgstr "Vaakatasaus"
+
+#: ttxtsubs.c:703
+msgid "Text Vertical Position"
+msgstr "Pystytasaus"
+
+#: ttxtsubs.c:704
+msgid "4:3/Anamorph"
+msgstr "4:3/anamorfinen"
+
+#: ttxtsubs.c:704
+msgid "Letterbox"
+msgstr "letterbox"
+
+#: ttxtsubs.c:705
+msgid "Text Vertical Adjust"
+msgstr "Pystytasauksen hienosäätö"
+
+#: ttxtsubs.c:707
+msgid "Line Spacing Adjust"
+msgstr "Rivivälin hienosäätö"
+
+#: ttxtsubs.c:709
+msgid "Workaround for some French chns"
+msgstr "Ranskalainen silmänkääntötemppu"
+
+#: ttxtsubs.c:713
+msgid "DVB Source Selection"
+msgstr "Tekstityslähteen valinta"
+
+#: ttxtsubs.c:716
+msgid "Font Size (pixel)"
+msgstr "Kirjasintyypin koko (px)"
+
+#: ttxtsubs.c:720
+msgid "Text Color"
+msgstr "Kirjasimen väri"
+
+#: ttxtsubs.c:724
+msgid "Background Color"
+msgstr "Taustaväri"
+
+#: ttxtsubs.c:736
+msgid "Custom Color"
+msgstr "Muokattava väri"
+
+#: ttxtsubs.c:741
+msgid "Red Value"
+msgstr "Punainen"
+
+#: ttxtsubs.c:742
+msgid "Green Value"
+msgstr "Vihreä"
+
+#: ttxtsubs.c:743
+msgid "Blue Value"
+msgstr "Sininen"
+
+#: ttxtsubs.c:744
+msgid "Transparency Value"
+msgstr "Läpinäkyvyys"
+
+#: ttxtsubs.c:754 ttxtsubs.c:762
+msgid "Language"
+msgstr "Tekstityskieli"
+
+#: ttxtsubs.c:762
+msgid "Hearing Impaired"
+msgstr "kuulorajoitteisille"
+
+#: ttxtsubspagemenu.c:17
+msgid "Subtitle Page Settings"
+msgstr "Tekstityssivun asetukset"
+
+#: ttxtsubspagemenu.c:31
+msgid "Auto"
+msgstr "automaattinen"
+
+#: ttxtsubspagemenu.c:32
+msgid "Manual"
+msgstr "manuaalinen"
+
+#: ttxtsubspagemenu.c:33
+msgid "Disabled"
+msgstr "pois"
+
+#: ttxtsubspagemenu.c:37
+msgid "Subtitle Mode"
+msgstr "Tekstitystapa"
+
+#: ttxtsubspagemenu.c:38
+msgid "Manual Subtitle Page"
+msgstr "Asetettu tekstityssivu"

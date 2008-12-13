@@ -24,7 +24,8 @@ class cTtxtSubsDisplayer : public cThread {
 
 class cTtxtSubsLiveReceiver : public cReceiver, public cTtxtSubsDisplayer {
  public:
-  cTtxtSubsLiveReceiver(int Pid, int textpage);
+  cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int textpage);
+  ~cTtxtSubsLiveReceiver(void);
 
  protected:
   virtual void Activate(bool On);

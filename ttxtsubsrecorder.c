@@ -31,22 +31,23 @@ cTtxtSubsRecorder::cTtxtSubsRecorder(cDevice *dev, const cChannel *ch)
   mTtxtinfo = (struct ttxtinfo *) malloc(sizeof(*mTtxtinfo));
   struct ttxtpidinfo *pi = NULL;
   int pid, page;
+  char lang[4] = "";
 
-  if(GetTtxtInfo(dev->CardIndex(), ch->Number(), ch->Sid(), ch->Vpid(), mTtxtinfo)) {
-    fprintf(stderr, "cTtxtSubsRecorder::cTtxtSubsRecorder: GetTtxtSubtitleInfo error!\n");
+  if(GetTtxtInfo(dev->CardIndex(), ch, mTtxtinfo)) {
+    esyslog("ttxtsubs: cTtxtSubsRecorder::cTtxtSubsRecorder: GetTtxtSubtitleInfo error!");
   } else {
-    pi = FindSubs(mTtxtinfo, &pid, &page);
+    pi = FindSubs(mTtxtinfo, &pid, &page, lang);
     
     if(!pi && mTtxtinfo->pidcount > 0) {
       pi = &(mTtxtinfo->p[0]);
-      fprintf(stderr, "Selected language not found, just recording first teletext pid found.\n");
+      isyslog("ttxtsubs: Selected language not found, just recording first teletext pid found.");
     }
 
     if(pi) {
-      mReceiver = new cTtxtSubsReceiver(ch->Ca(), pi);
+      mReceiver = new cTtxtSubsReceiver(ch->GetChannelID(), ch->Ca(), pi);
       mPacketBuffer = (uint8_t *) malloc(MAXPACKETSIZE);
     } else {
-      fprintf(stderr, "No teletext pid found, not recording any (obviously).\n");
+      isyslog("ttxtsubs: No teletext pid found, not recording any (obviously).");
     }
   }
 }
@@ -54,8 +55,9 @@ cTtxtSubsRecorder::cTtxtSubsRecorder(cDevice *dev, const cChannel *ch)
 cTtxtSubsRecorder::~cTtxtSubsRecorder(void)
 {
   if(mReceiver) {
-    delete mReceiver;
+    cTtxtSubsReceiver *tmp = mReceiver;
     mReceiver = NULL;
+    delete tmp;
   }
 
   if(mTtxtinfo) {
@@ -160,7 +162,7 @@ uint8_t *cTtxtSubsRecorder::GetPacket(uint8_t **outbuf, size_t *lenp)
 
 #if 0
   if(*outbuf) { // XXX
-    fprintf(stderr, "cTtxtSubsRecorder::GetPacket: len: %d\n", len);
+    dprint("cTtxtSubsRecorder::GetPacket: len: %d\n", len);
     for(size_t i = 46; i < len; i +=46) {
       struct ttxt_data_field *d = (struct ttxt_data_field *) b + i;
       if(d->data_unit_id != 0xff)

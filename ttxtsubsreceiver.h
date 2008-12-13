@@ -9,7 +9,7 @@ struct encodedPTS {
 class cTtxtSubsReceiver : public cReceiver
 {
  public:
-  cTtxtSubsReceiver(int Ca, struct ttxtpidinfo *PI);
+  cTtxtSubsReceiver(tChannelID ChnId, int Ca, struct ttxtpidinfo *PI);
   virtual ~cTtxtSubsReceiver();
 
   // returns pointer buf if there is new data

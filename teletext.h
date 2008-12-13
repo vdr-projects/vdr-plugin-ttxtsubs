@@ -5,14 +5,14 @@
 
 #define PACK  __attribute__ ((__packed__))
 
-struct ttxt_pes_header {
+struct PACK ttxt_pes_header {
   uint8_t start[3];
-  uint8_t stream_id  PACK;
-  uint16_t len PACK;
+  uint8_t stream_id;
+  uint16_t len;
 
   // private_stream_1 packets (and others)
-  uint8_t flags[2] PACK;
-  uint8_t header_len PACK;
+  uint8_t flags[2];
+  uint8_t header_len;
 };
 
 
@@ -23,19 +23,19 @@ enum {
 };
 
 #define TTXT_LINE_NO(x) ((x).par_loff & 0x1f)
-struct ttxt_data_field {
-  uint8_t data_unit_id PACK;
-  uint8_t data_unit_length PACK;
-  uint8_t par_loff PACK;
-  uint8_t framing_code PACK;
-  uint8_t mag_addr_ham[2] PACK;
-  uint8_t data[40] PACK;
+struct PACK ttxt_data_field {
+  uint8_t data_unit_id;
+  uint8_t data_unit_length;
+  uint8_t par_loff;
+  uint8_t framing_code;
+  uint8_t mag_addr_ham[2];
+  uint8_t data[40];
 };
 
 
-struct ttxt_pes_data_field {
-  uint8_t data_identifier PACK;
-  struct ttxt_data_field d[1] PACK;
+struct PACK ttxt_pes_data_field {
+  uint8_t data_identifier;
+  struct ttxt_data_field d[1];
 };
 
 
@@ -80,13 +80,13 @@ int parity(uint8_t x);
  * inchar - 7 bits = characted to remap
  * Also strips parity
  */
-uint8_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar);
+uint16_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar);
 
 /*
  * Map Latin G2 teletext characters into a ISO-8859-1 approximation.
  * Trying to use similar looking or similar meaning characters.
  */
-uint8_t ttxt_laG2_la1_char(uint8_t inchar);
+uint16_t ttxt_laG2_la1_char(uint8_t inchar);
 
 
 
