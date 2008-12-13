@@ -218,7 +218,7 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data)
 	page.flags |= inhibit_display;
       // if(fi[7] & 0x02) // Magazine Serial
       
-      page.national_charset = ((fi[7] & 0x80) >> 5) +
+      page.national_charset = ((fi[7] & 0x80) >> 7) +
 	((fi[7] & 0x20) >> 4) + ((fi[7] & 0x08) >> 1);
       
       mPageState = collecting;

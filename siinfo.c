@@ -332,6 +332,17 @@ static void addpageinfo(struct ttxtinfo *info, uint16_t pid, struct ttxt_descr *
   pa->mag = descr->d[descr_index].type_mag & 0x7;
   pa->page = descr->d[descr_index].page_no;
 
+#if 0
+  // Test - rewrite initial page 100 into subtitles page 150
+  if(pa->type == TTXT_INITIAL_PAGE &&
+     pa->mag = 0x1 &&
+     pa->page == 0x00) {
+    pa->type = TTXT_SUBTITLE_PAGE; // or TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE ?
+    pa->mag = 0x1;
+    pa->page = 0x50;
+  }
+#endif
+
   if(globals.frenchSpecial()) {
     /* By some silly reason some French channels (Canal+ and CanalSatellite)
        announce subtitles with the page number in decimal, for example

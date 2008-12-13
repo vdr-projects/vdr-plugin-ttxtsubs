@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubsi18n.c,v 1.1 2004/03/02 01:08:45 ragge Exp $
+ * $Id: ttxtsubsi18n.c,v 1.6 2004/05/31 19:12:22 ragge Exp $
  */
 
 #include "ttxtsubsi18n.h"
@@ -12,14 +12,14 @@
 const tI18nPhrase Phrases[] =
 {
   { "Teletext subtitles", // English
-    "", // Deutsch
+    "Videotextuntertitel", // German - Tobias Grimm 2004-05-21
     "", // Slovenian
-    "", // Italian
+    "Sottotitoli televideo", // Italian - Sean Carlos 2004-03-07
     "", // Dutch
     "", // Portuguese
-    "", // French
+    "Sous-titrage télétexte", // French - Stéphane Esté-Gracias 2004-03-02
     "", // Norwegian
-    "Tekstitys (Teksti-TV)", // Finnish
+    "Tekstitys (Teksti-TV)", // Finnish - Rolf Ahrenberg 2004-03-01
     "", // Polish
     "", // Spanish
     "", // Greek
@@ -31,684 +31,684 @@ const tI18nPhrase Phrases[] =
     "", // Russian
 #endif
   },
-  { "Hide teletext subtitles",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Piilota tekstitys (Teksti-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Göm textning (Text-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Hide teletext subtitles", // English
+    "Verstecke Videotextuntertitel", // German
+    "", // Slovenian
+    "Nascondi sottotitoli televideo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Masquer le sous-titrage", // French
+    "", // Norwegian
+    "Piilota tekstitys (Teksti-TV)", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Göm textning (Text-TV)", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Display teletext subtitles",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Näytä tekstitys (Teksti-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Visa textning (Text-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Display teletext subtitles", // English
+    "Zeige Videotextuntertitel", // German
+    "", // Slovenian
+    "Visualizza sottotitoli televideo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Afficher le sous-titrage", // French
+    "", // Norwegian
+    "Näytä tekstitys (Teksti-TV)", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Visa textning (Text-TV)", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Position Teletext Subtitles for 4:3/Anamorph",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "4:3/Anamorfinen tekstitys (Teksti-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Textning för 4:3/anamorf (Text-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Position Teletext Subtitles for 4:3/Anamorph", // English
+    "Positioniere Videotext-Untertitel für 4:3/Anamorph", // German
+    "", // Slovenian
+    "Posizionare sottotitoli per 4:3/anamorfico", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Position du sous-titrage pour 4:3/Anamorph", // French
+    "", // Norwegian
+    "4:3/Anamorfinen tekstitys (Teksti-TV)", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Textning för 4:3/anamorf (Text-TV)", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Position Teletext Subtitles for Letterbox",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Letterbox tekstitys (Teksti-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Textning för brevlådeformat (Text-TV)",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Position Teletext Subtitles for Letterbox", // English
+    "Positioniere Videotext-Untertitel für Letterbox", // German
+    "", // Slovenian
+    "Posizionare sottotitoli per Letterbox", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Position du sous-titrage pour Letterbox", // French
+    "", // Norwegian
+    "Letterbox tekstitys (Teksti-TV)", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Textning för brevlådeformat (Text-TV)", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Display Subtitles",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Näytä tekstitykset",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Visa textning",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Display Subtitles", // English
+    "Zeige Untertitel", // German
+    "", // Slovenian
+    "Visualizza sottotitoli", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Afficher le sous-titrage", // French
+    "", // Norwegian
+    "Näytä tekstitykset", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Visa textning", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Record Subtitles",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Tallenna tekstitykset",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Spela in textning",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Record Subtitles", // English
+    "Nimm Untertitel auf", // German
+    "", // Slovenian
+   "Registra sottotitoli", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Enregistrer le sous-titrage", // French
+    "", // Norwegian
+    "Tallenna tekstitykset", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Spela in textning", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Main Menu Alternative",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Päävalikon toiminnot",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Huvudmenyalternativ",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Main Menu Alternative", // English
+    "Hauptmenu Alternative", // German
+    "", // Slovenian
+    "Alternativa menù principale", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Choix du menu principal", // French
+    "", // Norwegian
+    "Päävalikon toiminnot", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Huvudmenyalternativ", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Display on/off",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "aktivointi",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Visa textning på/av",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Display on/off", // English
+    "Anzeige ein/aus", // German
+    "", // Slovenian
+    "Visualizza sì/no", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Affichage", // French
+    "", // Norwegian
+    "aktivointi", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Visa textning på/av", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "4:3/Letterbox",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "kuvasuhde",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "4:3/brevlådeformat",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "4:3/Letterbox", // English
+    "4:3/Letterbox",
+    "", // Slovenian
+    "4:3/Letterbox", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "4:3/Letterbox", // French
+    "", // Norwegian
+    "kuvasuhde", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "4:3/brevlådeformat", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Text Horizontal Position",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Vaakatasaus",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Horisontell position",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Text Horizontal Position", // English
+    "Horizontale Textposition", // German
+    "", // Slovenian
+    "Posizione testo orizzontale", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Position horizontale du texte", // French
+    "", // Norwegian
+    "Vaakatasaus", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Horisontell position", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Left",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "vasen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "vänster",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Left", // English
+    "Links", // German
+    "", // Slovenian
+    "Sinistra", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Gauche", // French
+    "", // Norwegian
+    "vasen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "vänster", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Center",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "keskitä",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "centrerad",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Center", // English
+    "Mitte", // German
+    "", // Slovenian
+    "Centro", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Centre", // French
+    "", // Norwegian
+    "keskitä", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "centrerad", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Right",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "oikea",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "höger",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Right", // English
+    "Rechts", // German
+    "", // Slovenian
+    "Destra", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Droite", // French
+    "", // Norwegian
+    "oikea", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "höger", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Text Vertical Position",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Pystytasaus",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Vertikal positon",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Text Vertical Position", // English
+    "Vertikale Textposition", // German
+    "", // Slovenian
+    "Posizione testo verticale", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Position verticale du texte", // French
+    "", // Norwegian
+    "Pystytasaus", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Vertikal positon", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "4:3/Anamorph",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "4:3/anamorfinen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "4:3/anamorf",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "4:3/Anamorph", // English
+    "4:3/Anamorph", // German
+    "", // Slovenian
+    "4:3/anamorfico", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "4:3/Anamorph", // French
+    "", // Norwegian
+    "4:3/anamorfinen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "4:3/anamorf", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Letterbox",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "letterbox",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "brevlådeformat",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Letterbox", // English
+    "Letterbox", // German
+    "", // Slovenian
+    "Letterbox", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Letterbox", // French
+    "", // Norwegian
+    "letterbox", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "brevlådeformat", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Text Vertical Adjust",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Pystytasauksen hienosäätö",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Vertikal justering",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Text Vertical Adjust", // English
+    "Text vertikal verschieben", // German
+    "", // Slovenian
+    "Correzione testo verticale", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Ajustement vertical du texte", // French
+    "", // Norwegian
+    "Pystytasauksen hienosäätö", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Vertikal justering", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Line Spacing Adjust",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Rivivälin hienosäätö",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Radavstånd",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Line Spacing Adjust", // English
+    "Zeilenabstand einstellen", // German
+    "", // Slovenian
+    "Correzione interlinea", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Espacement des lignes", // French
+    "", // Norwegian
+    "Rivivälin hienosäätö", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Radavstånd", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Workaround for some French chns",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Ranskalainen silmänkääntötemppu",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Fix för vissa franska kanaler",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Workaround for some French chns", // English
+    "Workaround für französische Kanäle", // German
+    "", // Slovenian
+    "Correzione per canali francesi", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Contournement chaînes françaises", // French
+    "", // Norwegian
+    "Ranskalainen silmänkääntötemppu", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Fix för vissa franska kanaler", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Language",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Tekstityskieli",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Språk",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Language", // English
+    "Sprache", // German
+    "", // Slovenian
+    "Lingua", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Langues", // French
+    "", // Norwegian
+    "Tekstityskieli", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Språk", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Hearing Impaired",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "kuulorajoitteisille",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Nedsatt hörsel",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Hearing Impaired", // English
+    "Gehörlose", // German
+    "", // Slovenian
+    "Non udente", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Malentendant", // French
+    "", // Norwegian
+    "kuulorajoitteisille", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Nedsatt hörsel", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Text Color",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Kirjasimen väri",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Färg på text",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Text Color", // English
+    "Textfarbe", // German
+    "", // Slovenian
+    "Colore testo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Couleur du text", // French
+    "", // Norwegian
+    "Kirjasimen väri", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Färg på text", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Background Color",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Taustaväri",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "Färg på bakgrund",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Background Color", // English
+    "Hintergrundfarbe", // German
+    "", // Slovenian
+     "Colore sfondo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Couleur du fond", // French
+    "", // Norwegian
+    "Taustaväri", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "Färg på bakgrund", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Black",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "musta",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "svart",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Black", // English
+    "Schwarz", // German
+    "", // Slovenian
+    "Nero", // Italian 
+    "", // Dutch
+    "", // Portuguese
+    "Noir", // French
+    "", // Norwegian
+    "musta", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "svart", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "White",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "valkoinen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "vit",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "White", // English
+    "Weiss", // German
+    "", // Slovenian
+    "Bianco", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Blanc", // French
+    "", // Norwegian
+    "valkoinen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "vit", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Red",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "punainen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "röd",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Red", // English
+    "Rot", // German
+    "", // Slovenian
+    "Rosso", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Rouge", // French
+    "", // Norwegian
+    "punainen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "röd", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Green",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "vihreä",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "grön",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Green", // English
+    "Grün", // German
+    "", // Slovenian
+    "Verde", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Vert", // French
+    "", // Norwegian
+    "vihreä", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "grön", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Yellow",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "keltainen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "gul",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Yellow", // English
+    "Gelb", // German
+    "", // Slovenian
+    "Giallo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Jaune", // French
+    "", // Norwegian
+    "keltainen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "gul", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Magenta",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "magenta",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "magenta",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Magenta", // English
+    "Magenta", // German
+    "", // Slovenian
+    "Magenta", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Magenta", // French
+    "", // Norwegian
+    "magenta", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "magenta", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Blue",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "sininen",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "blå",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Blue", // English
+    "Blau", // German
+    "", // Slovenian
+    "Azzurro", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Bleu", // French
+    "", // Norwegian
+    "sininen", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "blå", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Cyan",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "syaani",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "cyan",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Cyan", // English
+    "Türkis", // German
+    "", // Slovenian
+    "Ciano", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Cyan", // French
+    "", // Norwegian
+    "syaani", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "cyan", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Grey",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "harmaa",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "grå",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Grey", // English
+    "Grau", // German
+    "", // Slovenian
+    "Grigio", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Gris", // French
+    "", // Norwegian
+    "harmaa", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "grå", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Transparent",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "läpinäkyvä",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "transparent",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Transparent", // English
+    "Transparent", // German
+    "", // Slovenian
+    "Trasparente", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Transparent", // French
+    "", // Norwegian
+    "läpinäkyvä", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "transparent", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
-  { "Background",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "tausta",
-    "", // TODO
-    "", // TODO
-    "", // TODO
-    "bakgrund",
-    "", // TODO
-    "", // TODO
-    "", // TODO
+  { "Background", // English
+    "Hintergrund", // German
+    "", // Slovenian
+    "Sfondo", // Italian
+    "", // Dutch
+    "", // Portuguese
+    "Fond", // French
+    "", // Norwegian
+    "tausta", // Finnish
+    "", // Polish
+    "", // Spanish
+    "", // Greek
+    "bakgrund", // Swedish
+    "", // Romanian
+    "", // Hungarian
+    "", // Catalenian
 #if VDRVERSNUM >= 10300
-    "", // TODO
+    "", // Russian
 #endif
   },
   { NULL }

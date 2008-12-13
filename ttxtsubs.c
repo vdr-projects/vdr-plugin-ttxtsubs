@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.23 2004/03/02 01:08:45 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.26 2004/05/31 19:59:14 ragge Exp $
  */
 
 #include <vdr/plugin.h>
@@ -11,6 +11,18 @@
 #include <vdr/vdrttxtsubshooks.h>
 #include <vdr/menuitems.h>
 #include <vdr/config.h>
+
+#define TIMEMEASURE 0
+#if TIMEMEASURE
+#define TIMEVALSIMPL(tv, tv2) \
+  if(tv2.tv_usec < tv.tv_usec) { \
+    tv2.tv_usec += 1000000; \
+    tv2.tv_sec -= 1; \
+  }
+
+#include <sys/time.h>
+#include <time.h>
+#endif
 
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplayer.h"
@@ -20,7 +32,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.5pre2";
+static const char *VERSION        = "0.0.5";
 static const char *DESCRIPTION    = "Teletext subtitles";
 
 cTtxtsubsConf globals;
@@ -309,6 +321,10 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 
 void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 {
+#if TIMEMEASURE
+  struct timeval tv, tv2;
+  gettimeofday(&tv, NULL);  
+#endif
   dprint("cPluginTtxtsubs::ChannelSwitch(devicenr: %d, channelnr: %d) - mDispl: %x\n",
 	 Device->DeviceNumber(), ChannelNumber, mDispl); // XXX
 
@@ -333,6 +349,13 @@ void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
     } else
       StopTtxt();
   }
+#if TIMEMEASURE
+  gettimeofday(&tv2, NULL);  
+  TIMEVALSIMPL(tv, tv2);
+  // tv2.tv_sec - tv.tv_sec + 1000000 * (tv2.tv_usec - tv.tv_usec);
+  fprintf(stderr, "ttxtsubs: Channel switch time: %d.%06d s\n",
+	  tv2.tv_sec - tv.tv_sec, tv2.tv_usec - tv.tv_usec);
+#endif
 }
 
 void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name)
@@ -376,8 +399,9 @@ void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, int pid, int page)
   if(!mDispl) {
     cTtxtSubsLiveReceiver *r;
     //dprint("teletext subtitles started on pid %d\n", pid);
-    mDispl = r = new cTtxtSubsLiveReceiver(pid, page);
+    mDispl = r = new cTtxtSubsLiveReceiver(pid, page); // takes 0.01-0.015 s
     if(!cDevice::PrimaryDevice()->ActualDevice()->AttachReceiver(r))
+                                    // takes 0.02-0.04 s on a full featured card
       fprintf(stderr, "ttxtsubs: Error: AttachReceiver failed!\n"); //
     ShowTtxt();
   } else
@@ -404,7 +428,7 @@ void cPluginTtxtsubs::StopTtxt(void)
     cTtxtSubsDisplayer *d = mDispl;
     HideTtxt();
     mDispl = NULL;
-    delete d;
+    delete d; // takes 0.03-0.04 s
   }
 }
 
@@ -569,8 +593,12 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     char str[100];
     char *allowedc = "abcdefghijklmnopqrstuvwxyz";
 
-    cOsdItem *item = new cOsdItem("----------------------------");
+    cOsdItem *item = new cOsdItem("--------------------------------------------------------");
+#if defined(ELCHIAIOVERSION)
+    item->SetColor(clrScrolLine);
+#else
     item->SetColor(clrCyan);
+#endif
     Add(item);
 
     sprintf(str, "%s %d", tr("Language"), n + 1);
