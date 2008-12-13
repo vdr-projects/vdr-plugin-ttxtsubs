@@ -29,22 +29,14 @@
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplayer.h"
 #include "ttxtsubsrecorder.h"
-#include "ttxtsubsi18n.h"
 #include "utils.h"
 #include "siinfo.h"
 #include "ttxtsubs.h"
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
 
-#if defined(APIVERSNUM) && APIVERSNUM < 10400
-#error "This version of ttxtsubs only works with vdr version >= 1.4.0!"
-#endif
-
-#ifndef trNOOP
-#define trNOOP(s) (s)
-#endif
-#ifndef trVDR
-#define trVDR(s) tr(s)
+#if defined(APIVERSNUM) && APIVERSNUM < 10600
+#error "This version of ttxtsubs only works with vdr version >= 1.6.0!"
 #endif
 
 static const char *VERSION        = "0.0.6";
@@ -234,9 +226,6 @@ bool cPluginTtxtsubs::Start(void)
   cThread::Start();
 
   TtxtSubsChannelSettings.Load(AddDirectory(ConfigDirectory("ttxtsubs"),"channelsettings.dat"));
-#if defined(APIVERSNUM) && APIVERSNUM < 10507
-  RegisterI18n(Phrases);
-#endif
   if(!memcmp(globals.mLanguages[0][0], "unk", 3)) {
     // no language found in setup
     if(strlen(mOldLanguage)) {

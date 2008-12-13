@@ -4,7 +4,6 @@
 #include <vdr/device.h>
 
 #include "ttxtsubspagemenu.h"
-#include "ttxtsubsi18n.h"
 #include "ttxtsubsglobals.h"
 
 const char * MODE_CHOICES[4] = {NULL, NULL, NULL, NULL};

@@ -28,6 +28,9 @@ VDR Plugin 'ttxtsubs' Revision History
     - Added a thread based subtitles scanner
     - Added delay settings
     - Added manual page selection mode
+- switched completely to VDR 1.6's I18N system and removed the old crap - no
+  more support for older VDR versions!
+
 
 2004-05-31: Version 0.0.5
 
