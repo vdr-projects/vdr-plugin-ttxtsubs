@@ -1,6 +1,10 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2003-09-26: Version 0.0.4b
+- Fix patch for VDR 1.2.5
+- Minor bug fix for dxr3 display
+
 2003-07-19: Version 0.0.4
 - Release
 

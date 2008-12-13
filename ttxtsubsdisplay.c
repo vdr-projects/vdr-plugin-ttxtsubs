@@ -367,6 +367,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
 
     wind = mOsd->Create(0, y, w, ROWH, 2);
     //dprint("W: %d\n", w);
+    mOsd->Fill(0, y, w, y + ROWH, clrWhite, wind); // needed for dxr3s...
     mOsd->Fill(0, y, w, y + ROWH, clrBackground, wind);
     mOsd->Text(TEXTX, y + TEXTY, buf[i], clrWhite, clrBackground, wind);
 

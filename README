@@ -62,7 +62,7 @@ reworked a few times.
 
 Installation:
 
-This plugin is for VDR 1.2.1. It currently needs a few hooks in, and
+This plugin is for VDR 1.2.5. It currently needs a few hooks in, and
 changes to, VDR to work. A patch file is included. The patches should
 be harmless if you don't have the plugin loaded, so even if you patch
 VDR and later decide not to use this plugin you don't necessarily have
@@ -72,27 +72,19 @@ other version of VDR, but don't count on it.
 Steps:
 
 As usual, unpack the plugin and make a link:
-	cd ..../vdr-1.2.1/PLUGINS/src
-	tar zxvf ..../vdr-ttxtsubs-0.0.3.tgz
-	ln -s ttxtsubs-0.0.3 ttxtsubs
+	cd ..../vdr-1.2.5/PLUGINS/src
+	tar zxvf ..../vdr-ttxtsubs-0.0.4b.tgz
+	ln -s ttxtsubs-0.0.4b ttxtsubs
 
 Go back to your VDR directory and install the patches and the new files:
 	cd ../../
-	cp PLUGINS/src/ttxtsubs-0.0.3/vdrttxtsubshooks.[ch] .
-	patch -b < PLUGINS/src/ttxtsubs-0.0.3/VDR.patch 
+	cp PLUGINS/src/ttxtsubs-0.0.4b/vdrttxtsubshooks.[ch] .
+	patch -b < PLUGINS/src/ttxtsubs-0.0.4b/VDR.patch 
 
 Rebuild VDR:
 	make clean
 	make include-dir
 	make
 	make plugins
-
-
-NOTE: If you have installed an earlier version of the patch, you
-need to upgrade it. If so, do this:
-	cd ..../vdr-1.2.1
-	patch -b < PLUGINS/src/ttxtsubs-0.0.3/VDR.upgrade-patch 
-	make
-
 
 Now you should be able to start VDR with "-P ttxtsubs".

@@ -3,7 +3,7 @@
  *
  * See the README file for copyright information and how to reach the author.
  *
- * $Id: ttxtsubs.c,v 1.20 2003/07/19 02:03:15 ragge Exp $
+ * $Id: ttxtsubs.c,v 1.20 2003/07/19 02:03:15 ragge Exp ragge $
  */
 
 #include <vdr/plugin.h>
@@ -18,7 +18,7 @@
 #include "siinfo.h"
 #include "ttxtsubs.h"
 
-static const char *VERSION        = "0.0.4";
+static const char *VERSION        = "0.0.4b";
 static const char *DESCRIPTION    = "Teletext subtitles";
 //static const char *MAINMENUENTRY  = "Ttxtsubs";
 
