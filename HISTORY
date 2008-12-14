@@ -1,10 +1,10 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2008-12-??: Version 0.0.6
+2008-12-14: Version 0.0.6
+- Project moved to http://projects.vdr-developer.org/projects/show/plg-ttxtsubs
 - Applied patch from Rolf Ahrenberg (vdr-ttxtsubs-0.0.5-raastinrauta-edition.diff.gz)
   which introduces the following changes:
-  - Support for VDR >= 1.6.x
   - Rolf Ahrenberg
     - Updated the core patch and Makefile against VDR's current API
     - Added font, color, and DVB source selection
@@ -27,16 +27,18 @@ VDR Plugin 'ttxtsubs' Revision History
     - Fixed displaying subtitles setting
     - Added a thread based subtitles scanner
     - Added delay settings
+   - Tobias Grimm
     - Added manual page selection mode
-- switched completely to VDR 1.6's I18N system and removed the old crap - no
+- Switched completely to VDR 1.6's I18N system and removed the old crap - no
   more support for older VDR versions!
-- Removed VDR < 1.6.0 support code
 - Removed VDR*.patch and Checkpatch.sh and added up-to-date VDR patches
   into into "patches" subdirectory (thx to Rolf Ahrenberg)
 - Removed location lines from *.po (thx to Rolf Ahrenberg)
+- Fixed wrong GPL license text (wrong FSF address)
+- Clarified license (it's GPL-2 or any later) and added a licence
+  header to every source file
 
 2004-05-31: Version 0.0.5
-
 - Note:
 This version is intended for VDR 1.2.6. There is a patch for VDR 1.3.5
 included. It may or may not work with later VDR versions. Also see
@@ -62,7 +64,6 @@ my attention to VDR 1.3.x now.
     was a typo in the fix in 0.0.5pre1.
 
 2004-03-02: Version 0.0.5pre2
-
 - New features:
   - Text colours can be set and row spacing can be adjusted.
     (The usual semitransparent "background" colour appearently
@@ -81,7 +82,6 @@ my attention to VDR 1.3.x now.
     no need to repatch if you previously used any of those.
 
 2004-03-01: Version 0.0.5pre1
-
 - New features:
   - More than one language can be chosen, they are used in order of preference
   - Handles languages with two ISO 639-2 identifiers (as ger/deu, fre/fra)
@@ -137,5 +137,4 @@ my attention to VDR 1.3.x now.
 - Timeout on SI table reads
 
 2003-03-07: Version 0.0.1
-
 - Initial revision.
