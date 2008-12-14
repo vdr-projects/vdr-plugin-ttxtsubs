@@ -4,7 +4,6 @@
 #include <vdr/config.h>
 #include <vdr/osd.h>
 #include <vdr/channels.h>
-#include "ttxtsubs.h"
 #include "ttxtsubschannelsettings.h"
 
 class cTtxtsubsPageMenu : public cOsdMenu 

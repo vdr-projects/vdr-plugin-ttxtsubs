@@ -2,7 +2,6 @@
 #include "ttxtsubsdisplayer.h"
 #include "ttxtsubsdisplay.h"
 #include "utils.h"
-#include "ttxtsubs.h"
 #include "siinfo.h"
 #include "ttxtsubsglobals.h"
 

@@ -31,7 +31,6 @@
 #include "ttxtsubsrecorder.h"
 #include "utils.h"
 #include "siinfo.h"
-#include "ttxtsubs.h"
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
 

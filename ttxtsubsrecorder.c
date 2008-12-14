@@ -12,7 +12,6 @@
 #include "ttxtsubsfilter.h"
 #include "ttxtsubsrecorder.h"
 #include "ttxtsubsreceiver.h"
-#include "ttxtsubs.h"
 #include "teletext.h"
 
 #define MAXPACKETSIZE 20000
