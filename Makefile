@@ -51,8 +51,6 @@ OBJS = $(PLUGIN).o ttxtsubsdisplayer.o ttxtsubsdisplay.o teletext.o siinfo.o \
 	ttxtsubsfilter.o ttxtsubsrecorder.o ttxtsubsreceiver.o \
 	ttxtsubspagemenu.o ttxtsubschannelsettings.o
 
-SOURCEFILES = *.c *.h [A-Z]???* contrib
-
 ### Implicit rules:
 .PHONY: all all-redirect
 all-redirect: all
@@ -105,25 +103,11 @@ libvdr-$(PLUGIN).so: $(OBJS)
 dist: clean
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
 	@mkdir $(TMPDIR)/$(ARCHIVE)
-	@cp -a $(SOURCEFILES) $(TMPDIR)/$(ARCHIVE)
-	@tar czf $(PACKAGE).tgz -C $(TMPDIR) $(ARCHIVE)
+	@cp -a * $(TMPDIR)/$(ARCHIVE)
+	@tar czf $(PACKAGE).tar.gz -C $(TMPDIR) --exclude debian --exclude .git $(ARCHIVE)
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
-	@echo Distribution package created as $(PACKAGE).tgz
-
-bup: clean
-	@-rm -rf $(TMPDIR)/$(ARCHIVE)
-	@mkdir $(TMPDIR)/$(ARCHIVE)
-	@cp -a $(SOURCEFILES) RCS $(TMPDIR)/$(ARCHIVE)
-	@tar czf $(BUPPACKAGE).tgz -C $(TMPDIR) $(ARCHIVE)
-	@-rm -rf $(TMPDIR)/$(ARCHIVE)
-	@echo Distribution package created as $(BUPPACKAGE).tgz
-	@echo making backup...
-	@sh RCS/backup.sh $(BUPPACKAGE).tgz
-	@echo done.
+	@echo Distribution package created as $(PACKAGE).tar.gz
 
 clean:
 	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
 	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~
-
-ci:
-	ci -u $(SOURCEFILES)
