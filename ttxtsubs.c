@@ -50,7 +50,7 @@
 #error "This version of ttxtsubs only works with vdr version >= 1.6.0!"
 #endif
 
-static const char *VERSION        = "0.0.6";
+static const char *VERSION        = "0.0.7";
 static const char *DESCRIPTION    = trNOOP("Teletext subtitles");
 
 cTtxtsubsConf globals;

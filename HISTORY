@@ -1,6 +1,9 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2008-12-18: Version 0.0.7
+-Try to set OSDArea to 8 bpp when AntiAliasing is enabled (Closes #17)
+
 2008-12-14: Version 0.0.6
 - Project moved to http://projects.vdr-developer.org/projects/show/plg-ttxtsubs
 - Applied patch from Rolf Ahrenberg (vdr-ttxtsubs-0.0.5-raastinrauta-edition.diff.gz)

@@ -442,6 +442,11 @@ void cTtxtSubsDisplay::ShowOSD(void)
   if(rowcount > MAXTTXTROWS)
     rowcount = MAXTTXTROWS;
   y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
+
+  int bpp = 2;
+  if (Setup.AntiAlias) {
+    bpp = 8;
+  }
   for(i = 0; i < rowcount; i++) {
     int w = 0;
     int left = SIDEMARGIN;
@@ -456,37 +461,43 @@ void cTtxtSubsDisplay::ShowOSD(void)
         left = SCREENRIGHT - SIDEMARGIN - w;
         break;
       }
-    tArea area = {left, y, left+w-1, y+ROWH-1, 2};
+    tArea area = {left, y, left+w-1, y+ROWH-1, bpp};
     areas[numAreas++] = area;
     y += (ROWINCR + globals.lineSpacing());
   }
   if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
-     dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
-     }
-  else {
-    mOsd->SetAreas(areas, numAreas);
-    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
-    for(i = 0; i < rowcount; i++) {
-      int w = 0;
-      int left = SIDEMARGIN;
-      w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
-      if(w % 4)
-        w += 4 - (w % 4);
-      switch(globals.textPos()) {
-        case 1:
-          left = (SCREENRIGHT - w) / 2;
-          break;
-        case 2:
-          left = SCREENRIGHT - SIDEMARGIN - w;
-          break;
+    // try lower color depth
+    if (bpp > 2) {
+      for(i = 0; i < numAreas; i++) areas[numAreas++].bpp = 2;
+      if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
+        dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
+        return;
         }
-      mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
-      mOsd->DrawText(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
-      //dprint("%d/%d (%d,%d) (%d,%d): %s\n", i, rowcount-1, areas[i].x1, areas[i].y1, left + TEXTX, y + TEXTY, buf[i]);
-      y += (ROWINCR + globals.lineSpacing());
       }
-    mOsd->Flush();
     }
+  mOsd->SetAreas(areas, numAreas);
+
+  y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
+  for(i = 0; i < rowcount; i++) {
+    int w = 0;
+    int left = SIDEMARGIN;
+    w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+    if(w % 4)
+      w += 4 - (w % 4);
+    switch(globals.textPos()) {
+      case 1:
+        left = (SCREENRIGHT - w) / 2;
+        break;
+      case 2:
+        left = SCREENRIGHT - SIDEMARGIN - w;
+        break;
+      }
+    mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
+    mOsd->DrawText(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
+    //dprint("%d/%d (%d,%d) (%d,%d): %s\n", i, rowcount-1, areas[i].x1, areas[i].y1, left + TEXTX, y + TEXTY, buf[i]);
+    y += (ROWINCR + globals.lineSpacing());
+    }
+  mOsd->Flush();
 }
 
 
