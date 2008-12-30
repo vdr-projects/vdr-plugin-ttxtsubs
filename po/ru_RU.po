@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
 "POT-Creation-Date: 2008-12-13 23:18+0100\n"
-"PO-Revision-Date: 2007-08-24 23:49+0300\n"
-"Last-Translator: Vyacheslav Dikonov <sdiconov@mail.ru>\n"
-"Language-Team: <vdr@linuxtv.org>\n"
+"PO-Revision-Date: 2008-12-30 14:05+0100\n"
+"Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
+"Language-Team:  <vdr@linuxtv.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-5\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,7 +31,7 @@ msgid "Position Teletext Subtitles for Letterbox"
 msgstr "Субтитры в кадре широкоэкранного фильма"
 
 msgid "Page Selection"
-msgstr ""
+msgstr "Выбор страницы"
 
 msgid "Display on/off"
 msgstr "включить/выключить"
@@ -40,7 +40,7 @@ msgid "4:3/Letterbox"
 msgstr "4:3/широкий экран"
 
 msgid "Page Mode"
-msgstr ""
+msgstr "Режим страницы"
 
 msgid "Left"
 msgstr "слева"
@@ -52,16 +52,16 @@ msgid "Right"
 msgstr "справа"
 
 msgid "All"
-msgstr ""
+msgstr "Все"
 
 msgid "Only DVB-S"
-msgstr ""
+msgstr "Только DVB-S"
 
 msgid "Only DVB-T"
-msgstr ""
+msgstr "Только  DVB-T"
 
 msgid "Only DVB-C"
-msgstr ""
+msgstr "Только DVB-C"
 
 msgid "Black"
 msgstr "чёрный"
@@ -103,10 +103,10 @@ msgid "Record Subtitles"
 msgstr "Записывать субтитры"
 
 msgid "Live Delay"
-msgstr ""
+msgstr "Live задержка"
 
 msgid "Replay Delay"
-msgstr ""
+msgstr "Задержка воспроизведения"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в главном меню"
@@ -133,10 +133,10 @@ msgid "Workaround for some French chns"
 msgstr "Спец. настройки для франц. каналов"
 
 msgid "DVB Source Selection"
-msgstr ""
+msgstr "Выбор DVB источника"
 
 msgid "Font Size (pixel)"
-msgstr ""
+msgstr "Размер фонта  (pixel)"
 
 msgid "Text Color"
 msgstr "Цвет текста"
@@ -166,19 +166,20 @@ msgid "Hearing Impaired"
 msgstr "для слабослышащих"
 
 msgid "Subtitle Page Settings"
-msgstr ""
+msgstr "Настройки страницы субтитров"
 
 msgid "Auto"
-msgstr ""
+msgstr "Авто"
 
 msgid "Manual"
-msgstr ""
+msgstr "Ручн."
 
 msgid "Disabled"
-msgstr ""
+msgstr "отключено"
 
 msgid "Subtitle Mode"
-msgstr ""
+msgstr "Режим субтитров"
 
 msgid "Manual Subtitle Page"
-msgstr ""
+msgstr "Ручной выбор страницы"
+
