@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
 "POT-Creation-Date: 2008-12-13 23:18+0100\n"
-"PO-Revision-Date: 2007-08-24 23:49+0300\n"
-"Last-Translator: Nicolas Huillard <nhuillard@e-dition.fr>\n"
-"Language-Team: <vdr@linuxtv.org>\n"
+"PO-Revision-Date: 2009-01-04 19:05+0100\n"
+"Last-Translator: Nival MichaÃ«l\n"
+"Language-Team:  <vdr@linuxtv.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
-msgstr "Sous-titrage télétexte"
+msgstr "Sous-titrage tÃ©lÃ©texte"
 
 msgid "Hide teletext subtitles"
 msgstr "Masquer le sous-titrage"
@@ -34,7 +34,7 @@ msgid "Position Teletext Subtitles for Letterbox"
 msgstr "Position du sous-titrage pour Letterbox"
 
 msgid "Page Selection"
-msgstr "Page de sélection"
+msgstr "Page de sÃ©lection"
 
 msgid "Display on/off"
 msgstr "Affichage"
@@ -91,7 +91,7 @@ msgid "Cyan"
 msgstr "Cyan"
 
 msgid "Custom"
-msgstr "Personnalisé"
+msgstr "PersonnalisÃ©"
 
 msgid "Transparent"
 msgstr "Transparent"
@@ -106,10 +106,10 @@ msgid "Record Subtitles"
 msgstr "Enregistrer le sous-titrage"
 
 msgid "Live Delay"
-msgstr ""
+msgstr "DÃ©lai en directe"
 
 msgid "Replay Delay"
-msgstr ""
+msgstr "Delai Ã  la lecture"
 
 msgid "Main Menu Alternative"
 msgstr "Choix du menu principal"
@@ -133,10 +133,10 @@ msgid "Line Spacing Adjust"
 msgstr "Espacement des lignes"
 
 msgid "Workaround for some French chns"
-msgstr "Contournement chaînes françaises"
+msgstr "Contournement chaÃ®nes franÃ§aises"
 
 msgid "DVB Source Selection"
-msgstr "Sélection Source DVB"
+msgstr "SÃ©lection Source DVB"
 
 msgid "Font Size (pixel)"
 msgstr "Taille Police (pixel)"
@@ -148,7 +148,7 @@ msgid "Background Color"
 msgstr "Couleur du fond"
 
 msgid "Custom Color"
-msgstr "Couleur personnalisée"
+msgstr "Couleur personnalisÃ©e"
 
 msgid "Red Value"
 msgstr "Valeur Rouge"
@@ -178,10 +178,11 @@ msgid "Manual"
 msgstr "Manuel"
 
 msgid "Disabled"
-msgstr "Désactivé"
+msgstr "DÃ©sactivÃ©"
 
 msgid "Subtitle Mode"
 msgstr "Mode de sous-titres TXT"
 
 msgid "Manual Subtitle Page"
 msgstr "Page des sous-titres"
+
