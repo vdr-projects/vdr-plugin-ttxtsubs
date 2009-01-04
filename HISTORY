@@ -1,7 +1,7 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2008-xx.xx: Version 0.x.x
+2009-01-04: Version 0.0.8
 - Updated Italien translation provided by Diego Pierotto
 - Updated Russian translation provided by Oleg Roitburd (Closes #47)
 - Fixed displaying of multiple rows when antialiasing is enabled by  aquiring a
