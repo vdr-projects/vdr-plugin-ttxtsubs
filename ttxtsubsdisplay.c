@@ -443,17 +443,15 @@ void cTtxtSubsDisplay::ShowOSD(void)
     rowcount = MAXTTXTROWS;
   y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
 
-  int bpp = 2;
   if (Setup.AntiAlias) {
-    bpp = 8;
-  }
-  for(i = 0; i < rowcount; i++) {
-    int w = 0;
-    int left = SIDEMARGIN;
-    w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
-    if(w % 4)
-      w += 4 - (w % 4);
-    switch(globals.textPos()) {
+    // create only one osd area that's big enough for all rows
+    int x1 = SCREENRIGHT+1, x2 = 0, y1 = SCREENBOTTOM+1, y2 = 0;
+    for(i = 0; i < rowcount; i++) {
+      int w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+      int left = SIDEMARGIN;
+      if(w % 4)
+        w += 4 - (w % 4);
+      switch(globals.textPos()) {
       case 1:
         left = (SCREENRIGHT - w) / 2;
         break;
@@ -461,13 +459,43 @@ void cTtxtSubsDisplay::ShowOSD(void)
         left = SCREENRIGHT - SIDEMARGIN - w;
         break;
       }
-    tArea area = {left, y, left+w-1, y+ROWH-1, bpp};
+      if(x1 > left) 
+        x1 = left;
+      if(x2 < (left+w-1))
+        x2 = left+w-1;
+      if(y1 > y) 
+        y1 = y;
+      if(y2 < (y+ROWH-1))
+        y2 = y+ROWH-1;
+      y += (ROWINCR + globals.lineSpacing());
+    }
+    if((x1 >= x2) || (y1 >= y2)) // validate calculated area
+      return;
+    tArea area = {x1, y1, x2, y2, 8};
     areas[numAreas++] = area;
-    y += (ROWINCR + globals.lineSpacing());
+  } else {
+    for(i = 0; i < rowcount; i++) {
+      int w = 0;
+      int left = SIDEMARGIN;
+      w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+      if(w % 4)
+        w += 4 - (w % 4);
+      switch(globals.textPos()) {
+        case 1:
+          left = (SCREENRIGHT - w) / 2;
+          break;
+        case 2:
+          left = SCREENRIGHT - SIDEMARGIN - w;
+          break;
+        }
+      tArea area = {left, y, left+w-1, y+ROWH-1, 2};
+      areas[numAreas++] = area;
+      y += (ROWINCR + globals.lineSpacing());
+    }
   }
   if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
     // try lower color depth
-    if (bpp > 2) {
+    if (Setup.AntiAlias) {
       for(i = 0; i < numAreas; i++) areas[numAreas++].bpp = 2;
       if (mOsd->CanHandleAreas(areas, numAreas) != oeOk) {
         dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
@@ -476,6 +504,10 @@ void cTtxtSubsDisplay::ShowOSD(void)
       }
     }
   mOsd->SetAreas(areas, numAreas);
+
+  for (i = 0; i < numAreas; i++) {
+    mOsd->DrawRectangle(areas[i].x1, areas[i].y1, areas[i].x2, areas[i].y2, clrTransparent);
+    }
 
   y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
   for(i = 0; i < rowcount; i++) {
