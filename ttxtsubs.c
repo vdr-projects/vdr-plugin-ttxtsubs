@@ -615,7 +615,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   mDoStore(doStore),
   mConf(globals)
 {
-  char *buf = NULL;
   //static char *mainMenuAlts[] = {"off", "Display on/off", "4:3/Letterbox", "This menu"};
   // can't get it to store changes in file
   if(mainMenuAlts[0] == NULL) {
@@ -713,10 +712,9 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   if (mRed < 0 || mRed >= numColorValues) mRed = 0;
   mTransparency = (mConf.mCustomColor & 0x0F000000) >> 24;
   if (mTransparency < 0 || mTransparency >= numColorValues) mTransparency = 0;
-  asprintf(&buf, "%s: --------------------------------------------", tr("Custom Color"));
+  cString buf = cString::sprintf("%s: --------------------------------------------", tr("Custom Color"));
   cOsdItem *item = new cOsdItem(buf);
   item->SetSelectable(false);
-  free(buf);
   Add(item);
   Add(new cMenuEditStraItem(tr("Red Value"),          &mRed,          numColorValues, colorValues));
   Add(new cMenuEditStraItem(tr("Green Value"),        &mGreen,        numColorValues, colorValues));
