@@ -96,6 +96,7 @@ cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int text
   cReceiver(ChnId, -1, Pid),
   cTtxtSubsDisplayer(textpage)
 {
+  SetDescription("ttxtsubs live receiver");
 }
 
 cTtxtSubsLiveReceiver::~cTtxtSubsLiveReceiver(void)
@@ -144,6 +145,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
   mLangChoise(1000),
   mLangInfoState(0)
 {
+  SetDescription("ttxtsubs player");
 }
 
 // Take PES packets and break out the teletext data
