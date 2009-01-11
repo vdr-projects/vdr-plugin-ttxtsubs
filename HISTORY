@@ -3,6 +3,7 @@ VDR Plugin 'ttxtsubs' Revision History
 
 2009-xx-xx: Version 0.x.x
 - Updated French translation provided by Michaël Nival (Closes #49)
+- Install plug-in to lib dir with --remove-destination
 
 2009-01-04: Version 0.0.8
 - Updated Italien translation provided by Diego Pierotto
