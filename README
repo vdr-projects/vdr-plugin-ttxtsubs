@@ -97,3 +97,13 @@ patch -p1 < PLUGINS/src/ttxtsubs/patches/vdr-X.Y.Z-ttxtsubs.patch
 make
 make plugins
 ./vdr -P ttxtsubs
+
+
+A Note about reported problems with Digitainer II:
+
+If you own a Digitainer II, you may run into an issue with the OSD and a corrupted
+main menu. OlvierH reported, that the following setting at least partially solves
+this:
+
+Advanced Chipset Features - AGP &P2P Bridge Control - VGA Share Memory Size: 64M
+(default is 32M)
