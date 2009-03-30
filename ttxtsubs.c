@@ -284,6 +284,7 @@ void cPluginTtxtsubs::Housekeeping(void)
 
 const char *cPluginTtxtsubs::MainMenuEntry(void)
 {
+  bool haveChannel = Channels.GetByNumber(cDevice::ActualDevice()->CurrentChannel()) != NULL;
   switch(globals.mMainMenuEntry) {
   case 1:
     if(globals.mRealDoDisplay)
@@ -296,7 +297,7 @@ const char *cPluginTtxtsubs::MainMenuEntry(void)
     else
       return tr("Position Teletext Subtitles for Letterbox");
   case 3:
-    return tr("Page Selection");
+    if (haveChannel) return tr("Page Selection");
   default:
     return NULL;
   }

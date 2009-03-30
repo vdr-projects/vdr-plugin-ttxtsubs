@@ -5,6 +5,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - Updated French translation provided by Michaël Nival (Closes #49)
 - Install plug-in to lib dir with --remove-destination
 - Added note in README  about reported problems with Digitainer II (Closes #62)
+- Don't show page selection menu, when there is no current channel (Closes #111)
 
 2009-01-04: Version 0.0.8
 - Updated Italien translation provided by Diego Pierotto
