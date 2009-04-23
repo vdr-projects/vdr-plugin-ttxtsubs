@@ -292,7 +292,8 @@ static void DiscardBufferedSections(int card_no, uint16_t pid, int table_id)
 
     ret = poll(&pi, 1, 0);
     if(ret > 0 && (pi.revents & POLLIN)) {
-      read(fd, buf, SECTSIZE);
+      // TODO: Do something more useful if read fails!
+      if(read(fd, buf, SECTSIZE) < 0) { }
       n++;
     }
   } while (ret > 0);
