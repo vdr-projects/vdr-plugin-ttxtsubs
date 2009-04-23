@@ -146,7 +146,7 @@ public:
   // -- cVDRTtxtsubsHookListener
   virtual void HideOSD(void) { HideTtxt(); }
   virtual void ShowOSD(void) { ShowTtxt(); }
-  virtual void PlayerTeletextData(uint8_t *p, int length);
+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording);
   virtual cTtxtSubsRecorderBase *NewTtxtSubsRecorder(cDevice *dev, const cChannel *ch);
 
   // -- cThread
@@ -336,6 +336,7 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "Record")) globals.mDoRecord = atoi(Value);
   else if(!strcasecmp(Name, "LiveDelay")) globals.mLiveDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
+  else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
   else if(!strcasecmp(Name, "TextPos")) globals.mTextPos = atoi(Value);
   else if(!strcasecmp(Name, "BottomLB")) globals.mBottomLB = atoi(Value);
@@ -467,7 +468,7 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
   }
 }
 
-void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length)
+void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording)
 {
   cTtxtSubsPlayer *r = dynamic_cast<cTtxtSubsPlayer *>(mDispl);
 
@@ -476,7 +477,7 @@ void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length)
     return;
   }
 
-  r->PES_data(p, length);
+  r->PES_data(p, length, IsPesRecording);
 }
 
 cTtxtSubsRecorderBase *cPluginTtxtsubs::NewTtxtSubsRecorder(cDevice *dev, const cChannel *ch)
@@ -675,7 +676,8 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   Add(new cMenuEditBoolItem(tr("Display Subtitles"), &mConf.mDoDisplay));
   Add(new cMenuEditBoolItem(tr("Record Subtitles"), &mConf.mDoRecord));
   Add(new cMenuEditIntItem(tr("Live Delay"), &mConf.mLiveDelay, 0, 5000));
-  Add(new cMenuEditIntItem(tr("Replay Delay"), &mConf.mReplayDelay, 0, 5000));
+  Add(new cMenuEditIntItem(tr("Replay Delay (PES)"), &mConf.mReplayDelay, 0, 5000));
+  Add(new cMenuEditIntItem(tr("Replay Delay (TS)"), &mConf.mReplayTsDelay, 0, 5000));
   if(mConf.mMainMenuEntry < 0 || mConf.mMainMenuEntry >= numMainMenuAlts)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
@@ -775,6 +777,7 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("Record", mConf.mDoRecord);
   SetupStore("LiveDelay", mConf.mLiveDelay);
   SetupStore("ReplayDelay", mConf.mReplayDelay);
+  SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
   SetupStore("TextPos", mConf.mTextPos);
   SetupStore("BottomLB", mConf.mBottomLB);
   SetupStore("BottomAdj", mConf.mBottomAdj);

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2008-12-13 23:18+0100\n"
+"POT-Creation-Date: 2009-04-21 23:45+0300\n"
 "PO-Revision-Date: 2008-12-30 14:05+0100\n"
 "Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -105,8 +105,11 @@ msgstr "Записывать субтитры"
 msgid "Live Delay"
 msgstr "Live задержка"
 
-msgid "Replay Delay"
-msgstr "Задержка воспроизведения"
+msgid "Replay Delay (PES)"
+msgstr "Задержка воспроизведения (PES)"
+
+msgid "Replay Delay (TS)"
+msgstr "Задержка воспроизведения (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в главном меню"
@@ -182,4 +185,3 @@ msgstr "Режим субтитров"
 
 msgid "Manual Subtitle Page"
 msgstr "Ручной выбор страницы"
-

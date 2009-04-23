@@ -54,6 +54,7 @@ class cTtxtsubsConf {
       mI18nLanguage = 0;
       mLiveDelay = 0;
       mReplayDelay = 0;
+      mReplayTsDelay = 0;
     }
 
  public:
@@ -77,6 +78,7 @@ class cTtxtsubsConf {
   int i18nLanguage(void) {return mI18nLanguage;}
   int liveDelay(void) {return mLiveDelay;}
   int replayDelay(void) {return mReplayDelay;}
+  int replayTsDelay(void) {return mReplayTsDelay;}
 
  protected:
   int mDoDisplay;
@@ -98,6 +100,7 @@ class cTtxtsubsConf {
   int mI18nLanguage;
   int mLiveDelay;
   int mReplayDelay;
+  int mReplayTsDelay;
 };
 
 extern cTtxtsubsConf globals;

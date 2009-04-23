@@ -151,7 +151,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
 // Take PES packets and break out the teletext data
 // Buffer the data for processing in a separate thread
 // XXX We should do some filtering here to avoid unneccessary load!
-void cTtxtSubsPlayer::PES_data(uchar *p, int Length)
+void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording)
 {
   int i;
 
@@ -180,7 +180,7 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length)
     if(0xff == p[i*46]) // stuffing data
       continue;
 
-    uint64_t sched_time=cTimeMs::Now() + globals.replayDelay(); 
+    uint64_t sched_time=cTimeMs::Now() + (IsPesRecording ? globals.replayDelay() : globals.replayTsDelay());
     cFrame *f = new cFrame(p + i*46, 46 + sizeof(sched_time));
     memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
     mRingBuf.Put(f);

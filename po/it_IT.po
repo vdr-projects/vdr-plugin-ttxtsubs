@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2008-12-13 23:18+0100\n"
+"POT-Creation-Date: 2009-04-21 23:45+0300\n"
 "PO-Revision-Date: 2008-12-20 19:51+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -109,8 +109,11 @@ msgstr "Registra sottotitoli"
 msgid "Live Delay"
 msgstr "Ritardo mod. dal vivo"
 
-msgid "Replay Delay"
-msgstr "Ritardo mod. riproduzione"
+msgid "Replay Delay (PES)"
+msgstr "Ritardo mod. riproduzione (PES)"
+
+msgid "Replay Delay (TS)"
+msgstr "Ritardo mod. riproduzione (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Voci alternative menu princ."
@@ -186,4 +189,3 @@ msgstr "Mod. sottotitoli"
 
 msgid "Manual Subtitle Page"
 msgstr "Pagina manuale sottotitoli"
-
