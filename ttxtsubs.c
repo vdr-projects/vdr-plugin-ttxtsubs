@@ -461,8 +461,10 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
   StopTtxt();
   if(On)
     StartTtxtPlay(mPage);
-  // XXX this page number is just a fallback for old recordings which
-  // don't have a index page
+  else {
+    lastc=0;
+    sem_post(&chswitchwait);
+  }
 }
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length)
