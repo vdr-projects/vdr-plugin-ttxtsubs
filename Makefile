@@ -48,7 +48,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 ### The object files (add further files here):
 
 OBJS = $(PLUGIN).o ttxtsubsdisplayer.o ttxtsubsdisplay.o teletext.o siinfo.o \
-	ttxtsubsfilter.o ttxtsubsrecorder.o ttxtsubsreceiver.o \
+	ttxtsubsfilter.o ttxtsubsreceiver.o \
 	ttxtsubspagemenu.o ttxtsubschannelsettings.o
 
 ### Implicit rules:

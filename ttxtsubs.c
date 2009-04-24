@@ -40,7 +40,6 @@
 
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplayer.h"
-#include "ttxtsubsrecorder.h"
 #include "utils.h"
 #include "siinfo.h"
 #include "ttxtsubspagemenu.h"
@@ -147,7 +146,6 @@ public:
   virtual void HideOSD(void) { HideTtxt(); }
   virtual void ShowOSD(void) { ShowTtxt(); }
   virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording);
-  virtual cTtxtSubsRecorderBase *NewTtxtSubsRecorder(cDevice *dev, const cChannel *ch);
 
   // -- cThread
   void Action(void);
@@ -478,14 +476,6 @@ void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecor
   }
 
   r->PES_data(p, length, IsPesRecording);
-}
-
-cTtxtSubsRecorderBase *cPluginTtxtsubs::NewTtxtSubsRecorder(cDevice *dev, const cChannel *ch)
-{
-  if(globals.mDoRecord)
-    return new cTtxtSubsRecorder(dev, ch);
-  else
-    return NULL;
 }
 
 
