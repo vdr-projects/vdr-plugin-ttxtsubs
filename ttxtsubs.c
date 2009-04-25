@@ -146,6 +146,7 @@ public:
   virtual void HideOSD(void) { HideTtxt(); }
   virtual void ShowOSD(void) { ShowTtxt(); }
   virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording);
+  virtual int ManualPageNumber(const cChannel *channel);
 
   // -- cThread
   void Action(void);
@@ -478,6 +479,14 @@ void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecor
   r->PES_data(p, length, IsPesRecording);
 }
 
+int cPluginTtxtsubs::ManualPageNumber(const cChannel *channel)
+{
+    cTtxtSubsChannelSetting *setting = TtxtSubsChannelSettings.Get(channel);
+    if (setting && setting->PageMode() == PAGE_MODE_MANUAL)
+      return setting->PageNumber();
+    else
+      return 0;
+}
 
 // --  internal
 
