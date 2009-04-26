@@ -1,6 +1,16 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2009-04-26: Version 0.1.0
+- Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
+  format and added separate delay setting for TS recordings.
+  Credits go to Rolf Ahrenberg - Thanks a lot!
+- Silence compiler warning about unchecked read return value.
+  (thx to Rolf Ahrenberg)
+- After replaying, reset the last channel variable and trigger a channel switch
+  to reinitialize the live ttxtsubs display. (thx to Rolf Ahrenberg)
+- Removed unused local copy of vdrttxtsubshooks.c|h
+
 2009-04-03: Version 0.0.9
 - Updated French translation provided by Michaël Nival (Closes #49)
 - Install plug-in to lib dir with --remove-destination
