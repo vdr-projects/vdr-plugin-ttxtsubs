@@ -1,0 +1,183 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: VDR 1.5.7\n"
+"Report-Msgid-Bugs-To: <author>\n"
+"POT-Creation-Date: 2009-05-28 23:45+0300\n"
+"PO-Revision-Date: 2009-05-28 14:05+0100\n"
+"Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
+"Language-Team:  <vdr@linuxtv.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Teletext subtitles"
+msgstr "Телетекст-субтитри"
+
+msgid "Hide teletext subtitles"
+msgstr "Сховати субтитри"
+
+msgid "Display teletext subtitles"
+msgstr "Показувати субтитри"
+
+msgid "Position Teletext Subtitles for 4:3/Anamorph"
+msgstr "Субтитри для кадру 4:3"
+
+msgid "Position Teletext Subtitles for Letterbox"
+msgstr "Субтитри для широкого екрану"
+
+msgid "Page Selection"
+msgstr "Вибір сторінки"
+
+msgid "Display on/off"
+msgstr "включити/виключити"
+
+msgid "4:3/Letterbox"
+msgstr "4:3/широкий екран"
+
+msgid "Page Mode"
+msgstr "Режим сторінки"
+
+msgid "Left"
+msgstr "Зліва"
+
+msgid "Center"
+msgstr "по центру"
+
+msgid "Right"
+msgstr "справа"
+
+msgid "All"
+msgstr "Всі"
+
+msgid "Only DVB-S"
+msgstr "Тільки DVB-S"
+
+msgid "Only DVB-T"
+msgstr "Тільки  DVB-T"
+
+msgid "Only DVB-C"
+msgstr "Тільки DVB-C"
+
+msgid "Black"
+msgstr "Чорний"
+
+msgid "White"
+msgstr "Білий"
+
+msgid "Red"
+msgstr "Червноний"
+
+msgid "Green"
+msgstr "Зелений"
+
+msgid "Yellow"
+msgstr "Жовтий"
+
+msgid "Magenta"
+msgstr "Пурпуровий"
+
+msgid "Blue"
+msgstr "Синій"
+
+msgid "Cyan"
+msgstr "Голубий"
+
+msgid "Custom"
+msgstr "настройка"
+
+msgid "Transparent"
+msgstr "прозорий"
+
+msgid "Grey"
+msgstr "Сірий"
+
+msgid "Display Subtitles"
+msgstr "Показувати субтитри"
+
+msgid "Record Subtitles"
+msgstr "Записувати субтитри"
+
+msgid "Live Delay"
+msgstr "Live затримка"
+
+msgid "Replay Delay (PES)"
+msgstr "Затримка Програвання (PES)"
+
+msgid "Replay Delay (TS)"
+msgstr "Затримка Програвання (TS)"
+
+msgid "Main Menu Alternative"
+msgstr "Команда в головному меню"
+
+msgid "Text Horizontal Position"
+msgstr "Положення тексту по горизонталі"
+
+msgid "Text Vertical Position"
+msgstr "Положення тексту по вертикалі"
+
+msgid "4:3/Anamorph"
+msgstr "4:3"
+
+msgid "Letterbox"
+msgstr "Широкий екран"
+
+msgid "Text Vertical Adjust"
+msgstr "Вертикальний зсув тексту"
+
+msgid "Line Spacing Adjust"
+msgstr "Відстань між стрічками"
+
+msgid "Workaround for some French chns"
+msgstr "Спец. настройки для франц. каналів"
+
+msgid "DVB Source Selection"
+msgstr "Вибір DVB джерела"
+
+msgid "Font Size (pixel)"
+msgstr "Размір фонта (пікселі)"
+
+msgid "Text Color"
+msgstr "Колір тексту"
+
+msgid "Background Color"
+msgstr "Коліо тла"
+
+msgid "Custom Color"
+msgstr "Настройка кольору"
+
+msgid "Red Value"
+msgstr "Рівень червоного"
+
+msgid "Green Value"
+msgstr "Рівень зеленого"
+
+msgid "Blue Value"
+msgstr "Рівень синього"
+
+msgid "Transparency Value"
+msgstr "Ступінь прозорості"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Hearing Impaired"
+msgstr "Для слабочуючих"
+
+msgid "Subtitle Page Settings"
+msgstr "Настройки сторінки субтитрів"
+
+msgid "Auto"
+msgstr "Авто"
+
+msgid "Manual"
+msgstr "Ручн."
+
+msgid "Disabled"
+msgstr "Виключено"
+
+msgid "Subtitle Mode"
+msgstr "Режим субтитрів"
+
+msgid "Manual Subtitle Page"
+msgstr "Ручной вибір сторінки"
