@@ -3,6 +3,7 @@ VDR Plugin 'ttxtsubs' Revision History
 
 20xx-xx-xx: Version x.x.x
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
+- Updated VDR patch for 1.7.8
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
