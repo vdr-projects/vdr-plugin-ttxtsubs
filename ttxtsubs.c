@@ -45,8 +45,8 @@
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
 
-#if defined(APIVERSNUM) && APIVERSNUM < 10600
-#error "This version of ttxtsubs only works with vdr version >= 1.6.0!"
+#if defined(APIVERSNUM) && APIVERSNUM < 10706
+#error "This version of ttxtsubs only works with vdr version >= 1.7.6!"
 #endif
 
 static const char *VERSION        = "0.1.0";
