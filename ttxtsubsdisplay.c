@@ -183,8 +183,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
   if(Data == NULL)
     return;
 
-  //print_line((char *) Data);
-
   d = (struct ttxt_data_field *) Data;
 
   mp = unham(invtab[d->mag_addr_ham[0]], invtab[d->mag_addr_ham[1]]);
@@ -213,7 +211,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
     no = unham(fi[0], fi[1]);
 
     //dprint("cTtxtSubsDisplay::TtxtData: page:%d%02x, packet: %d\n", mag, no, packet); // XXX
-    //print_line((char *) Data);
 
     if(mag == mMag && no == mNo) {
       //dprint("cTtxtSubsDisplay::TtxtData: page:%d%02x, packet: %d\n", mag, no, packet); // XXX

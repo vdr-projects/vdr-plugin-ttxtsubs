@@ -184,8 +184,6 @@ void cTtxtSubsReceiver::Receive(uchar *Data, int Length)
 
     if(mFilter.Filter((char *) Data + 4 + i*46, (char *) it.data)) {
       // dprint("Forward Packet:\n");
-      // print_line((char *) Data + 4 + i*46);
-      // print_line(buf);
 
       cFrame *f = new cFrame((uchar *) &it, sizeof(ringBufItem));
       mRingBuf.Put(f);
@@ -248,8 +246,6 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
     for(int i = txtlen; i < 32; i++)
       d->data[i+8] = invtab[(unsigned char) ' ']; // space already has correct parity
 
-    //print_line((char *) mIndexPage[mIndexPageLines]); // XXX
-
     mIndexPageLines++;
 
     init_line(mIndexPage[mIndexPageLines], mIndexPageLines, mIndexPageNo >> 8);
@@ -259,8 +255,6 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
     copy_inv_par(d->data, (uint8_t *) header, txtlen);
     for(int i = txtlen; i < 40; i++)
       d->data[i] = invtab[(unsigned char) ' ']; // space already has correct parity
-   
-    //print_line((char *) mIndexPage[mIndexPageLines]); // XXX
 
     mIndexPageLines++;
   }
@@ -283,8 +277,6 @@ void cTtxtSubsReceiver::AddIndexInfo(char *lang, int type, uint16_t page)
 	   page);
   
   copy_inv_par(d->data+ mIndexPageCol*8, buf, 8);
-
-  //print_line((char *) mIndexPage[mIndexPageLines]); // XXX
 
   mIndexPageCol++;
   
