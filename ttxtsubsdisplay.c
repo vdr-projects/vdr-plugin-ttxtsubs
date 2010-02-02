@@ -136,11 +136,9 @@ void cTtxtSubsDisplay::Hide(void)
 {
     if (gSelfMem.IsMe())
     {
-        //dprint("cTtxtSubsDisplay::Hide - Ignoring self induced hide!\n");
         return;
     }
 
-    //dprint("cTtxtSubsDisplay::Hide\n");
     cMutexLock lock(&mOsdLock);
     mDoDisplay = 0;
     ClearOSD();
@@ -151,11 +149,9 @@ void cTtxtSubsDisplay::Show(void)
 {
     if (gSelfMem.IsMe())
     {
-        //dprint("cTtxtSubsDisplay::Show - Ignoring self induced show!\n");
         return;
     }
 
-    //dprint("cTtxtSubsDisplay::Show\n");
     cMutexLock lock(&mOsdLock);
     mDoDisplay = 1;
     ShowOSD();
@@ -186,7 +182,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
         if ((tv.tv_usec - mLastDataTime->tv_usec) > 500000)
         {
-            //dprint("Interimshow!\n");
             mPageState = interimshow;
             ClearOSD();
             ShowOSD();
@@ -201,8 +196,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
     mp = unham(invtab[d->mag_addr_ham[0]], invtab[d->mag_addr_ham[1]]);
     mag = mp & 0x7;
     packet = (mp >> 3) & 0x1f;
-
-    //dprint("cTtxtSubsDisplay::TtxtData: mag:%d packet: %d\n", mag, packet); // XXX
 
     if (packet == 0)
     {
@@ -226,11 +219,8 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
         no = unham(fi[0], fi[1]);
 
-        //dprint("cTtxtSubsDisplay::TtxtData: page:%d%02x, packet: %d\n", mag, no, packet); // XXX
-
         if (mag == mMag && no == mNo)
         {
-            //dprint("cTtxtSubsDisplay::TtxtData: page:%d%02x, packet: %d\n", mag, no, packet); // XXX
             page.mag = mag;
             page.no = no;
             page.flags = 0;
@@ -280,20 +270,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
         mPageState = collecting;
         gettimeofday(mLastDataTime, NULL);
-
-        //dprint("row: %d ", packet);
-    }
-    else
-    {
-        // packets with national characters information: X/28/0 format 1, X/28/1, X/28/4, M/29/0 M/29/4,
-        if (packet == 28 || packet == 29)
-        {
-            //dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
-        }
-
-        //if(packet == 26) {
-        //  dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
-        //}
     }
 }
 
@@ -407,19 +383,16 @@ void cTtxtSubsDisplay::ShowOSD(void)
 
     if (!globals.mRealDoDisplay)
     {
-        //dprint("NOT displaying subtitles because disabled!\n");
         return;
     }
 
     if (!mDoDisplay)
     {
-        //dprint("NOT displaying subtitles because of other OSD activities!\n");
         return;
     }
 
     if (mPageState != interimshow && mPageState != finished)
     {
-        //dprint("NOT displaying subtitles because page state: %d!\n", mPageState);
         return;
     }
 
@@ -435,7 +408,6 @@ void cTtxtSubsDisplay::ShowOSD(void)
     mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP, 20); // level 20
     if (!mOsd)
     {
-        //dprint("Error: cOsdProvider::NewOsd() returned NULL!\n");
         return;
     }
 
@@ -539,7 +511,6 @@ void cTtxtSubsDisplay::ShowOSD(void)
         }
         mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
         mOsd->DrawText(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
-        //dprint("%d/%d (%d,%d) (%d,%d): %s\n", i, rowcount-1, areas[i].x1, areas[i].y1, left + TEXTX, y + TEXTY, buf[i]);
         y += (ROWINCR + globals.lineSpacing());
     }
     mOsd->Flush();
@@ -548,7 +519,6 @@ void cTtxtSubsDisplay::ShowOSD(void)
 
 void cTtxtSubsDisplay::ClearOSD(void)
 {
-    // dprint("\nClearOSD!\n");
     cOSDSelfMemoryLock selfmem(&gSelfMem);
     cMutexLock lock(&mOsdLock);
 
