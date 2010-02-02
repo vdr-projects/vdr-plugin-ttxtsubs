@@ -19,6 +19,7 @@
  */
 
 #include "teletext.h"
+#include <vdr/tools.h>
 
 struct ttxt_data_field;
 struct timeval;
@@ -27,6 +28,11 @@ class cOsd;
 class cFont;
 
 #define MAXTTXTROWS 5
+
+struct SubtitleTextLine
+{
+    cString text;
+};
 
 class cTtxtSubsDisplay
 {
@@ -45,6 +51,9 @@ protected:
     void ClearOSD(void);
 
 private:
+    void UpdateSubtitleTextLines();
+
+private:
     int mPageState;
     int mMag;
     int mNo;
@@ -54,4 +63,7 @@ private:
     cMutex mOsdLock;
     struct timeval *mLastDataTime;
     const cFont *mOsdFont;
+    SubtitleTextLine _subTitleTextLines[MAXTTXTROWS];
+    int _numberOfSubTitleTextLines;
 };
+

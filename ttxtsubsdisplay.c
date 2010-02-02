@@ -274,51 +274,71 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 }
 
 
-static char *
-ttxt2la1(uint8_t *p, char *buf, int natopts)
+void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 {
-    int i, j = 0, skip = 1;
-    for (i = 0; i < 40; i++)
+    // We are making some assumptions here, which may not be correct:
+    //
+    // - only teletext lines with at least one "box begin" spacing attribute are
+    //   used for subtitle texts
+    // - a single teletext line results in a single subtitle line, independently of
+    //   the number of "box begin" / "box end" spacing attributes
+    // - each subtitle line can only have a single color (maybe a color change within
+    //   a teletext line should start a new subtitle line)
+
+    _numberOfSubTitleTextLines = 0;
+    char textBuffer[81];
+
+    for (int row = 1; row < 24; row++)
     {
-        uint8_t c = p[i] & 0x7f;
+        if (!page.data[row][0]) continue; // Row is empty
 
-        if (c == 0x0b)  // box begin
+        bool withinBox = false;
+        int textBufferIndex = 0;
+
+        for (int column = 0; column < 40; column++)
         {
-            skip = 0;
-            if (j != 0) // if we have chars in buf
-                buf[j++] = ' ';
-            continue;
+            // leave out parity bit!
+            uint8_t teletextCharacter = page.data[row][column] & 0x7f;
+
+            if (teletextCharacter < 0x10) // Process spacing attributes
+            {
+                if (teletextCharacter == 0x0b) // box begin
+                {
+                    withinBox = true;
+
+                    // if we already have chars in buffer, add space
+                    if (textBufferIndex > 0) textBuffer[textBufferIndex++] = ' ';
+                }
+                else if (teletextCharacter == 0x0a) // box begin
+                {
+                    withinBox = false;
+                }
+            }
+            else if (withinBox)
+            {
+                // skip leading spaces
+                if (textBufferIndex == 0 && teletextCharacter == 0x20) continue;
+
+                if (teletextCharacter >= 0x20)
+                {
+                    uint16_t aux = ttxt_laG0_la1_char(0, page.national_charset, teletextCharacter);
+                    if (aux & 0xff00) textBuffer[textBufferIndex++] = (aux & 0xff00) >> 8;
+                    textBuffer[textBufferIndex++] = aux & 0x00ff;
+                }
+            }
         }
 
-        if (c == 0x0a)  // box end
+        // strip extra spaces
+        while (textBufferIndex > 0 && textBuffer[textBufferIndex-1] == ' ') textBufferIndex--;
+
+        if (textBufferIndex > 0)
         {
-            skip = 1;
-            continue;
-        }
-
-        if (skip)
-            continue;
-
-        if (j == 0 && c == 20) // skip leading spaces
-            continue;
-
-        if (c >= 0x20)
-        {
-            uint16_t aux = ttxt_laG0_la1_char(0, natopts, c);
-            if (aux & 0xff00)
-                buf[j++] = (aux & 0xff00) >> 8;
-            buf[j++] = aux & 0x00ff;
+           textBuffer[textBufferIndex] = 0;
+           _subTitleTextLines[_numberOfSubTitleTextLines].text = textBuffer;
+           _numberOfSubTitleTextLines++;
+           if (_numberOfSubTitleTextLines > MAXTTXTROWS) return;
         }
     }
-
-    while (j > 0 && buf[j-1] == ' ') // strip extra spaces
-        j--;
-
-    buf[j++] = '\0';
-    if (strlen(buf))
-        return buf;
-    else
-        return NULL;
 }
 
 enum
@@ -372,8 +392,6 @@ getcolor(int color)
 void cTtxtSubsDisplay::ShowOSD(void)
 {
     int i, y;
-    int rowcount = 0;
-    char buf[TTXT_DISPLAYABLE_ROWS][82];
     int bottom = globals.bottomAdj() + (globals.bottomLB() ? BOTLETTERBOX : BOTNORM);
     tArea areas[MAXOSDAREAS];
     int numAreas = 0;
@@ -396,12 +414,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
         return;
     }
 
-    for (i = 1; i < 24; i++)
-    {
-        if (page.data[i][0] != 0) // anything on this line?
-            if (ttxt2la1(page.data[i], buf[rowcount], page.national_charset))
-                rowcount++;
-    }
+    UpdateSubtitleTextLines();
 
     DELETENULL(mOsd);
 
@@ -411,17 +424,15 @@ void cTtxtSubsDisplay::ShowOSD(void)
         return;
     }
 
-    if (rowcount > MAXTTXTROWS)
-        rowcount = MAXTTXTROWS;
-    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
+    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (_numberOfSubTitleTextLines-1));
 
     if (Setup.AntiAlias)
     {
         // create only one osd area that's big enough for all rows
         int x1 = SCREENRIGHT+1, x2 = 0, y1 = SCREENBOTTOM+1, y2 = 0;
-        for (i = 0; i < rowcount; i++)
+        for (i = 0; i < _numberOfSubTitleTextLines; i++)
         {
-            int w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+            int w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
             int left = SIDEMARGIN;
             if (w % 4)
                 w += 4 - (w % 4);
@@ -451,11 +462,11 @@ void cTtxtSubsDisplay::ShowOSD(void)
     }
     else
     {
-        for (i = 0; i < rowcount; i++)
+        for (i = 0; i < _numberOfSubTitleTextLines; i++)
         {
             int w = 0;
             int left = SIDEMARGIN;
-            w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+            w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
             if (w % 4)
                 w += 4 - (w % 4);
             switch (globals.textPos())
@@ -492,12 +503,12 @@ void cTtxtSubsDisplay::ShowOSD(void)
         mOsd->DrawRectangle(areas[i].x1, areas[i].y1, areas[i].x2, areas[i].y2, clrTransparent);
     }
 
-    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (rowcount-1));
-    for (i = 0; i < rowcount; i++)
+    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (_numberOfSubTitleTextLines-1));
+    for (i = 0; i < _numberOfSubTitleTextLines; i++)
     {
         int w = 0;
         int left = SIDEMARGIN;
-        w = mOsdFont->Width(buf[i]) + 2 * TEXTX;
+        w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
         if (w % 4)
             w += 4 - (w % 4);
         switch (globals.textPos())
@@ -510,7 +521,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
             break;
         }
         mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
-        mOsd->DrawText(left + TEXTX, y + TEXTY, buf[i], getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
+        mOsd->DrawText(left + TEXTX, y + TEXTY, _subTitleTextLines[i].text, getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
         y += (ROWINCR + globals.lineSpacing());
     }
     mOsd->Flush();
@@ -524,3 +535,4 @@ void cTtxtSubsDisplay::ClearOSD(void)
 
     DELETENULL(mOsd);
 }
+
