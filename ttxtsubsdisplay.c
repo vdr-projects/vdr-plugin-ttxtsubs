@@ -261,7 +261,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
     gettimeofday(mLastDataTime, NULL);
 
     //dprint("row: %d ", packet);
-    //dump_hex("", page.data[packet], 40);
   } else {
     // packets with national characters information: X/28/0 format 1, X/28/1, X/28/4, M/29/0 M/29/4, 
     if(packet == 28 || packet == 29) {
@@ -270,7 +269,6 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
     
     //if(packet == 26) {
     //  dprint("mag: %d, packet: %d, page: %02x, state: %d\n", page.mag, packet, page.no, mPageState);
-    //  dump_hex("", page.data[packet], 40);
     //}
   }
 }

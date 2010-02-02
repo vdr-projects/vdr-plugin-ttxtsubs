@@ -109,9 +109,6 @@ uint16_t ttxt_laG2_la1_char(uint8_t inchar);
 
 
 
-// debug stuff
-void dump_hex(char *msg, const uint8_t *p, int len);
-
 // invert tab for last 42 bytes in packets
 extern unsigned char invtab[256];
 

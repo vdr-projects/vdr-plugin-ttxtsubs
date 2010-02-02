@@ -108,23 +108,6 @@ struct PACK PMT_sect {
 };
 
 
-void dump_hex(char *msg, uint8_t *p, int len)
-{
-  int i;
-  printf("%s:", msg);
-  for(i = 0; i < len; i++) {
-    printf(" %02x", p[i]);
-  }
-  printf("\n");
-
-  printf("%s:", msg);
-  for(i = 0; i < len; i++) {
-    printf(" %c", isprint(p[i]) ? p[i] : '.');
-  }
-  printf("\n");
-}
-
-
 static int SetSectFilt(int fd, uint16_t pid, uint8_t tnr, uint8_t mask)
 {
   int ret;

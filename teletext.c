@@ -153,17 +153,6 @@ uint16_t ttxt_laG2_la1_char(uint8_t inchar)
   return laG2_la1_table[inchar & 0x7f];
 }
 
-void dump_hex(char *msg, const uint8_t *p, int len)
-{
-  int i;
-  printf("%s:", msg);
-  for(i = 0; i < len; i++) {
-    printf(" %02x", p[i]);
-  }
-  printf("\n");
-}
-
-
 void
 print_code(uint8_t c, int natopts)
 {
