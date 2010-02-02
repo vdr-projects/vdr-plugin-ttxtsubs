@@ -101,12 +101,6 @@ int parity(uint8_t x);
  */
 uint16_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar);
 
-/*
- * Map Latin G2 teletext characters into a ISO-8859-1 approximation.
- * Trying to use similar looking or similar meaning characters.
- */
-uint16_t ttxt_laG2_la1_char(uint8_t inchar);
-
 
 
 // invert tab for last 42 bytes in packets

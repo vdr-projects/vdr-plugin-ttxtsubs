@@ -143,12 +143,3 @@ uint16_t ttxt_laG0_la1_char(int Gtriplet, int natopts, uint8_t inchar)
     else
        return laG0_nat_opts16[no][laG0_nat_replace_map[c]];
 }
-
-/*
- * Map Latin G2 teletext characters into a ISO-8859-1 approximation.
- * Trying to use similar looking or similar meaning characters.
- */
-uint16_t ttxt_laG2_la1_char(uint8_t inchar)
-{
-  return laG2_la1_table[inchar & 0x7f];
-}
