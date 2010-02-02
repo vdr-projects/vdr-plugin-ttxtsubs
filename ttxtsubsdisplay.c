@@ -326,38 +326,6 @@ ttxt2la1(uint8_t *p, char *buf, int natopts)
     return NULL;
 }
 
-#if 0
-
-#define TEST_CENTER 0
-#if TEST_CENTER
-#define SCREENLEFT 0
-#define SCREENWIDTH 720
-#else
-#define SCREENLEFT 125
-#endif
-
-#define TEST_169 0
-#if TEST_169
-#define SCREENBOT 480
-#else
-#define SCREENBOT 540
-#endif
-
-#if 0
-#define ROWINCR 45
-#define ROWH 36
-#define TEXTY 4
-#else
-#define ROWINCR 43
-#define ROWH 34
-#define TEXTY 3
-#endif
-#define TEXTX 15
-//#define SCREENTOP (SCREENBOT - MAXTTXTROWS * ROWINCR)
-#define SCREENTOP 100
-
-#endif
-
 enum {
   SCREENLEFT = 0,
   SCREENRIGHT = 719,

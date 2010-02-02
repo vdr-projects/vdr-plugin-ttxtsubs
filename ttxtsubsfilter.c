@@ -52,13 +52,6 @@ void cTtxtSubsFilter::SetPages(size_t count, uint16_t *pages)
   memcpy((char *) mPages, (char *) pages, count * sizeof(uint16_t));
 
   mCount = count;
-
-#if 0
-    dprint("SetPages: %d, ", count);
-    for(size_t i = 0; i < count; i++)
-      dprint("%03x ", pages[i]);
-    dprint("\n");
-#endif
 }
 
 // XXX IF MERGING PAGES FROM SEVERAL PIDS (which we currently don't)
@@ -79,15 +72,6 @@ int cTtxtSubsFilter::Filter(char *indata, char *outdata)
   mp = UNHAM_INV(d->mag_addr_ham[0], d->mag_addr_ham[1]);
   mag = mp & 0x7;
   packet = (mp >> 3) & 0x1f;
-
-#if 0 // XXX
-    uint8_t buf[2];
-    ham8_4byte(mp, buf);
-    dprint("unham %02x %02x -> %02x, ham: %02x %02x\n",
-	    invtab[d->mag_addr_ham[0]], invtab[d->mag_addr_ham[1]],
-	    mp,
-	    buf[0], buf[1]);
-#endif
 
   // packet 0, change page no in this magazine
   if(packet == 0) {

@@ -355,17 +355,6 @@ static void addpageinfo(struct ttxtinfo *info, uint16_t pid, struct ttxt_descr *
   pa->mag = descr->d[descr_index].type_mag & 0x7;
   pa->page = descr->d[descr_index].page_no;
 
-#if 0
-  // Test - rewrite initial page 100 into subtitles page 150
-  if(pa->type == TTXT_INITIAL_PAGE &&
-     pa->mag = 0x1 &&
-     pa->page == 0x00) {
-    pa->type = TTXT_SUBTITLE_PAGE; // or TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE ?
-    pa->mag = 0x1;
-    pa->page = 0x50;
-  }
-#endif
-
   if(globals.frenchSpecial()) {
     /* By some silly reason some French channels (Canal+ and CanalSatellite)
        announce subtitles with the page number in decimal, for example
@@ -708,89 +697,3 @@ struct ttxtpidinfo *FindSubs(struct ttxtinfo *info, int *pid, int *pageno, char 
   *pageno = -1;
   return NULL;
 }
-
-
-#if 0
-int XX_GetTtxtSubtitleInfo(uint16_t pid, int card_no, struct ttxtinfo *info)
-{
-  int len;
-  char buf[4096];
-  struct PMT_sect *p = (struct PMT_sect *) buf;
-  char *sp;
-
-  memset((char *) info, 0, sizeof(*info));
-
-  len = GetSection(pid, 2, 0xFF, card_no, buf, sizeof(buf));
-
-  //dump_hex("Sect: ", (uint8_t *) buf, len);
-
-  if(len < 0)
-    return len;
-
-  if(len != ((ntohs(p->syntax_len) & 0xfff) + 3)) {
-    dprint("bad length: %x / %x!\n", len, ntohs(p->syntax_len));
-    return -1;
-  }
-
-  // also skip extra program info
-  sp = ((char *) &(p->s)) + (ntohs(p->res_program_info_length) & 0xfff);
-  
-  while(sp < buf + len - 4) {
-    struct PMT_stream *s = (struct PMT_stream *) sp;
-
-    //printf("type: %d, pid: %d, len: %d\n", s->stream_type, ntohs(s->res_PID) & 0x1fff, ntohs(s->res_ES_info_len) & 0xfff);
-    //dump_hex("descr: ", sp, ntohs(s->res_ES_info_len) & 0xfff);
-
-    if(s->stream_type == 6) { // PES private data
-      uint8_t *descr;
-
-      for(descr = s->descrs; descr < s->descrs + (ntohs(s->res_ES_info_len) & 0xfff); descr += descr[1] + 2) {
-	//dump_hex("descr: ", descr, descr[1] + 2);
-	if(descr[0] == DESCR_TELETEXT) {
-	  struct ttxt_descr *t = (struct ttxt_descr *) descr;
-	  int i, count = t->length / sizeof(t->d[0]);
-	  for(i = 0; i < count; i++) {
-	    addpageinfo(info, ntohs(s->res_PID) & 0x1fff, t, i);
-	    //printf("%c%c%c: type %d, page: %01x%02x\n", t->d[i].lang[0], t->d[i].lang[1], t->d[i].lang[2], t->d[i].type_mag >> 3,
-	    //t->d[i].type_mag & 0x7,  t->d[i].page_no);
-	  }
-	}
-      }
-    }
-
-    sp += (ntohs(s->res_ES_info_len) & 0xfff) + 5;
-  }
-
-  return 0;
-}
-#endif
-
-#if 0
-//XXX temporary for testing!
-int get_subs(char *lang, int sid, int vpid, int cardno, int *pid, int *page) {
-  struct ttxtinfo info;
-  int i, j;
-  int result = -1;
-
-  GetTtxtInfo(cardno, sid, vpid, &info);
-
-  for(i = 0; i < info.pidcount; i++) {
-    //printf("PID: %d ", info.p[i].pid);
-    for(j = 0; j < info.p[i].pagecount; j++) {
-      //printf(" %c%c%c: %01x%02x (%d) ",
-      //     info.p[i].i[j].lang[0], info.p[i].i[j].lang[1], info.p[i].i[j].lang[2], 
-      //     info.p[i].i[j].mag, info.p[i].i[j].page, info.p[i].i[j].type);
-      if(info.p[i].i[j].lang[0] == lang[0] && info.p[i].i[j].lang[1] == lang[1] &&
-	 info.p[i].i[j].lang[2] == lang[2] &&
-	 (info.p[i].i[j].type == TTXT_SUBTITLE_PAGE || info.p[i].i[j].type == TTXT_SUBTITLE_HEARING_IMPAIRED_PAGE)) {
-	*pid = info.p[i].pid;
-	*page = info.p[i].i[j].mag * 0x100 + info.p[i].i[j].page;
-	result = 0;
-      }
-    }
-  //printf("\n");
-  }
-
-  return result;
-}
-#endif
