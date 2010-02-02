@@ -243,39 +243,3 @@ print_code(uint8_t c, int natopts)
     dprint("<U%02x>", c);
   }
 }
-
-void
-print_page(struct ttxt_page *p)
-{
-  int r, c, e;
-
-  dprint("\n\n%03x %s%s%s%s%snatchars: %d\n",
-	 (p->mag << 8) + p->no,
-	 p->flags & erasepage ? "erasepage, " : "",
-	 p->flags & newsflash ? "Newsflash, " : "",
-	 p->flags & subtitle ? "Subtitle, " : "",
-	 p->flags & suppress_header ? "SuppressHeader, " : "",
-	 p->flags & inhibit_display ? "InihinitDisplay, " : "",
-	 p->national_charset);
-
-  for(r = 0; r < 26; r++) {
-    int do_display = 0;
-
-    for(e = 39; e > 0; e--) {
-      if(p->data[r][e]) {
-	do_display = 1;
-	break;
-      }
-    }
-
-    if(do_display) {
-      dprint("%02d ", r);
-      for(c = 0; c <= e; c++) {
-	char z = p->data[r][c] & 0x7f;
-	print_code(z, p->national_charset);
-	//dprint("%c", isprint(z) ? z : z == 0 ? '\'' : '.');
-      }
-      dprint("\n");
-    }
-  }
-}
