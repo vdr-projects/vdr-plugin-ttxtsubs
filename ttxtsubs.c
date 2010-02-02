@@ -24,6 +24,7 @@
 #include <vdr/menuitems.h>
 #include <vdr/thread.h>
 #include <vdr/config.h>
+#include <vdr/tools.h>
 #include <semaphore.h>
 
 #define TIMEMEASURE 0
@@ -523,12 +524,8 @@ void cPluginTtxtsubs::StopTtxt(void)
 {
   //dprint("cPluginTtxtsubs::StopTtxt\n");
 
-  if(mDispl) {
-    cTtxtSubsDisplayer *d = mDispl;
-    HideTtxt();
-    mDispl = NULL;
-    delete d; // takes 0.03-0.04 s
-  }
+  HideTtxt();
+  DELETENULL(mDispl); // takes 0.03-0.04 s
 }
 
 void cPluginTtxtsubs::ShowTtxt(void)

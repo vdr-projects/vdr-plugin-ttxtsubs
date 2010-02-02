@@ -48,11 +48,7 @@ cTtxtSubsDisplayer::~cTtxtSubsDisplayer(void)
   mGetCond.Broadcast();
   this->Cancel(5);
 
-  if(mDisp) {
-    cTtxtSubsDisplay *tmp = mDisp;
-    mDisp = NULL;
-    delete tmp;
-  }
+  delete mDisp;
 }
 
 // handled messages in ring buffer - runs in a thread of its own

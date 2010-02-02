@@ -30,6 +30,7 @@
 #include <vdr/thread.h>
 #include <vdr/font.h>
 #include <vdr/config.h>
+#include <vdr/tools.h>
 
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplay.h"
@@ -106,13 +107,8 @@ cTtxtSubsDisplay::cTtxtSubsDisplay(void)
 
 cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
 {
-  if(mLastDataTime)
-    free(mLastDataTime);
-  if(mOsd) {
-    cOsd* tmp = mOsd;
-    mOsd = NULL;
-    delete tmp;
-  }
+  free(mLastDataTime);
+  delete mOsd;
   if(mOsdFont && (mOsdFont != cFont::GetFont(fontOsd)))
     delete mOsdFont;
 }
@@ -395,11 +391,7 @@ void cTtxtSubsDisplay::ShowOSD(void)
 	rowcount++;
   }
 
-  if(mOsd) {
-    cOsd* tmp = mOsd;
-    mOsd = NULL;
-    delete tmp;
-  }
+  DELETENULL(mOsd);
 
      mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP, 20); // level 20
      if(!mOsd) {
@@ -507,9 +499,5 @@ void cTtxtSubsDisplay::ClearOSD(void)
   cOSDSelfMemoryLock selfmem(&gSelfMem);
   cMutexLock lock(&mOsdLock);
 
-  if(mOsd) {
-    cOsd* tmp = mOsd;
-    mOsd = NULL;
-    delete tmp;
-  }
+  DELETENULL(mOsd);
 }

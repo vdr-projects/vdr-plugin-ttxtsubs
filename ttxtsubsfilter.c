@@ -103,10 +103,8 @@ void cTtxtSubsFilter::FreePages(void)
 {
   mCount = 0;
 
-  if(mPages) {
-    free(mPages);
-    mPages = NULL;
-  }
+  free(mPages);
+  mPages = NULL;
 }
 
 
