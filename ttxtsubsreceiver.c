@@ -38,7 +38,9 @@ struct ringBufItem {
 
 cTtxtSubsReceiver::cTtxtSubsReceiver(tChannelID ChnId, int Ca, struct ttxtpidinfo *PI)
   :
+#if defined(APIVERSNUM) && APIVERSNUM < 10712
   cReceiver(ChnId, -1, PI->pid),
+#endif
   mGetMutex(),
   mGetCond(),
   mRingBuf(sizeof(ringBufItem) * 500, true),
@@ -49,6 +51,10 @@ cTtxtSubsReceiver::cTtxtSubsReceiver(tChannelID ChnId, int Ca, struct ttxtpidinf
 {
   int count = 0;
   uint16_t *pages = (uint16_t *) malloc(sizeof(uint16_t) * mPI.pagecount);
+
+#if defined(APIVERSNUM) && APIVERSNUM >= 10712
+  AddPid(PI->pid);
+#endif
 
   mPTS.valid = 0;
 

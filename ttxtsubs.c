@@ -390,7 +390,7 @@ void cPluginTtxtsubs::Action(void)
                           //from a different satellite, so what really should be done is to
                           //check if the dish is positioned
              while(tries<=2) {
-               while(geterror=GetTtxtInfo(dev->ActualDevice()->CardIndex(), c, &info)) {
+               while((geterror=GetTtxtInfo(dev->ActualDevice()->CardIndex(), c, &info))) {
                  esyslog("ttxtsubs: Error: GetTtxtInfo failed!");
                  cCondWait::SleepMs(1000);
                  getchmutex.Lock();
