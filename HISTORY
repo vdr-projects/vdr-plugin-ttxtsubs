@@ -6,6 +6,8 @@ VDR Plugin 'ttxtsubs' Revision History
 - Updated VDR patch for 1.7.8
 - Some code refactoring
 - Updated plugin and VDR patch for 1.7.12 - Thx to Rolf Ahrenberg (Closes #236)
+- Fixed replay when the current live ttxtsubs page differs from the
+  one in the recording - Thx to Rolf Ahrenberg (Closes #139)
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording

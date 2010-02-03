@@ -167,9 +167,8 @@ private:
 
   char mOldLanguage[4]; // language chosen from previous version
   int mOldHearingImpaired; // HI setting chosen from previous version
+  bool mReplay;
 
-  // ugly hack for now
-  int mPage;
   // wait for channel switch
   sem_t chswitchwait;
   cMutex getchmutex;
@@ -201,7 +200,8 @@ class cMenuSetupTtxtsubs : public cMenuSetupPage {
 cPluginTtxtsubs::cPluginTtxtsubs(void)
   :
   mDispl(NULL),
-  mOldHearingImpaired(0)
+  mOldHearingImpaired(0),
+  mReplay(false)
 {
   // Initialize any member variables here.
   // DON'T DO ANYTHING ELSE THAT MAY HAVE SIDE EFFECTS, REQUIRE GLOBAL
@@ -404,7 +404,6 @@ void cPluginTtxtsubs::Action(void)
                if (!geterror) {
                  if(FindSubs(&info, &pid, &page, lang)) {
                    //dprint("CHANNELSWITCH, pid: %d page: %x\n", pid, page);
-                   mPage = page; // XXX remember this for playback (temporary hack)!
                    for(int i = 0; i < gNumLanguages; i++) {
                       if(!memcmp(lang, gLanguages[i][0], 3) ||
                          !memcmp(lang, gLanguages[i][1], 3)) {
@@ -413,7 +412,10 @@ void cPluginTtxtsubs::Action(void)
                    }
                    if(globals.mI18nLanguage < 0 || globals.mI18nLanguage >= I18nLanguages()->Size())
                      globals.mI18nLanguage = 0; // default to iso8859-1 if no predefined charset
-                   StartTtxtLive(dev, c->GetChannelID(), pid, page);
+                   if (mReplay)
+                      StartTtxtPlay(page);
+                   else
+                      StartTtxtLive(dev, c->GetChannelID(), pid, page);
                    FreeTtxtInfoData(&info);
                    break; 
                  } else {  //!FindSubs
@@ -459,13 +461,9 @@ void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const char *FileName, bool On)
 {
   //dprint("cPluginTtxtsubs::Replaying\n"); // XXX
-  StopTtxt();
-  if(On)
-    StartTtxtPlay(mPage);
-  else {
-    lastc=0;
-    sem_post(&chswitchwait);
-  }
+  mReplay = On;
+  lastc=0;
+  sem_post(&chswitchwait);
 }
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording)
