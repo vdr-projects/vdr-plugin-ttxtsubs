@@ -28,10 +28,12 @@ class cOsd;
 class cFont;
 
 #define MAXTTXTROWS 5
+#define TEXT_OUTLINE_THICKNESS 1
 
 struct SubtitleTextLine
 {
     cString text;
+    int color;
 };
 
 class cTtxtSubsDisplay
@@ -46,24 +48,24 @@ public:
     void TtxtData(const uint8_t *, uint64_t sched_time = 0);
 
 protected:
-    void Clear(void);
     void ShowOSD();
     void ClearOSD(void);
 
 private:
     void UpdateSubtitleTextLines();
+    void DrawOutlinedText(int x, int y, const char* text, tColor textColor, tColor outlineColor, tColor backgroundColor, 
+      const cFont* font);
 
 private:
-    int mPageState;
-    int mMag;
-    int mNo;
-    int mDoDisplay;
-    struct ttxt_page page;
-    cOsd *mOsd;
-    cMutex mOsdLock;
-    struct timeval *mLastDataTime;
-    const cFont *mOsdFont;
+    int _pageState;
+    int _mag;
+    int _no;
+    int _doDisplay;
+    struct ttxt_page _page;
+    cOsd* _osd;
+    cMutex _osdLock;
+    struct timeval* _lastDataTime;
+    const cFont* _osdFont;
     SubtitleTextLine _subTitleTextLines[MAXTTXTROWS];
     int _numberOfSubTitleTextLines;
 };
-

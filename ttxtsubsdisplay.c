@@ -98,37 +98,43 @@ static cOSDSelfMemory gSelfMem;
 
 cTtxtSubsDisplay::cTtxtSubsDisplay(void)
         :
-        mPageState(invalid),
-        mMag(0),
-        mNo(0),
-        mDoDisplay(1),
-        mOsd(NULL),
-        mOsdLock(),
-        mLastDataTime(NULL)
+        _pageState(invalid),
+        _mag(0),
+        _no(0),
+        _doDisplay(1),
+        _osd(NULL),
+        _osdLock(),
+        _lastDataTime(NULL)
 {
-    memset(&page.data, 0, sizeof(page.data));
-    mLastDataTime = (struct timeval *) calloc(1, sizeof(*mLastDataTime));
-    mOsdFont = cFont::CreateFont(Setup.FontOsd, globals.mFontSize);
-    if (!mOsdFont || !mOsdFont->Height())
-        mOsdFont = cFont::GetFont(fontOsd);
+    memset(&_page.data, 0, sizeof(_page.data));
+    _lastDataTime = (struct timeval *) calloc(1, sizeof(*_lastDataTime));
+
+    _osdFont = cFont::CreateFont(Setup.FontOsd, globals.mFontSize);
+    if (!_osdFont || !_osdFont->Height())
+    {
+        _osdFont = cFont::GetFont(fontOsd);
+    }
 }
 
 
 cTtxtSubsDisplay::~cTtxtSubsDisplay(void)
 {
-    free(mLastDataTime);
-    delete mOsd;
-    if (mOsdFont && (mOsdFont != cFont::GetFont(fontOsd)))
-        delete mOsdFont;
+    free(_lastDataTime);
+    delete _osd;
+    if (_osdFont != cFont::GetFont(fontOsd))
+    {
+        delete _osdFont;
+    }
 }
 
 
 void cTtxtSubsDisplay::SetPage(int Pageno)  // Pageno is 0x000 to 0x799
 {
-    mMag = (Pageno >> 8) & 0xF;
-    mNo = Pageno & 0xFF;
+    _mag = (Pageno >> 8) & 0xF;
+    _no = Pageno & 0xFF;
 
-    Clear();
+    _pageState = invalid;
+    ClearOSD();
 }
 
 
@@ -139,8 +145,8 @@ void cTtxtSubsDisplay::Hide(void)
         return;
     }
 
-    cMutexLock lock(&mOsdLock);
-    mDoDisplay = 0;
+    cMutexLock lock(&_osdLock);
+    _doDisplay = 0;
     ClearOSD();
 }
 
@@ -152,16 +158,9 @@ void cTtxtSubsDisplay::Show(void)
         return;
     }
 
-    cMutexLock lock(&mOsdLock);
-    mDoDisplay = 1;
+    cMutexLock lock(&_osdLock);
+    _doDisplay = 1;
     ShowOSD();
-}
-
-
-void cTtxtSubsDisplay::Clear(void)
-{
-    mPageState = invalid;
-    ClearOSD();
 }
 
 
@@ -173,16 +172,16 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
     struct ttxt_data_field *d;
 
     // idle time - if we have been sitting on a half finished page for a while - show it
-    if (Data == NULL && mPageState == collecting)
+    if (Data == NULL && _pageState == collecting)
     {
         struct timeval tv;
         gettimeofday(&tv, NULL);
         // add second diff to usecs
-        tv.tv_usec += 1000000 * (tv.tv_sec - mLastDataTime->tv_sec);
+        tv.tv_usec += 1000000 * (tv.tv_sec - _lastDataTime->tv_sec);
 
-        if ((tv.tv_usec - mLastDataTime->tv_usec) > 500000)
+        if ((tv.tv_usec - _lastDataTime->tv_usec) > 500000)
         {
-            mPageState = interimshow;
+            _pageState = interimshow;
             ClearOSD();
             ShowOSD();
         }
@@ -205,74 +204,86 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
         for (i = 0; i < 8; i++)
             fi[i] = invtab[d->data[i]];
 
-        if (mag == mMag)  /* XXX: && ! magazine_serial */
+        if (mag == _mag)  /* XXX: && ! magazine_serial */
         {
-            if (mPageState == collecting)
+            if (_pageState == collecting)
             {
-                mPageState = finished;
+                _pageState = finished;
                 ClearOSD();
                 ShowOSD();
             }
-            if (mPageState == interimshow)
-                mPageState = finished;
+            if (_pageState == interimshow)
+                _pageState = finished;
         }
 
         no = unham(fi[0], fi[1]);
 
-        if (mag == mMag && no == mNo)
+        if (mag == _mag && no == _no)
         {
-            page.mag = mag;
-            page.no = no;
-            page.flags = 0;
-            page.national_charset = 0;
+            _page.mag = mag;
+            _page.no = no;
+            _page.flags = 0;
+            _page.national_charset = 0;
 
             if (fi[3] & 0x80)  // Erase Page
             {
-                page.flags |= erasepage;
-                memset(&page.data, 0, sizeof(page.data)); // only if erasepage is set?
+                _page.flags |= erasepage;
+                memset(&_page.data, 0, sizeof(_page.data)); // only if erasepage is set?
             }
             if (fi[5] & 0x20) // Newsflash
-                page.flags |= newsflash;
+                _page.flags |= newsflash;
             if (fi[5] & 0x80) // Subtitle
-                page.flags |= subtitle;
+                _page.flags |= subtitle;
             if (fi[6] & 0x02) // Suppress Header
-                page.flags |= suppress_header;
+                _page.flags |= suppress_header;
             // if(fi[6] & 0x08) // Update Indicator
             // if(fi[6] & 0x20) // Interrupted Sequence
             if (fi[6] & 0x80) // Inhibit Display
-                page.flags |= inhibit_display;
+                _page.flags |= inhibit_display;
             // if(fi[7] & 0x02) // Magazine Serial
 
-            page.national_charset = ((fi[7] & 0x80) >> 7) +
+            _page.national_charset = ((fi[7] & 0x80) >> 7) +
                                     ((fi[7] & 0x20) >> 4) + ((fi[7] & 0x08) >> 1);
 
-            if (mPageState != collecting)
+            if (_pageState != collecting)
             {
                 int diff = sched_time - cTimeMs::Now();
                 //printf("Got sched_time %llx, diff %d\n", sched_time, diff);
                 if (diff > 10) cCondWait::SleepMs(diff);
             }
 
-            mPageState = collecting;
-            gettimeofday(mLastDataTime, NULL);
+            _pageState = collecting;
+            gettimeofday(_lastDataTime, NULL);
 
             for (i = 0; i < 32; i++)
-                page.data[0][i] = invtab[d->data[i+8]];
+                _page.data[0][i] = invtab[d->data[i+8]];
         }
     }
-    else if (mag == page.mag && packet < TTXT_DISPLAYABLE_ROWS &&
-             (mPageState == collecting || mPageState == interimshow))
+    else if (mag == _page.mag && packet < TTXT_DISPLAYABLE_ROWS &&
+             (_pageState == collecting || _pageState == interimshow))
     {
-        // mag == page.mag: The magazines can be sent interleaved
+        // mag == _page.mag: The magazines can be sent interleaved
         int i;
         for (i = 0; i < 40; i++)
-            page.data[packet][i] = invtab[d->data[i]];
+            _page.data[packet][i] = invtab[d->data[i]];
 
-        mPageState = collecting;
-        gettimeofday(mLastDataTime, NULL);
+        _pageState = collecting;
+        gettimeofday(_lastDataTime, NULL);
     }
 }
 
+tColor SubtitleColorMap[8][3] =
+{
+    // foreground, outline,        background
+    {clrBlack,     clrBlack,       clrTransparent},
+    {clrRed,       clrBlack,       clrTransparent},
+    {clrGreen,     clrBlack,       clrTransparent},
+    {clrYellow,    clrBlack,       clrTransparent},
+    {clrBlue,      clrTransparent, clrWhite      },
+    {clrMagenta,   clrBlack,       clrTransparent},
+    {clrCyan,      clrBlack,       clrTransparent},
+    {clrWhite,     clrBlack,       clrTransparent}
+};
 
 void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 {
@@ -290,15 +301,16 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 
     for (int row = 1; row < 24; row++)
     {
-        if (!page.data[row][0]) continue; // Row is empty
+        if (!_page.data[row][0]) continue; // Row is empty
 
         bool withinBox = false;
         int textBufferIndex = 0;
+        _subTitleTextLines[_numberOfSubTitleTextLines].color = 7; // default white
 
         for (int column = 0; column < 40; column++)
         {
             // leave out parity bit!
-            uint8_t teletextCharacter = page.data[row][column] & 0x7f;
+            uint8_t teletextCharacter = _page.data[row][column] & 0x7f;
 
             if (teletextCharacter < 0x10) // Process spacing attributes
             {
@@ -313,6 +325,10 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
                 {
                     withinBox = false;
                 }
+                else if (teletextCharacter >= 0x00 && teletextCharacter <= 0x07) // color attributes
+                {
+                    _subTitleTextLines[_numberOfSubTitleTextLines].color = teletextCharacter;
+                }
             }
             else if (withinBox)
             {
@@ -321,7 +337,7 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 
                 if (teletextCharacter >= 0x20)
                 {
-                    uint16_t aux = ttxt_laG0_la1_char(0, page.national_charset, teletextCharacter);
+                    uint16_t aux = ttxt_laG0_la1_char(0, _page.national_charset, teletextCharacter);
                     if (aux & 0xff00) textBuffer[textBufferIndex++] = (aux & 0xff00) >> 8;
                     textBuffer[textBufferIndex++] = aux & 0x00ff;
                 }
@@ -341,198 +357,74 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
     }
 }
 
-enum
+void cTtxtSubsDisplay::DrawOutlinedText(int x, int y, const char* text, tColor textColor, tColor outlineColor,
+  tColor backgroundColor, const cFont* font)
 {
-    SCREENLEFT = 0,
-    SCREENRIGHT = 719,
-    SCREENTOP = 150,
-    SCREENBOTTOM = 575,
-
-    SIDEMARGIN = 125,
-    BOTNORM = 540,
-    BOTLETTERBOX = 482,
-
-    ROWINCR = 43,
-    ROWH = 34,
-    TEXTY = 3,
-    TEXTX = 15
-};
-
-static tColor
-getcolor(int color)
-{
-    switch (color)
+    for (int horizontalOffset = -TEXT_OUTLINE_THICKNESS; horizontalOffset <= TEXT_OUTLINE_THICKNESS; horizontalOffset++)
     {
-    case 0:
-        return clrBlack;
-    case 1:
-        return clrWhite;
-    case 2:
-        return clrRed;
-    case 3:
-        return clrGreen;
-    case 4:
-        return clrYellow;
-    case 5:
-        return clrMagenta;
-    case 6:
-        return clrBlue;
-    case 7:
-        return clrCyan;
-    case 8:
-        return globals.customColor();
-    case 9:
-        return clrTransparent;
-    default:
-        return clrGray50;
+        for (int verticalOffset = -TEXT_OUTLINE_THICKNESS; verticalOffset <= TEXT_OUTLINE_THICKNESS; verticalOffset++) 
+        {
+            if (horizontalOffset || verticalOffset)
+            {
+                _osd->DrawText(x + horizontalOffset, y + verticalOffset, text, outlineColor, backgroundColor, font);
+            }
+        }
     }
-    return clrGray50;
+    _osd->DrawText(x, y, text, textColor, backgroundColor, font);
 }
 
 void cTtxtSubsDisplay::ShowOSD(void)
 {
-    int i, y;
-    int bottom = globals.bottomAdj() + (globals.bottomLB() ? BOTLETTERBOX : BOTNORM);
-    tArea areas[MAXOSDAREAS];
-    int numAreas = 0;
-
     cOSDSelfMemoryLock selfmem(&gSelfMem);
-    cMutexLock lock(&mOsdLock);
+    cMutexLock lock(&_osdLock);
 
-    if (!globals.mRealDoDisplay)
-    {
-        return;
-    }
-
-    if (!mDoDisplay)
-    {
-        return;
-    }
-
-    if (mPageState != interimshow && mPageState != finished)
-    {
-        return;
-    }
+    if (!globals.mRealDoDisplay) return;
+    if (!_doDisplay) return;
+    if (_pageState != interimshow && _pageState != finished) return;
 
     UpdateSubtitleTextLines();
 
-    DELETENULL(mOsd);
+    if (_numberOfSubTitleTextLines <= 0) return;
 
-    mOsd = cOsdProvider::NewOsd(SCREENLEFT, SCREENTOP, 20); // level 20
-    if (!mOsd)
+    DELETENULL(_osd);
+
+    int width = cOsd::OsdWidth();
+    int height = _numberOfSubTitleTextLines * _osdFont->Height();
+
+    _osd = cOsdProvider::NewOsd(cOsd::OsdLeft(), cOsd::OsdTop() + cOsd::OsdHeight() - height, OSD_LEVEL_SUBTITLES + 1);
+    tArea Areas[] = { { 0, 0, width - 1, height - 1, 8 } };
+    if (Setup.AntiAlias && _osd->CanHandleAreas(Areas, sizeof(Areas) / sizeof(tArea)) == oeOk)
     {
-        return;
-    }
-
-    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (_numberOfSubTitleTextLines-1));
-
-    if (Setup.AntiAlias)
-    {
-        // create only one osd area that's big enough for all rows
-        int x1 = SCREENRIGHT+1, x2 = 0, y1 = SCREENBOTTOM+1, y2 = 0;
-        for (i = 0; i < _numberOfSubTitleTextLines; i++)
-        {
-            int w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
-            int left = SIDEMARGIN;
-            if (w % 4)
-                w += 4 - (w % 4);
-            switch (globals.textPos())
-            {
-            case 1:
-                left = (SCREENRIGHT - w) / 2;
-                break;
-            case 2:
-                left = SCREENRIGHT - SIDEMARGIN - w;
-                break;
-            }
-            if (x1 > left)
-                x1 = left;
-            if (x2 < (left+w-1))
-                x2 = left+w-1;
-            if (y1 > y)
-                y1 = y;
-            if (y2 < (y+ROWH-1))
-                y2 = y+ROWH-1;
-            y += (ROWINCR + globals.lineSpacing());
-        }
-        if ((x1 >= x2) || (y1 >= y2)) // validate calculated area
-            return;
-        tArea area = {x1, y1, x2, y2, 8};
-        areas[numAreas++] = area;
+        _osd->SetAreas(Areas, sizeof(Areas) / sizeof(tArea));
     }
     else
     {
-        for (i = 0; i < _numberOfSubTitleTextLines; i++)
-        {
-            int w = 0;
-            int left = SIDEMARGIN;
-            w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
-            if (w % 4)
-                w += 4 - (w % 4);
-            switch (globals.textPos())
-            {
-            case 1:
-                left = (SCREENRIGHT - w) / 2;
-                break;
-            case 2:
-                left = SCREENRIGHT - SIDEMARGIN - w;
-                break;
-            }
-            tArea area = {left, y, left+w-1, y+ROWH-1, 2};
-            areas[numAreas++] = area;
-            y += (ROWINCR + globals.lineSpacing());
-        }
-    }
-    if (mOsd->CanHandleAreas(areas, numAreas) != oeOk)
-    {
-        // try lower color depth
-        if (Setup.AntiAlias)
-        {
-            for (i = 0; i < numAreas; i++) areas[numAreas++].bpp = 2;
-            if (mOsd->CanHandleAreas(areas, numAreas) != oeOk)
-            {
-                dprint("ttxtsubs: OSD Cannot handle areas (error code: %d) - try to enlarge the line spacing!\n", mOsd->CanHandleAreas(areas, numAreas));
-                return;
-            }
-        }
-    }
-    mOsd->SetAreas(areas, numAreas);
-
-    for (i = 0; i < numAreas; i++)
-    {
-        mOsd->DrawRectangle(areas[i].x1, areas[i].y1, areas[i].x2, areas[i].y2, clrTransparent);
+        tArea Areas[] = { { 0, 0, width - 1, height - 1, 4 } };
+        _osd->SetAreas(Areas, sizeof(Areas) / sizeof(tArea));
     }
 
-    y = bottom - SCREENTOP - ROWH - ((ROWINCR + globals.lineSpacing()) * (_numberOfSubTitleTextLines-1));
-    for (i = 0; i < _numberOfSubTitleTextLines; i++)
+    _osd->DrawRectangle(0, 0, width - 1, height - 1, clrTransparent);
+
+    for(int textLineIndex = 0; textLineIndex < _numberOfSubTitleTextLines; textLineIndex++)
     {
-        int w = 0;
-        int left = SIDEMARGIN;
-        w = mOsdFont->Width(_subTitleTextLines[i].text) + 2 * TEXTX;
-        if (w % 4)
-            w += 4 - (w % 4);
-        switch (globals.textPos())
-        {
-        case 1:
-            left = (SCREENRIGHT - w) / 2;
-            break;
-        case 2:
-            left = SCREENRIGHT - SIDEMARGIN - w;
-            break;
-        }
-        mOsd->DrawRectangle(left, y, left + w, y + ROWH, getcolor(globals.bgColor()));
-        mOsd->DrawText(left + TEXTX, y + TEXTY, _subTitleTextLines[i].text, getcolor(globals.fgColor()), getcolor(globals.bgColor()), mOsdFont);
-        y += (ROWINCR + globals.lineSpacing());
+        int lineWidth = _osdFont->Width(_subTitleTextLines[textLineIndex].text);
+        int x = (width - lineWidth) / 2;
+        int y = (height / _numberOfSubTitleTextLines) * textLineIndex;
+        tColor foregroundColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][0];
+        tColor outlineColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][1];
+        tColor backgroundColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][2];
+
+        DrawOutlinedText(x, y, _subTitleTextLines[textLineIndex].text, foregroundColor, outlineColor, backgroundColor, _osdFont);
     }
-    mOsd->Flush();
+    _osd->Flush();
 }
 
 
 void cTtxtSubsDisplay::ClearOSD(void)
 {
     cOSDSelfMemoryLock selfmem(&gSelfMem);
-    cMutexLock lock(&mOsdLock);
+    cMutexLock lock(&_osdLock);
 
-    DELETENULL(mOsd);
+    DELETENULL(_osd);
 }
 

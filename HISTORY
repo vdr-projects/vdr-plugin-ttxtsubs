@@ -11,6 +11,11 @@ VDR Plugin 'ttxtsubs' Revision History
 - Added VDR patch that stores the manual page selection with the channel settings
   in the channels.conf - patch provided by Rolf Ahrenberg (tpid-v2)
   (references #139)
+- Show colored subtitles if color information is provided e.g. for
+  different speakers (Closes #61)
+- Position subtitles always centered at the bottom, independent of the
+  OSD resolution (Closes #231)
+- Render subtitles outlined (Closes #51)
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
