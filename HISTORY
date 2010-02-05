@@ -8,6 +8,9 @@ VDR Plugin 'ttxtsubs' Revision History
 - Updated plugin and VDR patch for 1.7.12 - Thx to Rolf Ahrenberg (Closes #236)
 - Fixed replay when the current live ttxtsubs page differs from the
   one in the recording - Thx to Rolf Ahrenberg (Closes #139)
+- Added VDR patch that stores the manual page selection with the channel settings
+  in the channels.conf - patch provided by Rolf Ahrenberg (tpid-v2)
+  (references #139)
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
