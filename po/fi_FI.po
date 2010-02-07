@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2009-04-21 23:45+0300\n"
+"POT-Creation-Date: 2010-02-07 13:47+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -66,39 +66,6 @@ msgstr "vain DVB-T"
 msgid "Only DVB-C"
 msgstr "vain DVB-C"
 
-msgid "Black"
-msgstr "musta"
-
-msgid "White"
-msgstr "valkoinen"
-
-msgid "Red"
-msgstr "punainen"
-
-msgid "Green"
-msgstr "vihreä"
-
-msgid "Yellow"
-msgstr "keltainen"
-
-msgid "Magenta"
-msgstr "magenta"
-
-msgid "Blue"
-msgstr "sininen"
-
-msgid "Cyan"
-msgstr "syaani"
-
-msgid "Custom"
-msgstr "muokattava"
-
-msgid "Transparent"
-msgstr "läpinäkyvä"
-
-msgid "Grey"
-msgstr "harmaa"
-
 msgid "Display Subtitles"
 msgstr "Näytä tekstitykset"
 
@@ -144,27 +111,6 @@ msgstr "Tekstityslähteen valinta"
 msgid "Font Size (pixel)"
 msgstr "Kirjasintyypin koko (px)"
 
-msgid "Text Color"
-msgstr "Kirjasimen väri"
-
-msgid "Background Color"
-msgstr "Taustaväri"
-
-msgid "Custom Color"
-msgstr "Muokattava väri"
-
-msgid "Red Value"
-msgstr "Punainen"
-
-msgid "Green Value"
-msgstr "Vihreä"
-
-msgid "Blue Value"
-msgstr "Sininen"
-
-msgid "Transparency Value"
-msgstr "Läpinäkyvyys"
-
 msgid "Language"
 msgstr "Tekstityskieli"
 
@@ -188,3 +134,36 @@ msgstr "Tekstitystapa"
 
 msgid "Manual Subtitle Page"
 msgstr "Asetettu tekstityssivu"
+
+#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
+#~ msgstr "4:3/Anamorfinen tekstitys (Teksti-TV)"
+
+#~ msgid "Position Teletext Subtitles for Letterbox"
+#~ msgstr "Letterbox tekstitys (Teksti-TV)"
+
+#~ msgid "Left"
+#~ msgstr "vasen"
+
+#~ msgid "Center"
+#~ msgstr "keskitä"
+
+#~ msgid "Right"
+#~ msgstr "oikea"
+
+#~ msgid "Text Horizontal Position"
+#~ msgstr "Vaakatasaus"
+
+#~ msgid "Text Vertical Position"
+#~ msgstr "Pystytasaus"
+
+#~ msgid "4:3/Anamorph"
+#~ msgstr "4:3/anamorfinen"
+
+#~ msgid "Letterbox"
+#~ msgstr "letterbox"
+
+#~ msgid "Text Vertical Adjust"
+#~ msgstr "Pystytasauksen hienosäätö"
+
+#~ msgid "Line Spacing Adjust"
+#~ msgstr "Rivivälin hienosäätö"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2009-04-21 23:45+0300\n"
+"POT-Creation-Date: 2010-02-07 13:47+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Ruben Nunez Francisco <ruben.nunez@tang-it.com>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -63,39 +63,6 @@ msgstr "Sólo DVB-T"
 msgid "Only DVB-C"
 msgstr "Sólo DVB-C"
 
-msgid "Black"
-msgstr "Negro"
-
-msgid "White"
-msgstr "Blanco"
-
-msgid "Red"
-msgstr "Rojo"
-
-msgid "Green"
-msgstr "Verde"
-
-msgid "Yellow"
-msgstr "Amarillo"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Blue"
-msgstr "Azul"
-
-msgid "Cyan"
-msgstr "Cian"
-
-msgid "Custom"
-msgstr "Personalizado"
-
-msgid "Transparent"
-msgstr "Transparente"
-
-msgid "Grey"
-msgstr "Gris"
-
 msgid "Display Subtitles"
 msgstr "Visualiza subtítulos"
 
@@ -141,27 +108,6 @@ msgstr "Selección fuente DVB"
 msgid "Font Size (pixel)"
 msgstr ""
 
-msgid "Text Color"
-msgstr "Color del texto"
-
-msgid "Background Color"
-msgstr "Color de fondo"
-
-msgid "Custom Color"
-msgstr "Color personalizado"
-
-msgid "Red Value"
-msgstr "Valor rojo"
-
-msgid "Green Value"
-msgstr "Valor verde"
-
-msgid "Blue Value"
-msgstr "Valor azul"
-
-msgid "Transparency Value"
-msgstr "Valor transparencia"
-
 msgid "Language"
 msgstr "Idioma"
 
@@ -185,3 +131,36 @@ msgstr "Modo subtítulos"
 
 msgid "Manual Subtitle Page"
 msgstr "Página manual subtítulos"
+
+#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
+#~ msgstr "Posiciona subtítulos teletexto para 4:3/anamórfico"
+
+#~ msgid "Position Teletext Subtitles for Letterbox"
+#~ msgstr "Posicióna subtítulos teletexto para Letterbox"
+
+#~ msgid "Left"
+#~ msgstr "Izquierda"
+
+#~ msgid "Center"
+#~ msgstr "Centro"
+
+#~ msgid "Right"
+#~ msgstr "Derecha"
+
+#~ msgid "Text Horizontal Position"
+#~ msgstr "´Posición horizontal del texto"
+
+#~ msgid "Text Vertical Position"
+#~ msgstr "Posición vertical del texto"
+
+#~ msgid "4:3/Anamorph"
+#~ msgstr "4:3/Anamórfico"
+
+#~ msgid "Letterbox"
+#~ msgstr "Letterbox"
+
+#~ msgid "Text Vertical Adjust"
+#~ msgstr "Ajuste vertical del texto"
+
+#~ msgid "Line Spacing Adjust"
+#~ msgstr "Ajuste distancia entre líneas"

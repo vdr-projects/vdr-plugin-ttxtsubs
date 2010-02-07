@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2009-04-21 23:45+0300\n"
+"POT-Creation-Date: 2010-02-07 13:47+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Klaus Schmidinger <Klaus.Schmidinger@tvdr.de>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -63,39 +63,6 @@ msgstr "Nur DVB-T"
 msgid "Only DVB-C"
 msgstr "Nur DVB-C"
 
-msgid "Black"
-msgstr "Schwarz"
-
-msgid "White"
-msgstr "Weiss"
-
-msgid "Red"
-msgstr "Rot"
-
-msgid "Green"
-msgstr "Grün"
-
-msgid "Yellow"
-msgstr "Gelb"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Blue"
-msgstr "Blau"
-
-msgid "Cyan"
-msgstr "Türkis"
-
-msgid "Custom"
-msgstr "Benutzerdefiniert"
-
-msgid "Transparent"
-msgstr "Transparent"
-
-msgid "Grey"
-msgstr "Grau"
-
 msgid "Display Subtitles"
 msgstr "Zeige Untertitel"
 
@@ -141,27 +108,6 @@ msgstr "DVB Quelle Auswahl"
 msgid "Font Size (pixel)"
 msgstr ""
 
-msgid "Text Color"
-msgstr "Textfarbe"
-
-msgid "Background Color"
-msgstr "Hintergrundfarbe"
-
-msgid "Custom Color"
-msgstr "Benutzerdefinierte Farbe"
-
-msgid "Red Value"
-msgstr "Roter Wert"
-
-msgid "Green Value"
-msgstr "Grüner Wert"
-
-msgid "Blue Value"
-msgstr "Blauer Wert"
-
-msgid "Transparency Value"
-msgstr "Transparenter Wert"
-
 msgid "Language"
 msgstr "Sprache"
 
@@ -185,3 +131,18 @@ msgstr "Untertitelmodus"
 
 msgid "Manual Subtitle Page"
 msgstr "Manuelle Untertitelseite"
+
+#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
+#~ msgstr "Positioniere Videotext-Untertitel für 4:3/Anamorph"
+
+#~ msgid "Position Teletext Subtitles for Letterbox"
+#~ msgstr "Positioniere Videotext-Untertitel für Letterbox"
+
+#~ msgid "Left"
+#~ msgstr "Links"
+
+#~ msgid "Center"
+#~ msgstr "Mitte"
+
+#~ msgid "Right"
+#~ msgstr "Rechts"

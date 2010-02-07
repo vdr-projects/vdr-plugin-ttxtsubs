@@ -12,7 +12,7 @@ VDR Plugin 'ttxtsubs' Revision History
   in the channels.conf - patch provided by Rolf Ahrenberg (tpid-v2)
   (references #139)
 - Show colored subtitles if color information is provided e.g. for
-  different speakers (Closes #61)
+  different speakers and dropped custom color settings (Closes #61)
 - Position subtitles always centered at the bottom, independent of the
   OSD resolution (Closes #231)
 - Render subtitles outlined (Closes #51)

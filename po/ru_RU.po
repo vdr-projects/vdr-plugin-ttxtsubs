@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2009-04-21 23:45+0300\n"
+"POT-Creation-Date: 2010-02-07 13:47+0100\n"
 "PO-Revision-Date: 2008-12-30 14:05+0100\n"
 "Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -63,39 +63,6 @@ msgstr "Только  DVB-T"
 msgid "Only DVB-C"
 msgstr "Только DVB-C"
 
-msgid "Black"
-msgstr "чёрный"
-
-msgid "White"
-msgstr "белый"
-
-msgid "Red"
-msgstr "красный"
-
-msgid "Green"
-msgstr "зелёный"
-
-msgid "Yellow"
-msgstr "жёлтый"
-
-msgid "Magenta"
-msgstr "пурпурный"
-
-msgid "Blue"
-msgstr "синий"
-
-msgid "Cyan"
-msgstr "голубой"
-
-msgid "Custom"
-msgstr "настраиваемый"
-
-msgid "Transparent"
-msgstr "прозрачный"
-
-msgid "Grey"
-msgstr "серый"
-
 msgid "Display Subtitles"
 msgstr "Показывать субтитры"
 
@@ -141,27 +108,6 @@ msgstr "Выбор DVB источника"
 msgid "Font Size (pixel)"
 msgstr "Размер фонта  (pixel)"
 
-msgid "Text Color"
-msgstr "Цвет текста"
-
-msgid "Background Color"
-msgstr "Цвет фона"
-
-msgid "Custom Color"
-msgstr "Настраиваемый цвет"
-
-msgid "Red Value"
-msgstr "Уровень красного"
-
-msgid "Green Value"
-msgstr "Уровень зелёного"
-
-msgid "Blue Value"
-msgstr "Уровень синего"
-
-msgid "Transparency Value"
-msgstr "Степень прозрачности"
-
 msgid "Language"
 msgstr "Язык"
 
@@ -185,3 +131,36 @@ msgstr "Режим субтитров"
 
 msgid "Manual Subtitle Page"
 msgstr "Ручной выбор страницы"
+
+#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
+#~ msgstr "Субтитры в кадре 4:3"
+
+#~ msgid "Position Teletext Subtitles for Letterbox"
+#~ msgstr "Субтитры в кадре широкоэкранного фильма"
+
+#~ msgid "Left"
+#~ msgstr "слева"
+
+#~ msgid "Center"
+#~ msgstr "в центре"
+
+#~ msgid "Right"
+#~ msgstr "справа"
+
+#~ msgid "Text Horizontal Position"
+#~ msgstr "Размещение текста по горизонтали"
+
+#~ msgid "Text Vertical Position"
+#~ msgstr "Размещение текста по вертикали"
+
+#~ msgid "4:3/Anamorph"
+#~ msgstr "4:3"
+
+#~ msgid "Letterbox"
+#~ msgstr "широкий экран"
+
+#~ msgid "Text Vertical Adjust"
+#~ msgstr "Вертикальный сдвиг текста"
+
+#~ msgid "Line Spacing Adjust"
+#~ msgstr "Расстояние между строками"

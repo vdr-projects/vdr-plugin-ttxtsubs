@@ -46,9 +46,6 @@ class cTtxtsubsConf {
       mLineSpacing = 0;
       mDvbSources = 0;
       mFontSize = 20;
-      mFgColor = 1;
-      mBgColor = 8;
-      mCustomColor = 0xBB333333;
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
       mI18nLanguage = 0;
@@ -68,9 +65,6 @@ class cTtxtsubsConf {
   int lineSpacing(void) {return mLineSpacing;}
   int dvbSources(void) {return mDvbSources;}
   int fontSize(void) {return mFontSize;}
-  int fgColor(void) {return mFgColor;}
-  int bgColor(void) {return mBgColor;}
-  int customColor(void) {return mCustomColor;}
   char (*languages(void))[MAXLANGUAGES][2][4] {return &mLanguages;}
   int (*hearingImpaireds(void))[MAXLANGUAGES][2] {return &mHearingImpaireds;}
 
@@ -92,9 +86,6 @@ class cTtxtsubsConf {
   int mLineSpacing;
   int mDvbSources;
   int mFontSize;
-  int mFgColor;
-  int mBgColor;
-  int mCustomColor;
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
   int mI18nLanguage;

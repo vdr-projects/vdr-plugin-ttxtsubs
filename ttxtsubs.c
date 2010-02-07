@@ -189,10 +189,6 @@ class cMenuSetupTtxtsubs : public cMenuSetupPage {
   int mLangHI[MAXLANGUAGES];
   int mSavedFrenchSpecial;
   int mDoStore;
-  int mTransparency;
-  int mRed;
-  int mGreen;
-  int mBlue;
   cTtxtsubsConf mConf;
 };
 
@@ -345,9 +341,6 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "LineSpacing")) globals.mLineSpacing = atoi(Value);
   else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
-  else if(!strcasecmp(Name, "FgColor")) globals.mFgColor = atoi(Value);
-  else if(!strcasecmp(Name, "BgColor")) globals.mBgColor = atoi(Value);
-  else if(!strcasecmp(Name, "CustomColor")) globals.mCustomColor = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
   else if(!strcasecmp(Name, "HearingImpaireds")) parseHIs(Value);
   // Handle old settings
@@ -604,8 +597,6 @@ void cMenuSetupTtxtsubsLanguages::Store(void)
 const char * mainMenuAlts[5] = {NULL, NULL, NULL, NULL, NULL};
 const char * textPosAlts[4];
 const char * dvbSources[5];
-const char * textColors[12];
-const char * const colorValues[17] = {"#00", "#11", "#22", "#33", "#44", "#55", "#66", "#77", "#88", "#99", "#AA", "#BB", "#CC", "#DD", "#EE", "#FF", NULL};
 
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
@@ -632,25 +623,10 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     dvbSources[2] = tr("Only DVB-T");
     dvbSources[3] = tr("Only DVB-C");
     dvbSources[4] = NULL;
-
-    textColors[0] = tr("Black");
-    textColors[1] = tr("White");
-    textColors[2] = tr("Red");
-    textColors[3] = tr("Green");
-    textColors[4] = tr("Yellow");
-    textColors[5] = tr("Magenta");
-    textColors[6] = tr("Blue");
-    textColors[7] = tr("Cyan");
-    textColors[8] = tr("Custom");
-    textColors[9] = tr("Transparent");
-    textColors[10] = tr("Grey");
-    textColors[11] = NULL;
   }
   const int numTextPosAlts = sizeof(textPosAlts) / sizeof(textPosAlts[0]) - 1;
   const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
   const int numDvbSources = sizeof(dvbSources) / sizeof(dvbSources[0]) - 1;
-  const int numTextColors = sizeof(textColors) / sizeof(textColors[0]) - 1;
-  const int numColorValues = sizeof(colorValues) / sizeof(colorValues[0]) - 1;
 
   mSavedFrenchSpecial = mConf.mFrenchSpecial;
 
@@ -692,33 +668,7 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mConf.mDvbSources = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("DVB Source Selection"),
                           &mConf.mDvbSources, 4, dvbSources));
-  Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE));
-  if(mConf.mFgColor < 0 || mConf.mFgColor >= numTextColors)
-    mConf.mFgColor = 1;  // menu item segfaults if out of range
-  Add(new cMenuEditStraItem(tr("Text Color"), &mConf.mFgColor,
-			    numTextColors, textColors));
-  if(mConf.mBgColor < 0 || mConf.mBgColor >= numTextColors)
-    mConf.mBgColor = 0;  // menu item segfaults if out of range
-  Add(new cMenuEditStraItem(tr("Background Color"), &mConf.mBgColor,
-			    numTextColors, textColors));
-
-  // the color code is borrowed from AIO patches
-  mBlue = (mConf.mCustomColor & 0x0000000F);
-  if (mBlue < 0 || mBlue >= numColorValues) mBlue = 0;
-  mGreen = (mConf.mCustomColor & 0x00000F00) >>  8;
-  if (mGreen < 0 || mGreen >= numColorValues) mGreen = 0;
-  mRed = (mConf.mCustomColor & 0x000F0000) >> 16;
-  if (mRed < 0 || mRed >= numColorValues) mRed = 0;
-  mTransparency = (mConf.mCustomColor & 0x0F000000) >> 24;
-  if (mTransparency < 0 || mTransparency >= numColorValues) mTransparency = 0;
-  cString buf = cString::sprintf("%s: --------------------------------------------", tr("Custom Color"));
-  cOsdItem *item = new cOsdItem(buf);
-  item->SetSelectable(false);
-  Add(item);
-  Add(new cMenuEditStraItem(tr("Red Value"),          &mRed,          numColorValues, colorValues));
-  Add(new cMenuEditStraItem(tr("Green Value"),        &mGreen,        numColorValues, colorValues));
-  Add(new cMenuEditStraItem(tr("Blue Value"),         &mBlue,         numColorValues, colorValues));
-  Add(new cMenuEditStraItem(tr("Transparency Value"), &mTransparency, numColorValues, colorValues));
+  Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE * 2));
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     char str[100];
@@ -780,13 +730,6 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("LineSpacing", mConf.mLineSpacing);
   SetupStore("DvbSources", mConf.mDvbSources);
   SetupStore("FontSize", mConf.mFontSize);
-  SetupStore("FgColor", mConf.mFgColor);
-  SetupStore("BgColor", mConf.mBgColor);
-  mConf.mCustomColor = (mBlue              ) | (mBlue         <<  4) |
-                       (mGreen        <<  8) | (mGreen        << 12) |
-                       (mRed          << 16) | (mRed          << 20) |
-                       (mTransparency << 24) | (mTransparency << 28);
-  SetupStore("CustomColor", mConf.mCustomColor);
 
   char lstr[MAXLANGUAGES*2*4 + 1];
   char histr[MAXLANGUAGES*2 + 1];
