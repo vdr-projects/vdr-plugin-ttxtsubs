@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 14:01+0100\n"
+"POT-Creation-Date: 2010-02-07 14:29+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Jordi Vilà <jvila@tinet.org>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -79,6 +79,9 @@ msgid "DVB Source Selection"
 msgstr "Selecció font DVB"
 
 msgid "Font Size (pixel)"
+msgstr ""
+
+msgid "Font OutlineWidth (pixel)"
 msgstr ""
 
 msgid "Language"

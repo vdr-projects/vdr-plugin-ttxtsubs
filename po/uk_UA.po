@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 14:01+0100\n"
+"POT-Creation-Date: 2010-02-07 14:29+0100\n"
 "PO-Revision-Date: 2009-05-28 14:05+0100\n"
 "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -72,6 +72,10 @@ msgid "DVB Source Selection"
 msgstr "Вибір DVB джерела"
 
 msgid "Font Size (pixel)"
+msgstr "Размір фонта (пікселі)"
+
+#, fuzzy
+msgid "Font OutlineWidth (pixel)"
 msgstr "Размір фонта (пікселі)"
 
 msgid "Language"

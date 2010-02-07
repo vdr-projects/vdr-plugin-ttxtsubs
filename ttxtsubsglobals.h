@@ -42,6 +42,7 @@ class cTtxtsubsConf {
       mFrenchSpecial = 0;
       mDvbSources = 0;
       mFontSize = 20;
+      mOutlineWidth = 2;
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
       mI18nLanguage = 0;
@@ -57,6 +58,7 @@ class cTtxtsubsConf {
   int frenchSpecial(void) {return mFrenchSpecial;}
   int dvbSources(void) {return mDvbSources;}
   int fontSize(void) {return mFontSize;}
+  int outlineWidth(void) {return mOutlineWidth;}
   char (*languages(void))[MAXLANGUAGES][2][4] {return &mLanguages;}
   int (*hearingImpaireds(void))[MAXLANGUAGES][2] {return &mHearingImpaireds;}
 
@@ -74,6 +76,7 @@ class cTtxtsubsConf {
   int mFrenchSpecial;
   int mDvbSources;
   int mFontSize;
+  int mOutlineWidth;
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
   int mI18nLanguage;

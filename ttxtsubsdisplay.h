@@ -28,7 +28,6 @@ class cOsd;
 class cFont;
 
 #define MAXTTXTROWS 5
-#define TEXT_OUTLINE_THICKNESS 1
 
 struct SubtitleTextLine
 {

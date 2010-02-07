@@ -331,6 +331,7 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "FrenchSpecial")) globals.mFrenchSpecial = atoi(Value);
   else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
+  else if(!strcasecmp(Name, "OutlineWidth")) globals.mOutlineWidth = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
   else if(!strcasecmp(Name, "HearingImpaireds")) parseHIs(Value);
   // Handle old settings
@@ -642,6 +643,7 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   Add(new cMenuEditStraItem(tr("DVB Source Selection"),
                           &mConf.mDvbSources, 4, dvbSources));
   Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE * 2));
+  Add(new cMenuEditIntItem(tr("Font OutlineWidth (pixel)"), &mConf.mOutlineWidth, 1, 10));
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     char str[100];
@@ -699,6 +701,7 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
   SetupStore("DvbSources", mConf.mDvbSources);
   SetupStore("FontSize", mConf.mFontSize);
+  SetupStore("OutlineWidth", mConf.mOutlineWidth);
 
   char lstr[MAXLANGUAGES*2*4 + 1];
   char histr[MAXLANGUAGES*2 + 1];

@@ -360,9 +360,9 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 void cTtxtSubsDisplay::DrawOutlinedText(int x, int y, const char* text, tColor textColor, tColor outlineColor,
   tColor backgroundColor, const cFont* font)
 {
-    for (int horizontalOffset = -TEXT_OUTLINE_THICKNESS; horizontalOffset <= TEXT_OUTLINE_THICKNESS; horizontalOffset++)
+    for (int horizontalOffset = -globals.mOutlineWidth; horizontalOffset <= globals.mOutlineWidth; horizontalOffset++)
     {
-        for (int verticalOffset = -TEXT_OUTLINE_THICKNESS; verticalOffset <= TEXT_OUTLINE_THICKNESS; verticalOffset++) 
+        for (int verticalOffset = -globals.mOutlineWidth; verticalOffset <= globals.mOutlineWidth; verticalOffset++) 
         {
             if (horizontalOffset || verticalOffset)
             {
