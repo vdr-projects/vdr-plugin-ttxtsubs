@@ -14,7 +14,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - Show colored subtitles if color information is provided e.g. for
   different speakers and dropped custom color settings (Closes #61)
 - Position subtitles always centered at the bottom, independent of the
-  OSD resolution (Closes #231)
+  OSD resolution and dropped custom text position settings (Closes #231)
 - Render subtitles outlined (Closes #51)
 
 2009-04-26: Version 0.1.0

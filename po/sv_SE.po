@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Tomas Prybil <tomas@prybil.se>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -25,11 +25,8 @@ msgstr "Göm textning (Text-TV)"
 msgid "Display teletext subtitles"
 msgstr "Visa textning (Text-TV)"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Textning för 4:3/anamorf (Text-TV)"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Textning för brevlådeformat (Text-TV)"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr ""
@@ -37,20 +34,12 @@ msgstr ""
 msgid "Display on/off"
 msgstr "Visa textning på/av"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/brevlådeformat"
 
 msgid "Page Mode"
 msgstr ""
-
-msgid "Left"
-msgstr "vänster"
-
-msgid "Center"
-msgstr "centrerad"
-
-msgid "Right"
-msgstr "höger"
 
 msgid "All"
 msgstr ""
@@ -81,24 +70,6 @@ msgstr ""
 
 msgid "Main Menu Alternative"
 msgstr "Huvudmenyalternativ"
-
-msgid "Text Horizontal Position"
-msgstr "Horisontell position"
-
-msgid "Text Vertical Position"
-msgstr "Vertikal positon"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/anamorf"
-
-msgid "Letterbox"
-msgstr "brevlådeformat"
-
-msgid "Text Vertical Adjust"
-msgstr "Vertikal justering"
-
-msgid "Line Spacing Adjust"
-msgstr "Radavstånd"
 
 msgid "Workaround for some French chns"
 msgstr "Fix för vissa franska kanaler"
@@ -132,36 +103,3 @@ msgstr ""
 
 msgid "Manual Subtitle Page"
 msgstr ""
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Textning för 4:3/anamorf (Text-TV)"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Textning för brevlådeformat (Text-TV)"
-
-#~ msgid "Left"
-#~ msgstr "vänster"
-
-#~ msgid "Center"
-#~ msgstr "centrerad"
-
-#~ msgid "Right"
-#~ msgstr "höger"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Horisontell position"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Vertikal positon"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3/anamorf"
-
-#~ msgid "Letterbox"
-#~ msgstr "brevlådeformat"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Vertikal justering"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Radavstånd"

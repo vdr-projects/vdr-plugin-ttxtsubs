@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Ruben Nunez Francisco <ruben.nunez@tang-it.com>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -24,11 +24,8 @@ msgstr "Esconde subtítulos teletexto"
 msgid "Display teletext subtitles"
 msgstr "Visualiza subtítulos teletexto"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Posiciona subtítulos teletexto para 4:3/anamórfico"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Posicióna subtítulos teletexto para Letterbox"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Selección página subtítulos"
@@ -36,20 +33,12 @@ msgstr "Selección página subtítulos"
 msgid "Display on/off"
 msgstr "Visualiza sí/no"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
 msgstr "Modo página"
-
-msgid "Left"
-msgstr "Izquierda"
-
-msgid "Center"
-msgstr "Centro"
-
-msgid "Right"
-msgstr "Derecha"
 
 msgid "All"
 msgstr "Todas"
@@ -80,24 +69,6 @@ msgstr "Retardo en reproducción (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Alternativa del menú principal"
-
-msgid "Text Horizontal Position"
-msgstr "´Posición horizontal del texto"
-
-msgid "Text Vertical Position"
-msgstr "Posición vertical del texto"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/Anamórfico"
-
-msgid "Letterbox"
-msgstr "Letterbox"
-
-msgid "Text Vertical Adjust"
-msgstr "Ajuste vertical del texto"
-
-msgid "Line Spacing Adjust"
-msgstr "Ajuste distancia entre líneas"
 
 msgid "Workaround for some French chns"
 msgstr "Corrección para canales franceses"
@@ -131,36 +102,3 @@ msgstr "Modo subtítulos"
 
 msgid "Manual Subtitle Page"
 msgstr "Página manual subtítulos"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Posiciona subtítulos teletexto para 4:3/anamórfico"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Posicióna subtítulos teletexto para Letterbox"
-
-#~ msgid "Left"
-#~ msgstr "Izquierda"
-
-#~ msgid "Center"
-#~ msgstr "Centro"
-
-#~ msgid "Right"
-#~ msgstr "Derecha"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "´Posición horizontal del texto"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Posición vertical del texto"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3/Anamórfico"
-
-#~ msgid "Letterbox"
-#~ msgstr "Letterbox"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Ajuste vertical del texto"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Ajuste distancia entre líneas"

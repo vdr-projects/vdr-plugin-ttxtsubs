@@ -288,10 +288,7 @@ const char *cPluginTtxtsubs::MainMenuEntry(void)
     else
       return tr("Display teletext subtitles");
   case 2:
-    if(globals.mBottomLB)
-      return tr("Position Teletext Subtitles for 4:3/Anamorph");
-    else
-      return tr("Position Teletext Subtitles for Letterbox");
+      return tr("deprecated");
   case 3:
     if (haveChannel) return tr("Page Selection");
   default:
@@ -308,9 +305,6 @@ cOsdObject *cPluginTtxtsubs::MainMenuAction(void)
   switch(globals.mMainMenuEntry) {
   case 1:
     globals.mRealDoDisplay = globals.mRealDoDisplay ? 0 : 1;
-    return NULL;
-  case 2:
-    globals.mBottomLB = globals.mBottomLB ? 0 : 1;
     return NULL;
   case 3:
     return new cTtxtsubsPageMenu();
@@ -334,11 +328,7 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
-  else if(!strcasecmp(Name, "TextPos")) globals.mTextPos = atoi(Value);
-  else if(!strcasecmp(Name, "BottomLB")) globals.mBottomLB = atoi(Value);
-  else if(!strcasecmp(Name, "BottomAdj")) globals.mBottomAdj = atoi(Value);
   else if(!strcasecmp(Name, "FrenchSpecial")) globals.mFrenchSpecial = atoi(Value);
-  else if(!strcasecmp(Name, "LineSpacing")) globals.mLineSpacing = atoi(Value);
   else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
@@ -595,7 +585,6 @@ void cMenuSetupTtxtsubsLanguages::Store(void)
 }
 
 const char * mainMenuAlts[5] = {NULL, NULL, NULL, NULL, NULL};
-const char * textPosAlts[4];
 const char * dvbSources[5];
 
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
@@ -604,19 +593,14 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   mDoStore(doStore),
   mConf(globals)
 {
-  //static char *mainMenuAlts[] = {"off", "Display on/off", "4:3/Letterbox", "This menu"};
+  //static char *mainMenuAlts[] = {"off", "Display on/off", "This menu"};
   // can't get it to store changes in file
   if(mainMenuAlts[0] == NULL) {
     mainMenuAlts[0] = trVDR("off");
     mainMenuAlts[1] = tr("Display on/off");
-    mainMenuAlts[2] = tr("4:3/Letterbox");
+    mainMenuAlts[2] = tr("4:3/Letterbox (deprecated)");
     mainMenuAlts[3] = tr("Page Mode");
     mainMenuAlts[4] = NULL;
-
-    textPosAlts[0] = tr("Left");
-    textPosAlts[1] = tr("Center");
-    textPosAlts[2] = tr("Right");
-    textPosAlts[3] = NULL;
 
     dvbSources[0] = tr("All");
     dvbSources[1] = tr("Only DVB-S");
@@ -624,7 +608,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     dvbSources[3] = tr("Only DVB-C");
     dvbSources[4] = NULL;
   }
-  const int numTextPosAlts = sizeof(textPosAlts) / sizeof(textPosAlts[0]) - 1;
   const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
   const int numDvbSources = sizeof(dvbSources) / sizeof(dvbSources[0]) - 1;
 
@@ -652,16 +635,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
 			    numMainMenuAlts, mainMenuAlts));
-  if(mConf.mTextPos < 0 || mConf.mTextPos >= numTextPosAlts)
-    mConf.mTextPos = 0;  // menu item segfaults if out of range
-  Add(new cMenuEditStraItem(tr("Text Horizontal Position"), &mConf.mTextPos,
-			    numTextPosAlts, textPosAlts));
-  Add(new cMenuEditBoolItem(tr("Text Vertical Position"),
-			    &mConf.mBottomLB, tr("4:3/Anamorph"), tr("Letterbox")));
-  Add(new cMenuEditIntItem(tr("Text Vertical Adjust"),
-			    &mConf.mBottomAdj, -100, 45));
-  Add(new cMenuEditIntItem( tr("Line Spacing Adjust"),
-			    &mConf.mLineSpacing, -25, 25));
   Add(new cMenuEditBoolItem(tr("Workaround for some French chns"),
 			    &mConf.mFrenchSpecial));
   if(mConf.mDvbSources < 0 || mConf.mDvbSources >= numDvbSources)
@@ -722,12 +695,8 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("LiveDelay", mConf.mLiveDelay);
   SetupStore("ReplayDelay", mConf.mReplayDelay);
   SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
-  SetupStore("TextPos", mConf.mTextPos);
-  SetupStore("BottomLB", mConf.mBottomLB);
-  SetupStore("BottomAdj", mConf.mBottomAdj);
   SetupStore("FrenchSpecial", mConf.mFrenchSpecial);
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
-  SetupStore("LineSpacing", mConf.mLineSpacing);
   SetupStore("DvbSources", mConf.mDvbSources);
   SetupStore("FontSize", mConf.mFontSize);
 

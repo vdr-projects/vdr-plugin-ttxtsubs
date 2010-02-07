@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2008-12-30 14:05+0100\n"
 "Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -24,11 +24,8 @@ msgstr "Скрыть субтитры"
 msgid "Display teletext subtitles"
 msgstr "Показывать субтитры"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Субтитры в кадре 4:3"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Субтитры в кадре широкоэкранного фильма"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Выбор страницы"
@@ -36,20 +33,12 @@ msgstr "Выбор страницы"
 msgid "Display on/off"
 msgstr "включить/выключить"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/широкий экран"
 
 msgid "Page Mode"
 msgstr "Режим страницы"
-
-msgid "Left"
-msgstr "слева"
-
-msgid "Center"
-msgstr "в центре"
-
-msgid "Right"
-msgstr "справа"
 
 msgid "All"
 msgstr "Все"
@@ -80,24 +69,6 @@ msgstr "Задержка воспроизведения (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в главном меню"
-
-msgid "Text Horizontal Position"
-msgstr "Размещение текста по горизонтали"
-
-msgid "Text Vertical Position"
-msgstr "Размещение текста по вертикали"
-
-msgid "4:3/Anamorph"
-msgstr "4:3"
-
-msgid "Letterbox"
-msgstr "широкий экран"
-
-msgid "Text Vertical Adjust"
-msgstr "Вертикальный сдвиг текста"
-
-msgid "Line Spacing Adjust"
-msgstr "Расстояние между строками"
 
 msgid "Workaround for some French chns"
 msgstr "Спец. настройки для франц. каналов"
@@ -131,36 +102,3 @@ msgstr "Режим субтитров"
 
 msgid "Manual Subtitle Page"
 msgstr "Ручной выбор страницы"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Субтитры в кадре 4:3"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Субтитры в кадре широкоэкранного фильма"
-
-#~ msgid "Left"
-#~ msgstr "слева"
-
-#~ msgid "Center"
-#~ msgstr "в центре"
-
-#~ msgid "Right"
-#~ msgstr "справа"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Размещение текста по горизонтали"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Размещение текста по вертикали"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3"
-
-#~ msgid "Letterbox"
-#~ msgstr "широкий экран"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Вертикальный сдвиг текста"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Расстояние между строками"

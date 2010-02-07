@@ -39,11 +39,7 @@ class cTtxtsubsConf {
       mRealDoDisplay =1;
       mDoRecord = 1;
       mMainMenuEntry = 0;
-      mTextPos = 0;
-      mBottomLB = 0;
-      mBottomAdj = 0;
       mFrenchSpecial = 0;
-      mLineSpacing = 0;
       mDvbSources = 0;
       mFontSize = 20;
       memset(mLanguages, 0, sizeof(mLanguages));
@@ -58,11 +54,7 @@ class cTtxtsubsConf {
   int doDisplay(void) {return mRealDoDisplay;}
   int doRecord(void) {return mDoRecord;}
   int mainMenuEntry(void) {return mMainMenuEntry;}
-  int textPos(void) {return mTextPos;}
-  int bottomLB(void) {return mBottomLB;}
-  int bottomAdj(void) {return mBottomAdj;}
   int frenchSpecial(void) {return mFrenchSpecial;}
-  int lineSpacing(void) {return mLineSpacing;}
   int dvbSources(void) {return mDvbSources;}
   int fontSize(void) {return mFontSize;}
   char (*languages(void))[MAXLANGUAGES][2][4] {return &mLanguages;}
@@ -79,11 +71,7 @@ class cTtxtsubsConf {
   int mRealDoDisplay;
   int mDoRecord;
   int mMainMenuEntry;
-  int mTextPos;
-  int mBottomLB;
-  int mBottomAdj;
   int mFrenchSpecial;
-  int mLineSpacing;
   int mDvbSources;
   int mFontSize;
   char mLanguages[MAXLANGUAGES][2][4];

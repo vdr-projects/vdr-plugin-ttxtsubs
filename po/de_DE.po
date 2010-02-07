@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Klaus Schmidinger <Klaus.Schmidinger@tvdr.de>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -24,11 +24,8 @@ msgstr "Verstecke Videotextuntertitel"
 msgid "Display teletext subtitles"
 msgstr "Zeige Videotextuntertitel"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Positioniere Videotext-Untertitel für 4:3/Anamorph"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Positioniere Videotext-Untertitel für Letterbox"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Seitenauswahl"
@@ -36,20 +33,12 @@ msgstr "Seitenauswahl"
 msgid "Display on/off"
 msgstr "Anzeige ein/aus"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
 msgstr "Seitenmodus"
-
-msgid "Left"
-msgstr "Links"
-
-msgid "Center"
-msgstr "Mitte"
-
-msgid "Right"
-msgstr "Rechts"
 
 msgid "All"
 msgstr "Alle"
@@ -80,24 +69,6 @@ msgstr "Wiedergabe Verzögerung (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Hauptmenu Alternative"
-
-msgid "Text Horizontal Position"
-msgstr "Horizontale Textposition"
-
-msgid "Text Vertical Position"
-msgstr "Vertikale Textposition"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/Anamorph"
-
-msgid "Letterbox"
-msgstr "Letterbox"
-
-msgid "Text Vertical Adjust"
-msgstr "Text vertikal verschieben"
-
-msgid "Line Spacing Adjust"
-msgstr "Zeilenabstand einstellen"
 
 msgid "Workaround for some French chns"
 msgstr "Workaround für französische Kanäle"
@@ -131,18 +102,3 @@ msgstr "Untertitelmodus"
 
 msgid "Manual Subtitle Page"
 msgstr "Manuelle Untertitelseite"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Positioniere Videotext-Untertitel für 4:3/Anamorph"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Positioniere Videotext-Untertitel für Letterbox"
-
-#~ msgid "Left"
-#~ msgstr "Links"
-
-#~ msgid "Center"
-#~ msgstr "Mitte"
-
-#~ msgid "Right"
-#~ msgstr "Rechts"

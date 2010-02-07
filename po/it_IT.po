@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2008-12-20 19:51+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -28,11 +28,8 @@ msgstr "Nascondi sottotitoli teletext"
 msgid "Display teletext subtitles"
 msgstr "Visualizza sottotitoli teletext"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Posizione sottotitoli per 4:3/Anamorfico"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Posizione sottotitoli per Letterbox"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Selezione pagina"
@@ -40,20 +37,12 @@ msgstr "Selezione pagina"
 msgid "Display on/off"
 msgstr "Visualizza sì/no"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
 msgstr "Mod. pagina"
-
-msgid "Left"
-msgstr "Sinistra"
-
-msgid "Center"
-msgstr "Centro"
-
-msgid "Right"
-msgstr "Destra"
 
 msgid "All"
 msgstr "Tutte"
@@ -84,24 +73,6 @@ msgstr "Ritardo mod. riproduzione (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Voci alternative menu princ."
-
-msgid "Text Horizontal Position"
-msgstr "Posizione testo orizzontale"
-
-msgid "Text Vertical Position"
-msgstr "Posizione testo verticale"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/anamorfico"
-
-msgid "Letterbox"
-msgstr "Letterbox"
-
-msgid "Text Vertical Adjust"
-msgstr "Correzione testo verticale"
-
-msgid "Line Spacing Adjust"
-msgstr "Correzione interlinea"
 
 msgid "Workaround for some French chns"
 msgstr "Correzione per canali francesi"
@@ -135,36 +106,3 @@ msgstr "Mod. sottotitoli"
 
 msgid "Manual Subtitle Page"
 msgstr "Pagina manuale sottotitoli"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Posizione sottotitoli per 4:3/Anamorfico"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Posizione sottotitoli per Letterbox"
-
-#~ msgid "Left"
-#~ msgstr "Sinistra"
-
-#~ msgid "Center"
-#~ msgstr "Centro"
-
-#~ msgid "Right"
-#~ msgstr "Destra"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Posizione testo orizzontale"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Posizione testo verticale"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3/anamorfico"
-
-#~ msgid "Letterbox"
-#~ msgstr "Letterbox"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Correzione testo verticale"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Correzione interlinea"

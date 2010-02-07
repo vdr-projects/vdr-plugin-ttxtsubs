@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2009-05-28 14:05+0100\n"
 "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -19,11 +19,8 @@ msgstr "Сховати субтитри"
 msgid "Display teletext subtitles"
 msgstr "Показувати субтитри"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Субтитри для кадру 4:3"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Субтитри для широкого екрану"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Вибір сторінки"
@@ -31,20 +28,12 @@ msgstr "Вибір сторінки"
 msgid "Display on/off"
 msgstr "включити/виключити"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/широкий екран"
 
 msgid "Page Mode"
 msgstr "Режим сторінки"
-
-msgid "Left"
-msgstr "Зліва"
-
-msgid "Center"
-msgstr "по центру"
-
-msgid "Right"
-msgstr "справа"
 
 msgid "All"
 msgstr "Всі"
@@ -75,24 +64,6 @@ msgstr "Затримка Програвання (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в головному меню"
-
-msgid "Text Horizontal Position"
-msgstr "Положення тексту по горизонталі"
-
-msgid "Text Vertical Position"
-msgstr "Положення тексту по вертикалі"
-
-msgid "4:3/Anamorph"
-msgstr "4:3"
-
-msgid "Letterbox"
-msgstr "Широкий екран"
-
-msgid "Text Vertical Adjust"
-msgstr "Вертикальний зсув тексту"
-
-msgid "Line Spacing Adjust"
-msgstr "Відстань між стрічками"
 
 msgid "Workaround for some French chns"
 msgstr "Спец. настройки для франц. каналів"
@@ -126,36 +97,3 @@ msgstr "Режим субтитрів"
 
 msgid "Manual Subtitle Page"
 msgstr "Ручной вибір сторінки"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Субтитри для кадру 4:3"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Субтитри для широкого екрану"
-
-#~ msgid "Left"
-#~ msgstr "Зліва"
-
-#~ msgid "Center"
-#~ msgstr "по центру"
-
-#~ msgid "Right"
-#~ msgstr "справа"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Положення тексту по горизонталі"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Положення тексту по вертикалі"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3"
-
-#~ msgid "Letterbox"
-#~ msgstr "Широкий екран"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Вертикальний зсув тексту"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Відстань між стрічками"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -27,11 +27,8 @@ msgstr "Piilota tekstitys (Teksti-TV)"
 msgid "Display teletext subtitles"
 msgstr "Näytä tekstitys (Teksti-TV)"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "4:3/Anamorfinen tekstitys (Teksti-TV)"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Letterbox tekstitys (Teksti-TV)"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Tekstityssivun valinta"
@@ -39,20 +36,12 @@ msgstr "Tekstityssivun valinta"
 msgid "Display on/off"
 msgstr "aktivointi"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "kuvasuhde"
 
 msgid "Page Mode"
 msgstr "sivun valinta"
-
-msgid "Left"
-msgstr "vasen"
-
-msgid "Center"
-msgstr "keskitä"
-
-msgid "Right"
-msgstr "oikea"
 
 msgid "All"
 msgstr "kaikki"
@@ -83,24 +72,6 @@ msgstr "Viive toistossa (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Päävalikon toiminnot"
-
-msgid "Text Horizontal Position"
-msgstr "Vaakatasaus"
-
-msgid "Text Vertical Position"
-msgstr "Pystytasaus"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/anamorfinen"
-
-msgid "Letterbox"
-msgstr "letterbox"
-
-msgid "Text Vertical Adjust"
-msgstr "Pystytasauksen hienosäätö"
-
-msgid "Line Spacing Adjust"
-msgstr "Rivivälin hienosäätö"
 
 msgid "Workaround for some French chns"
 msgstr "Ranskalainen silmänkääntötemppu"
@@ -134,36 +105,3 @@ msgstr "Tekstitystapa"
 
 msgid "Manual Subtitle Page"
 msgstr "Asetettu tekstityssivu"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "4:3/Anamorfinen tekstitys (Teksti-TV)"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Letterbox tekstitys (Teksti-TV)"
-
-#~ msgid "Left"
-#~ msgstr "vasen"
-
-#~ msgid "Center"
-#~ msgstr "keskitä"
-
-#~ msgid "Right"
-#~ msgstr "oikea"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Vaakatasaus"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Pystytasaus"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3/anamorfinen"
-
-#~ msgid "Letterbox"
-#~ msgstr "letterbox"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Pystytasauksen hienosäätö"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Rivivälin hienosäätö"

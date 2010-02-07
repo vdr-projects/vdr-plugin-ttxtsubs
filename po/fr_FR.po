@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2010-02-07 13:47+0100\n"
+"POT-Creation-Date: 2010-02-07 14:01+0100\n"
 "PO-Revision-Date: 2009-01-04 19:05+0100\n"
 "Last-Translator: Nival Michaël\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -27,11 +27,8 @@ msgstr "Masquer le sous-titrage"
 msgid "Display teletext subtitles"
 msgstr "Afficher le sous-titrage"
 
-msgid "Position Teletext Subtitles for 4:3/Anamorph"
-msgstr "Position du sous-titrage pour 4:3/Anamorph"
-
-msgid "Position Teletext Subtitles for Letterbox"
-msgstr "Position du sous-titrage pour Letterbox"
+msgid "deprecated"
+msgstr ""
 
 msgid "Page Selection"
 msgstr "Page de sélection"
@@ -39,20 +36,12 @@ msgstr "Page de sélection"
 msgid "Display on/off"
 msgstr "Affichage"
 
-msgid "4:3/Letterbox"
+#, fuzzy
+msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
 msgstr "Mode page"
-
-msgid "Left"
-msgstr "Gauche"
-
-msgid "Center"
-msgstr "Centre"
-
-msgid "Right"
-msgstr "Droite"
 
 msgid "All"
 msgstr "Tous"
@@ -83,24 +72,6 @@ msgstr "Delai à la lecture (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Choix du menu principal"
-
-msgid "Text Horizontal Position"
-msgstr "Position horizontale du texte"
-
-msgid "Text Vertical Position"
-msgstr "Position verticale du texte"
-
-msgid "4:3/Anamorph"
-msgstr "4:3/Anamorph"
-
-msgid "Letterbox"
-msgstr "Letterbox"
-
-msgid "Text Vertical Adjust"
-msgstr "Ajustement vertical du texte"
-
-msgid "Line Spacing Adjust"
-msgstr "Espacement des lignes"
 
 msgid "Workaround for some French chns"
 msgstr "Contournement chaînes françaises"
@@ -134,36 +105,3 @@ msgstr "Mode de sous-titres TXT"
 
 msgid "Manual Subtitle Page"
 msgstr "Page des sous-titres"
-
-#~ msgid "Position Teletext Subtitles for 4:3/Anamorph"
-#~ msgstr "Position du sous-titrage pour 4:3/Anamorph"
-
-#~ msgid "Position Teletext Subtitles for Letterbox"
-#~ msgstr "Position du sous-titrage pour Letterbox"
-
-#~ msgid "Left"
-#~ msgstr "Gauche"
-
-#~ msgid "Center"
-#~ msgstr "Centre"
-
-#~ msgid "Right"
-#~ msgstr "Droite"
-
-#~ msgid "Text Horizontal Position"
-#~ msgstr "Position horizontale du texte"
-
-#~ msgid "Text Vertical Position"
-#~ msgstr "Position verticale du texte"
-
-#~ msgid "4:3/Anamorph"
-#~ msgstr "4:3/Anamorph"
-
-#~ msgid "Letterbox"
-#~ msgstr "Letterbox"
-
-#~ msgid "Text Vertical Adjust"
-#~ msgstr "Ajustement vertical du texte"
-
-#~ msgid "Line Spacing Adjust"
-#~ msgstr "Espacement des lignes"
