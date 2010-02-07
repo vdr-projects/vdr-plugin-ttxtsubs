@@ -168,6 +168,7 @@ private:
   char mOldLanguage[4]; // language chosen from previous version
   int mOldHearingImpaired; // HI setting chosen from previous version
   bool mReplay;
+  tChannelID mReplayChannelId;
 
   // wait for channel switch
   sem_t chswitchwait;
@@ -356,6 +357,20 @@ void cPluginTtxtsubs::Action(void)
     if (cn!=lastc) {
       StopTtxt();
       lastc=0;
+      if (mReplay) {
+        cTtxtSubsChannelSetting *cs = TtxtSubsChannelSettings.Get(mReplayChannelId);
+        cString x = mReplayChannelId.ToString();
+        if (cs && cs->PageMode() == PAGE_MODE_MANUAL) {
+           int tmp = cs->PageNumber();
+           int page = (tmp / 100);
+           tmp = tmp % 100;
+           page = (page << 4) + (tmp / 10);
+           page = (page << 4) + tmp % 10;
+           StartTtxtPlay(page);
+           lastc=cn;
+         }
+      }
+      else {
       cChannel *c = Channels.GetByNumber(cn);
       if(c) {
         //int manual_page = TtxtSubsChannelSettings.Page(c->GetChannelID());
@@ -412,6 +427,7 @@ void cPluginTtxtsubs::Action(void)
           lastc=cn;
         //}   
       }
+      }
     }  
   }
 }
@@ -445,8 +461,11 @@ void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const char *FileName, bool On)
 {
   //dprint("cPluginTtxtsubs::Replaying\n"); // XXX
+  cRecordingInfo recInfo(FileName) ;
+  recInfo.Read();
+  mReplayChannelId = recInfo.ChannelID();
   mReplay = On;
-  lastc=0;
+  lastc=-1;
   sem_post(&chswitchwait);
 }
 

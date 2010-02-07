@@ -46,8 +46,12 @@ public:
   
 class cTtxtSubsChannelSettings:public cConfig<cTtxtSubsChannelSetting> {
 public:
+  // TODO: This methode can be dropped when using only the ChannelID
   cTtxtSubsChannelSetting *Get(const cChannel *Channel) {
     tChannelID ChannelID=Channel->GetChannelID();
+    return Get(ChannelID);
+  }
+  cTtxtSubsChannelSetting *Get(tChannelID ChannelID) {
     for (cTtxtSubsChannelSetting *p=First(); p; p=Next(p)) {
       if (p->ChannelID()==ChannelID) return p;
     }
