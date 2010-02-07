@@ -389,18 +389,11 @@ void cPluginTtxtsubs::Action(void)
                           //from a different satellite, so what really should be done is to
                           //check if the dish is positioned
              while(tries<=2) {
-               while((geterror=GetTtxtInfo(dev->ActualDevice()->CardIndex(), c, &info))) {
+               if (geterror=GetTtxtInfo(dev->ActualDevice()->CardIndex(), c, &info)) {
                  esyslog("ttxtsubs: Error: GetTtxtInfo failed!");
-                 cCondWait::SleepMs(1000);
-                 getchmutex.Lock();
-                 bool changed=(cn!=switchChannel);
-                 getchmutex.Unlock();
-                 if (changed) {
-                   esyslog("ttxtsubs: Channel changed while looking for teletext info");
-                   break;
-                 }  
-               }  
-               if (!geterror) {
+                 break;
+               }
+               else {
                  if(FindSubs(&info, &pid, &page, lang)) {
                    //dprint("CHANNELSWITCH, pid: %d page: %x\n", pid, page);
                    for(int i = 0; i < gNumLanguages; i++) {
@@ -421,7 +414,7 @@ void cPluginTtxtsubs::Action(void)
                    FreeTtxtInfoData(&info);
                    tries++;
                  }  
-               } else break; //if(!geterror)..
+               }
              } //while(tries<=2)  
           }
           lastc=cn;
