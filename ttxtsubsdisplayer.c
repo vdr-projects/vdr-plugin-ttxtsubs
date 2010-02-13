@@ -168,6 +168,8 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
     if (teletextSubtitlePages && teletextSubtitlePages[0].ttxtType)
     {
       for (int p=0; teletextSubtitlePages[p].ttxtType; p++) {
+        isyslog("ttxtsubs: got page info from vdr: %s 0x%02X 0x%2X.0x%02X", teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType,
+          teletextSubtitlePages[p].ttxtMagazine, teletextSubtitlePages[p].ttxtPage);
         int ch = globals.langChoise(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05);
         if (ch >= 0 && ch < mLangChoise) {
           mLangChoise = ch;

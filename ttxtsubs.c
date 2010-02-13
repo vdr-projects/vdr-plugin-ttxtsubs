@@ -86,7 +86,8 @@ const char *gLanguages[][2] = {
   {"est",""},    //Estonian
   {"dan",""},    //Danish
   {"cze","ces"}, //Czech
-  {"tur",""}     //Turkish
+  {"tur",""},    //Turkish
+  {"und",""}     //Undefined/Manual
 };
 const char *gLanguageNames[] = {
   "-",
@@ -111,7 +112,8 @@ const char *gLanguageNames[] = {
   "Eesti",
   "Dansk",
   "Èesky",
-  "Türkçe"
+  "Türkçe",
+  "Undef/Manual"
 };
 int gNumLanguages = sizeof(gLanguages) / sizeof(gLanguages[0]);
 
