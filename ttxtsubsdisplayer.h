@@ -54,7 +54,7 @@ class cTtxtSubsLiveReceiver : public cReceiver, public cTtxtSubsDisplayer {
 class cTtxtSubsPlayer : public cTtxtSubsDisplayer {
  public:
   cTtxtSubsPlayer(int backup_textpage);
-  virtual void PES_data(uchar *Data, int Length, bool IsPesRecording);
+  virtual void PES_data(uchar *Data, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[]);
 
  private:
   void SearchLanguagePage(uint8_t *p, int len);

@@ -49,6 +49,9 @@
 #if defined(APIVERSNUM) && APIVERSNUM < 10706
 #error "This version of ttxtsubs only works with vdr version >= 1.7.6!"
 #endif
+#if TTXTSUBSVERSNUM != 2
+#error "This version of ttxtsubs requires the ttxtsubs patch version 2 to be applied to VDR!!"
+#endif
 
 static const char *VERSION        = "0.1.0";
 static const char *DESCRIPTION    = trNOOP("Teletext subtitles");
@@ -146,7 +149,7 @@ public:
   // -- cVDRTtxtsubsHookListener
   virtual void HideOSD(void) { HideTtxt(); }
   virtual void ShowOSD(void) { ShowTtxt(); }
-  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording);
+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[]);
   virtual int ManualPageNumber(const cChannel *channel);
 
   // -- cThread
@@ -369,6 +372,11 @@ void cPluginTtxtsubs::Action(void)
            StartTtxtPlay(page);
            lastc=cn;
          }
+        else
+        {
+           StartTtxtPlay(0x000);
+           lastc=cn;
+        }
       }
       else {
       cChannel *c = Channels.GetByNumber(cn);
@@ -462,8 +470,11 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
   sem_post(&chswitchwait);
 }
 
-void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording)
+void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[])
 {
+  if (!mDispl)
+     return;
+
   cTtxtSubsPlayer *r = dynamic_cast<cTtxtSubsPlayer *>(mDispl);
 
   if(!r) {
@@ -471,7 +482,7 @@ void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecor
     return;
   }
 
-  r->PES_data(p, length, IsPesRecording);
+  r->PES_data(p, length, IsPesRecording, teletextSubtitlePages);
 }
 
 int cPluginTtxtsubs::ManualPageNumber(const cChannel *channel)

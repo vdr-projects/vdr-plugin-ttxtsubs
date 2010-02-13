@@ -152,7 +152,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
 // Take PES packets and break out the teletext data
 // Buffer the data for processing in a separate thread
 // XXX We should do some filtering here to avoid unneccessary load!
-void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording)
+void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[])
 {
   int i;
 
@@ -161,6 +161,23 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording)
   if(Length < 46 || p[0] != 0 || p[1] != 0 || p[2] != 1 || p[3] != 0xbd || p[8] != 0x24 ||
      p[45] < 0x10 || p[45] >= 0x20) {
     fprintf(stderr, "cTtxtSubsPlayer::PES_data: bad indata!\n");
+  }
+
+  if (!mFoundLangPage)
+  {
+    if (teletextSubtitlePages && teletextSubtitlePages[0].ttxtType)
+    {
+      for (int p=0; teletextSubtitlePages[p].ttxtType; p++) {
+        int ch = globals.langChoise(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05);
+        if (ch >= 0 && ch < mLangChoise) {
+          mLangChoise = ch;
+          int bcdPage = (teletextSubtitlePages[p].ttxtMagazine << 8) + teletextSubtitlePages[p].ttxtPage;
+          mDisp->SetPage(bcdPage);
+          mFoundLangPage = 1;
+          fprintf(stderr, "Found subtitle page: %03x\n", bcdPage); // XXX
+        }
+      }
+    }
   }
 
   // Recorded teletext typically has payload type 0x10.
