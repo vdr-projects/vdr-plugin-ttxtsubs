@@ -3,14 +3,17 @@ VDR Plugin 'ttxtsubs' Revision History
 
 2010-02-xx: Version 0.2.0
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
-- Updated VDR patch for 1.7.8
 - Some code refactoring
-- Updated plugin and VDR patch for 1.7.12 - Thx to Rolf Ahrenberg (Closes #236)
+- Major VDR patch update for 1.7.12 (Closes #236, References #139)) - The patch
+  now covers the following changes to VDR:
+   - Record teletext subtitles
+   - Added setup option to enable teletext subtitle recording
+   - Allow configuration of fixed teletetxt subtitle pages
+   - Capture teletext subtitle pages from PMT
+   - Pass teletext date ttxtsubs plugin
+  Special Thx to Rolf Ahrenberg!
 - Fixed replay when the current live ttxtsubs page differs from the
   one in the recording - Thx to Rolf Ahrenberg (Closes #139)
-- Added VDR patch that stores the manual page selection with the channel settings
-  in the channels.conf - patch provided by Rolf Ahrenberg (tpid-v2)
-  (references #139)
 - Show colored subtitles if color information is provided e.g. for
   different speakers and dropped custom color settings (Closes #61)
 - Position subtitles always centered at the bottom, independent of the

@@ -1,62 +1,226 @@
-diff -Nru vdr-1.7.12-vanilla/channels.c vdr-1.7.12-ttxtsubs/channels.c
---- vdr-1.7.12-vanilla/channels.c	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/channels.c	2010-02-03 09:21:21.000000000 +0200
-@@ -551,6 +551,15 @@
+diff --git a/MANUAL b/MANUAL
+index 405f6a8..d1ce1f9 100644
+--- a/MANUAL
++++ b/MANUAL
+@@ -721,6 +721,9 @@ Version 1.6
+                          background transparency. By default the values as broadcast
+                          are used.
+ 
++  Record Teletext Subtitles = no
++                         If set to 'yes', teletext subtitles will be recorded.
++
+   LNB:
+ 
+   SLOF               = 11700  The switching frequency (in MHz) between low and
+diff --git a/Makefile b/Makefile
+index 01408cb..b280030 100644
+--- a/Makefile
++++ b/Makefile
+@@ -43,6 +43,8 @@ OBJS = audio.o channels.o ci.o config.o cutter.o device.o diseqc.o dvbdevice.o d
+        skinclassic.o skins.o skinsttng.o sources.o spu.o status.o svdrp.o themes.o thread.o\
+        timers.o tools.o transfer.o vdr.o videodir.o
+ 
++OBJS += vdrttxtsubshooks.o
++
+ ifndef NO_KBD
+ DEFINES += -DREMOTE_KBD
+ endif
+diff --git a/channels.c b/channels.c
+index c14df19..aaaea30 100644
+--- a/channels.c
++++ b/channels.c
+@@ -551,6 +551,13 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
       }
  }
  
-+void cChannel::SetTPidData(char TLangs[][MAXLANGCODE2], int TPages[])
++void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[])
 +{
-+  for (int i = 0; i < MAXTPAGES; i++) {
-+      tpages[i] = TPages[i];
-+      strn0cpy(tlangs[i], TLangs[i], MAXLANGCODE2);
-+      }
-+  tpages[MAXTPAGES] = 0;
++  for (int i = fixedTeletextSubtitlePages; i < MAXTXTPAGES; i++)
++      teletextSubtitlePages[i] = pages[i];
++  teletextSubtitlePages[MAXTXTPAGES].ttxtType = 0;
 +}
 +
  void cChannel::SetCaIds(const int *CaIds)
  {
    if (caids[0] && caids[0] <= CA_USER_MAX)
-diff -Nru vdr-1.7.12-vanilla/channels.h vdr-1.7.12-ttxtsubs/channels.h
---- vdr-1.7.12-vanilla/channels.h	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/channels.h	2010-02-03 09:21:21.000000000 +0200
+@@ -758,11 +765,22 @@ cString cChannel::ToText(const cChannel *Channel)
+         q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs);
+         }
+      *q = 0;
++     const int TBufferSize = 5 + 1 + (MAXTXTPAGES * (3 + 1 + MAXLANGCODE1 + 1)) + 10; // '12345;150=deu,151=fin,...', +10: paranoia
++     char tpidbuf[TBufferSize];
++     q = tpidbuf;
++     q += snprintf(q, sizeof(tpidbuf), "%d", Channel->tpid);
++     if (Channel->fixedTeletextSubtitlePages > 0) {
++        q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), ";");
++        for (int i = 0; i < Channel->fixedTeletextSubtitlePages; ++i) {
++            tTeletextSubtitlePage page = Channel->teletextSubtitlePages[i];
++            q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), "%d=%s", page.PageNumber(), page.ttxtLanguage);
++            }
++        }
+      char caidbuf[MAXCAIDS * 5 + 10]; // 5: 4 digits plus delimiting ',', 10: paranoia
+      q = caidbuf;
+      q += IntArrayToString(q, Channel->caids, 16);
+      *q = 0;
+-     buffer = cString::sprintf("%s:%d:%s:%s:%d:%s:%s:%d:%s:%d:%d:%d:%d\n", FullName, Channel->frequency, *Channel->ParametersToString(), *cSource::ToString(Channel->source), Channel->srate, vpidbuf, apidbuf, Channel->tpid, caidbuf, Channel->sid, Channel->nid, Channel->tid, Channel->rid);
++     buffer = cString::sprintf("%s:%d:%s:%s:%d:%s:%s:%s:%s:%d:%d:%d:%d\n", FullName, Channel->frequency, *Channel->ParametersToString(), *cSource::ToString(Channel->source), Channel->srate, vpidbuf, apidbuf, tpidbuf, caidbuf, Channel->sid, Channel->nid, Channel->tid, Channel->rid);
+      }
+   return buffer;
+ }
+@@ -796,8 +814,9 @@ bool cChannel::Parse(const char *s)
+      char *parambuf = NULL;
+      char *vpidbuf = NULL;
+      char *apidbuf = NULL;
++     char *tpidbuf = NULL;
+      char *caidbuf = NULL;
+-     int fields = sscanf(s, "%a[^:]:%d :%a[^:]:%a[^:] :%d :%a[^:]:%a[^:]:%d :%a[^:]:%d :%d :%d :%d ", &namebuf, &frequency, &parambuf, &sourcebuf, &srate, &vpidbuf, &apidbuf, &tpid, &caidbuf, &sid, &nid, &tid, &rid);
++     int fields = sscanf(s, "%a[^:]:%d :%a[^:]:%a[^:] :%d :%a[^:]:%a[^:]:%a[^:]:%a[^:]:%d :%d :%d :%d ", &namebuf, &frequency, &parambuf, &sourcebuf, &srate, &vpidbuf, &apidbuf, &tpidbuf, &caidbuf, &sid, &nid, &tid, &rid);
+      if (fields >= 9) {
+         if (fields == 9) {
+            // allow reading of old format
+@@ -879,7 +898,35 @@ bool cChannel::Parse(const char *s)
+                     }
+               dpids[NumDpids] = 0;
+               }
+-
++           if (tpidbuf) {
++              char *p;
++              fixedTeletextSubtitlePages = 0;
++              // 2001;150=deu,151=fin
++              if ((p = strchr(tpidbuf, ';')) != NULL) {
++                 char *q, *strtok_next;
++                 *p++ = 0;
++                 while ((q = strtok_r(p, ",", &strtok_next)) != NULL) {
++                       if (fixedTeletextSubtitlePages < MAXTXTPAGES) {
++                          int page;
++                          char *l = strchr(q, '=');
++                          if (l)
++                             *l++ = 0;
++                          if (sscanf(q, "%d", &page) == 1) {
++                             teletextSubtitlePages[fixedTeletextSubtitlePages++] = tTeletextSubtitlePage(page);
++                             strn0cpy(teletextSubtitlePages[fixedTeletextSubtitlePages].ttxtLanguage, l ? l : "und", MAXLANGCODE1);
++                             }
++                          else
++                             esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
++                          }
++                       else
++                          esyslog("ERROR: too many Teletext pages!"); // no need to set ok to 'false'
++                       p = NULL;
++                       }
++                 teletextSubtitlePages[fixedTeletextSubtitlePages].ttxtType = 0; // end of list
++                 }
++              if (sscanf(tpidbuf, "%d", &tpid) != 1)
++                 return false;
++              }
+            if (caidbuf) {
+               char *p = caidbuf;
+               char *q;
+@@ -916,6 +963,7 @@ bool cChannel::Parse(const char *s)
+         free(sourcebuf);
+         free(vpidbuf);
+         free(apidbuf);
++        free(tpidbuf);
+         free(caidbuf);
+         free(namebuf);
+         if (!GetChannelID().Valid()) {
+diff --git a/channels.h b/channels.h
+index b465f6a..1ddef40 100644
+--- a/channels.h
++++ b/channels.h
 @@ -35,6 +35,7 @@
  #define MAXDPIDS 16 // dolby (AC3 + DTS)
  #define MAXSPIDS 32 // subtitles
  #define MAXCAIDS  8 // conditional access
-+#define MAXTPAGES 8 // teletext pages
++#define MAXTXTPAGES 8 // teletext pages
  
  #define MAXLANGCODE1 4 // a 3 letter language code, zero terminated
  #define MAXLANGCODE2 8 // up to two 3 letter language codes, separated by '+' and zero terminated
-@@ -133,6 +134,8 @@
+@@ -92,6 +93,16 @@ public:
+   static const tChannelID InvalidID;
+   };
+ 
++struct tTeletextSubtitlePage {
++  tTeletextSubtitlePage(void) { ttxtPage = ttxtMagazine = ttxtType = ttxtLanguage[0] = 0; }
++  tTeletextSubtitlePage(int page) { ttxtMagazine = (page / 100) & 0x7; ttxtPage = (((page % 100) / 10) << 4) + (page % 10); ttxtType = 0x02; }
++  char ttxtLanguage[MAXLANGCODE1];
++  uchar ttxtPage;
++  uchar ttxtMagazine;
++  uchar ttxtType;
++  int PageNumber(void) const { return BCDCHARTOINT(ttxtMagazine) * 100 + BCDCHARTOINT(ttxtPage); }
++  };
++
+ class cChannel;
+ 
+ class cLinkChannel : public cListObject {
+@@ -133,6 +144,8 @@ private:
    uint16_t compositionPageIds[MAXSPIDS];
    uint16_t ancillaryPageIds[MAXSPIDS];
    int tpid;
-+  char tlangs[MAXTPAGES][MAXLANGCODE2];
-+  int tpages[MAXTPAGES + 1]; // list is zero-terminated
++  int fixedTeletextSubtitlePages;
++  tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES + 1]; // list is termintated by ttxtType=0
    int caids[MAXCAIDS + 1]; // list is zero-terminated
    int nid;
    int tid;
-@@ -192,6 +195,8 @@
+@@ -192,6 +205,7 @@ public:
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
    int Tpid(void) const { return tpid; }
-+  const char *Tlang(int i) const { return (0 <= i && i < MAXTPAGES) ? tlangs[i] : ""; }
-+  const int TPages(int i) const { return (0 <= i && i < MAXTPAGES) ? tpages[i] : 0; }
++  const tTeletextSubtitlePage TeletextSubtitlePage(int i) const { return (0 <= i && i < MAXTXTPAGES) ? teletextSubtitlePages[i] : tTeletextSubtitlePage(); };
    const int *Caids(void) const { return caids; }
    int Ca(int Index = 0) const { return Index < MAXCAIDS ? caids[Index] : 0; }
    int Nid(void) const { return nid; }
-@@ -228,6 +233,7 @@
+@@ -228,6 +242,7 @@ public:
    void SetName(const char *Name, const char *ShortName, const char *Provider);
    void SetPortalName(const char *PortalName);
    void SetPids(int Vpid, int Ppid, int Vtype, int *Apids, char ALangs[][MAXLANGCODE2], int *Dpids, char DLangs[][MAXLANGCODE2], int *Spids, char SLangs[][MAXLANGCODE2], int Tpid);
-+  void SetTPidData(char TLangs[][MAXLANGCODE2], int TPages[]);
++  void SetTeletextSubtitlePages(tTeletextSubtitlePage pages[]);
    void SetCaIds(const int *CaIds); // list must be zero-terminated
    void SetCaDescriptors(int Level);
    void SetLinkChannels(cLinkChannels *LinkChannels);
-diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
---- vdr-1.7.12-vanilla/device.c	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/device.c	2010-02-03 09:21:21.000000000 +0200
+diff --git a/config.c b/config.c
+index acdf4c4..4aaf720 100644
+--- a/config.c
++++ b/config.c
+@@ -333,6 +333,7 @@ cSetup::cSetup(void)
+   MarginStop = 10;
+   AudioLanguages[0] = -1;
+   DisplaySubtitles = 0;
++  RecordTtxtSubtitles = 0;
+   SubtitleLanguages[0] = -1;
+   SubtitleOffset = 0;
+   SubtitleFgTransparency = 0;
+@@ -521,6 +522,7 @@ bool cSetup::Parse(const char *Name, const char *Value)
+   else if (!strcasecmp(Name, "MarginStop"))          MarginStop         = atoi(Value);
+   else if (!strcasecmp(Name, "AudioLanguages"))      return ParseLanguages(Value, AudioLanguages);
+   else if (!strcasecmp(Name, "DisplaySubtitles"))    DisplaySubtitles   = atoi(Value);
++  else if (!strcasecmp(Name, "RecordTtxtSubtitles")) RecordTtxtSubtitles = atoi(Value);
+   else if (!strcasecmp(Name, "SubtitleLanguages"))   return ParseLanguages(Value, SubtitleLanguages);
+   else if (!strcasecmp(Name, "SubtitleOffset"))      SubtitleOffset     = atoi(Value);
+   else if (!strcasecmp(Name, "SubtitleFgTransparency")) SubtitleFgTransparency = atoi(Value);
+@@ -614,6 +616,7 @@ bool cSetup::Save(void)
+   Store("MarginStop",         MarginStop);
+   StoreLanguages("AudioLanguages", AudioLanguages);
+   Store("DisplaySubtitles",   DisplaySubtitles);
++  Store("RecordTtxtSubtitles", RecordTtxtSubtitles);
+   StoreLanguages("SubtitleLanguages", SubtitleLanguages);
+   Store("SubtitleOffset",     SubtitleOffset);
+   Store("SubtitleFgTransparency", SubtitleFgTransparency);
+diff --git a/config.h b/config.h
+index be1d7bd..5dcbe20 100644
+--- a/config.h
++++ b/config.h
+@@ -235,6 +235,7 @@ public:
+   int MarginStart, MarginStop;
+   int AudioLanguages[I18N_MAX_LANGUAGES + 1];
+   int DisplaySubtitles;
++  int RecordTtxtSubtitles;
+   int SubtitleLanguages[I18N_MAX_LANGUAGES + 1];
+   int SubtitleOffset;
+   int SubtitleFgTransparency, SubtitleBgTransparency;
+diff --git a/device.c b/device.c
+index cb31b83..86b6b2c 100644
+--- a/device.c
++++ b/device.c
 @@ -18,6 +18,7 @@
  #include "receiver.h"
  #include "status.h"
@@ -65,7 +229,7 @@ diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
  
  // --- cLiveSubtitle ---------------------------------------------------------
  
-@@ -1190,6 +1191,13 @@
+@@ -1190,6 +1191,13 @@ int cDevice::PlayPesPacket(const uchar *Data, int Length, bool VideoOnly)
                    }
                 break;
            case 0xBD: { // private stream 1
@@ -79,7 +243,7 @@ diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
                 int PayloadOffset = Data[8] + 9;
  
                 // Compatibility mode for old subtitles plugin:
-@@ -1349,6 +1357,7 @@
+@@ -1349,6 +1357,7 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
       tsToPesVideo.Reset();
       tsToPesAudio.Reset();
       tsToPesSubtitle.Reset();
@@ -87,7 +251,7 @@ diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
       }
    else if (Length < TS_SIZE) {
       esyslog("ERROR: skipped %d bytes of TS fragment", Length);
-@@ -1394,6 +1403,17 @@
+@@ -1394,6 +1403,17 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
                      if (!VideoOnly || HasIBPTrickSpeed())
                         PlayTsSubtitle(Data, TS_SIZE);
                      }
@@ -97,7 +261,7 @@ diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
 +                       tsToPesTeletext.PutTs(Data, Length);
 +                       if (const uchar *p = tsToPesTeletext.GetPes(l)) {
 +                          if ((l > 45) && (p[0] == 0x00) && (p[1] == 0x00) && (p[2] == 0x01) && (p[3] == 0xbd) && (p[8] == 0x24) && (p[45] >= 0x10) && (p[45] < 0x20))
-+                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false);
++                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false, patPmtParser.TeletextSubtitlePages());
 +                          tsToPesTeletext.Reset();
 +                          }
 +                       }
@@ -105,10 +269,11 @@ diff -Nru vdr-1.7.12-vanilla/device.c vdr-1.7.12-ttxtsubs/device.c
                   }
                }
             else if (Pid == patPmtParser.Ppid()) {
-diff -Nru vdr-1.7.12-vanilla/device.h vdr-1.7.12-ttxtsubs/device.h
---- vdr-1.7.12-vanilla/device.h	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/device.h	2010-02-03 09:21:21.000000000 +0200
-@@ -499,6 +499,7 @@
+diff --git a/device.h b/device.h
+index 897de2a..2e36351 100644
+--- a/device.h
++++ b/device.h
+@@ -499,6 +499,7 @@ private:
    cTsToPes tsToPesVideo;
    cTsToPes tsToPesAudio;
    cTsToPes tsToPesSubtitle;
@@ -116,21 +281,22 @@ diff -Nru vdr-1.7.12-vanilla/device.h vdr-1.7.12-ttxtsubs/device.h
    bool isPlayingVideo;
  protected:
    const cPatPmtParser *PatPmtParser(void) const { return &patPmtParser; }
-diff -Nru vdr-1.7.12-vanilla/Makefile vdr-1.7.12-ttxtsubs/Makefile
---- vdr-1.7.12-vanilla/Makefile	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/Makefile	2010-02-03 09:21:21.000000000 +0200
-@@ -43,6 +43,8 @@
-        skinclassic.o skins.o skinsttng.o sources.o spu.o status.o svdrp.o themes.o thread.o\
-        timers.o tools.o transfer.o vdr.o videodir.o
+diff --git a/menu.c b/menu.c
+index 7ddf0cf..1f49f3d 100644
+--- a/menu.c
++++ b/menu.c
+@@ -2790,6 +2790,7 @@ void cMenuSetupDVB::Setup(void)
+      Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle foreground transparency"), &data.SubtitleFgTransparency, 0, 9));
+      Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle background transparency"), &data.SubtitleBgTransparency, 0, 10));
+      }
++  Add(new cMenuEditBoolItem(tr("Setup.DVB$Record Teletext Subtitles"), &data.RecordTtxtSubtitles));
  
-+OBJS += vdrttxtsubshooks.o
-+
- ifndef NO_KBD
- DEFINES += -DREMOTE_KBD
- endif
-diff -Nru vdr-1.7.12-vanilla/pat.c vdr-1.7.12-ttxtsubs/pat.c
---- vdr-1.7.12-vanilla/pat.c	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/pat.c	2010-02-03 09:30:12.000000000 +0200
+   SetCurrent(Get(current));
+   Display();
+diff --git a/pat.c b/pat.c
+index 9b3ded6..444be21 100644
+--- a/pat.c
++++ b/pat.c
 @@ -13,6 +13,7 @@
  #include "libsi/section.h"
  #include "libsi/descriptor.h"
@@ -139,17 +305,16 @@ diff -Nru vdr-1.7.12-vanilla/pat.c vdr-1.7.12-ttxtsubs/pat.c
  
  #define PMT_SCAN_TIMEOUT  10 // seconds
  
-@@ -341,6 +342,9 @@
+@@ -341,6 +342,8 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
          char DLangs[MAXDPIDS][MAXLANGCODE2] = { "" };
          char SLangs[MAXSPIDS][MAXLANGCODE2] = { "" };
          int Tpid = 0;
-+        char TLangs[MAXTPAGES][MAXLANGCODE2] = { "" };
-+        int TPages[MAXTPAGES + 1] = { 0 };
++        tTeletextSubtitlePage TeletextSubtitlePages[MAXTXTPAGES];
 +        int NumTPages = 0;
          int NumApids = 0;
          int NumDpids = 0;
          int NumSpids = 0;
-@@ -426,8 +430,19 @@
+@@ -426,8 +429,21 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
                                      NumSpids++;
                                      }
                                   break;
@@ -159,10 +324,12 @@ diff -Nru vdr-1.7.12-vanilla/pat.c vdr-1.7.12-ttxtsubs/pat.c
 +                                 SI::TeletextDescriptor *sd = (SI::TeletextDescriptor *)d;
 +                                 SI::TeletextDescriptor::Teletext ttxt;
 +                                 for (SI::Loop::Iterator it; sd->teletextLoop.getNext(ttxt, it); ) {
-+                                     if ((NumTPages < MAXTPAGES) && ttxt.languageCode[0] && ((ttxt.getTeletextType() == 0x02) || (ttxt.getTeletextType() == 0x05))) {
-+                                        char *s = TLangs[NumTPages];
-+                                        strn0cpy(s, I18nNormalizeLanguageCode(ttxt.languageCode), MAXLANGCODE1);
-+                                        TPages[NumTPages] = (ttxt.getTeletextPageNumber() & 0xff) | ((ttxt.getTeletextMagazineNumber() & 0xff) << 8) | ((ttxt.getTeletextType() & 0xff) << 16);
++                                     bool isSubtitlePage = (ttxt.getTeletextType() == 0x02) || (ttxt.getTeletextType() == 0x05);
++                                     if ((NumTPages < MAXTXTPAGES) && ttxt.languageCode[0] && isSubtitlePage) {
++                                        strn0cpy(TeletextSubtitlePages[NumTPages].ttxtLanguage, I18nNormalizeLanguageCode(ttxt.languageCode), MAXLANGCODE1);
++                                        TeletextSubtitlePages[NumTPages].ttxtPage = ttxt.getTeletextPageNumber();
++                                        TeletextSubtitlePages[NumTPages].ttxtMagazine = ttxt.getTeletextMagazineNumber();
++                                        TeletextSubtitlePages[NumTPages].ttxtType = ttxt.getTeletextType();
 +                                        NumTPages++;
 +                                        }
 +                                     }
@@ -170,39 +337,616 @@ diff -Nru vdr-1.7.12-vanilla/pat.c vdr-1.7.12-ttxtsubs/pat.c
                                   break;
                              case SI::ISO639LanguageDescriptorTag: {
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
-@@ -458,6 +473,16 @@
+@@ -458,6 +474,15 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
              }
          if (Setup.UpdateChannels >= 2) {
             Channel->SetPids(Vpid, Ppid, Vtype, Apids, ALangs, Dpids, DLangs, Spids, SLangs, Tpid);
-+           if (NumTPages < MAXTPAGES) {
++           if (NumTPages < MAXTXTPAGES) {
 +              int manualPageNumber = cVDRTtxtsubsHookListener::Hook()->ManualPageNumber(Channel);
 +              if (manualPageNumber) {
-+                 char *s = TLangs[NumTPages];
-+                 strn0cpy(s, "man", MAXLANGCODE1);
-+                 TPages[NumTPages] = manualPageNumber;
++                 TeletextSubtitlePages[NumTPages] = tTeletextSubtitlePage(manualPageNumber);
++                 strn0cpy(TeletextSubtitlePages[NumTPages].ttxtLanguage, "und", MAXLANGCODE1);
 +                 NumTPages++;
 +                 }
 +              }
-+           Channel->SetTPidData(TLangs, TPages);
++           Channel->SetTeletextSubtitlePages(TeletextSubtitlePages);
             Channel->SetCaIds(CaDescriptors->CaIds());
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
             }
-diff -Nru vdr-1.7.12-vanilla/receiver.c vdr-1.7.12-ttxtsubs/receiver.c
---- vdr-1.7.12-vanilla/receiver.c	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/receiver.c	2010-02-03 09:27:31.000000000 +0200
-@@ -82,7 +82,7 @@
+diff --git a/po/ca_ES.po b/po/ca_ES.po
+index fcdf672..1197fe1 100644
+--- a/po/ca_ES.po
++++ b/po/ca_ES.po
+@@ -10,7 +10,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-02 19:02+0100\n"
+ "Last-Translator: Luca Olivetti <luca@ventoso.org>\n"
+ "Language-Team: Catalanian\n"
+@@ -934,6 +934,9 @@ msgstr "Transpar
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "TransparËncia fons subtÌtols"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "ConfiguraciÛ de l'LNB"
+ 
+diff --git a/po/cs_CZ.po b/po/cs_CZ.po
+index 3bbd6eb..c15fc13 100644
+--- a/po/cs_CZ.po
++++ b/po/cs_CZ.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-28 15:00+0200\n"
+ "Last-Translator: VladimÌr B·rta <vladimir.barta@k2atmitec.cz>, Ji¯Ì Dobr˝ <jdobry@centrum.cz>\n"
+ "Language-Team: Czech\n"
+@@ -932,6 +932,9 @@ msgstr "Pr
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Pr˘hlednost pozadÌ titulk˘"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/da_DK.po b/po/da_DK.po
+index fbad909..3416080 100644
+--- a/po/da_DK.po
++++ b/po/da_DK.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-08-12 14:17+0200\n"
+ "Last-Translator: Mogens Elneff <mogens@elneff.dk>\n"
+ "Language-Team: Danish\n"
+@@ -931,6 +931,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Undertekst baggrundsgennemsigtighed"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/de_DE.po b/po/de_DE.po
+index ad6401b..775fd30 100644
+--- a/po/de_DE.po
++++ b/po/de_DE.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2010-01-16 16:46+0100\n"
+ "Last-Translator: Klaus Schmidinger <kls@tvdr.de>\n"
+ "Language-Team: German\n"
+@@ -931,6 +931,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Untertitel-Transparenz Hintergrund"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr "Teletext-Untertitel aufnehmen"
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/el_GR.po b/po/el_GR.po
+index e8382b8..741cb4a 100644
+--- a/po/el_GR.po
++++ b/po/el_GR.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-08-12 14:17+0200\n"
+ "Last-Translator: Dimitrios Dimitrakos <mail@dimitrios.de>\n"
+ "Language-Team: Greek\n"
+@@ -931,6 +931,9 @@ msgstr ""
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr ""
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/es_ES.po b/po/es_ES.po
+index d2bf5b0..0515348 100644
+--- a/po/es_ES.po
++++ b/po/es_ES.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-02 19:02+0100\n"
+ "Last-Translator: Luca Olivetti <luca@ventoso.org>\n"
+ "Language-Team: Spanish\n"
+@@ -932,6 +932,9 @@ msgstr "Transparencia primer plano subt
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparencia fondo subtÌtulos"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/et_EE.po b/po/et_EE.po
+index 97e2aee..72a95ae 100644
+--- a/po/et_EE.po
++++ b/po/et_EE.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-08-12 14:17+0200\n"
+ "Last-Translator: Arthur Konovalov <artlov@gmail.com>\n"
+ "Language-Team: Estonian\n"
+@@ -931,6 +931,9 @@ msgstr "Subtiitri l
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Subtiitri tausta l‰bipaistvus"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/fi_FI.po b/po/fi_FI.po
+index 916b51e..372a1a2 100644
+--- a/po/fi_FI.po
++++ b/po/fi_FI.po
+@@ -10,7 +10,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-08-15 15:52+0200\n"
+ "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
+ "Language-Team: Finnish\n"
+@@ -934,6 +934,9 @@ msgstr "Tekstityksen l
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Tekstityksen taustan l‰pin‰kyvyys"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/fr_FR.po b/po/fr_FR.po
+index 4c4dcce..8ebfd3e 100644
+--- a/po/fr_FR.po
++++ b/po/fr_FR.po
+@@ -13,7 +13,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-27 18:14+0100\n"
+ "Last-Translator: Jean-Claude Repetto <jc@repetto.org>\n"
+ "Language-Team: French\n"
+@@ -937,6 +937,9 @@ msgstr "Transparence de l'avant-plan"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparence du fond"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/hr_HR.po b/po/hr_HR.po
+index b7cf5a0..d769dc1 100644
+--- a/po/hr_HR.po
++++ b/po/hr_HR.po
+@@ -9,7 +9,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-17 19:00+0100\n"
+ "Last-Translator: Adrian Caval <anrxc@sysphere.org>\n"
+ "Language-Team: Croatian\n"
+@@ -933,6 +933,9 @@ msgstr "Transparentnost titla"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparentnost pozadine titla"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/hu_HU.po b/po/hu_HU.po
+index d09c8dd..e2b9364 100644
+--- a/po/hu_HU.po
++++ b/po/hu_HU.po
+@@ -10,7 +10,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-12-01 21:42+0200\n"
+ "Last-Translator: Istv·n F¸ley <ifuley@tigercomp.ro>\n"
+ "Language-Team: Hungarian\n"
+@@ -934,6 +934,9 @@ msgstr "Felirat transzparenci
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Felirat h·tterÈnek transzparenci·ja"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/it_IT.po b/po/it_IT.po
+index 3a8f2e2..41335d8 100644
+--- a/po/it_IT.po
++++ b/po/it_IT.po
+@@ -11,7 +11,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2010-01-12 23:53+0100\n"
+ "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
+ "Language-Team: Italian\n"
+@@ -938,6 +938,9 @@ msgstr "Trasparenza sottotitoli"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Trasparenza sfondo sottotitoli"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/lt_LT.po b/po/lt_LT.po
+index 93583c5..2b55e82 100644
+--- a/po/lt_LT.po
++++ b/po/lt_LT.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.7.9\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2009-10-17 14:19+0200\n"
+ "Last-Translator: Valdemaras Pipiras <varas@ambernet.lt>\n"
+ "Language-Team: Lithuanian\n"
+@@ -931,6 +931,9 @@ msgstr "Subtitr≈≥ priekinio vaizdo permatomumas"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Subtitr≈≥ fono permatomumas"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "Konverteris (LNB)"
+ 
+diff --git a/po/nl_NL.po b/po/nl_NL.po
+index fdfaf8d..56523f4 100644
+--- a/po/nl_NL.po
++++ b/po/nl_NL.po
+@@ -11,7 +11,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-26 17:20+0100\n"
+ "Last-Translator: Johan Schuring <johan.schuring@vetteblei.nl>\n"
+ "Language-Team: Dutch\n"
+@@ -935,6 +935,9 @@ msgstr "Transparantie voorgrond ondertiteling"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparantie achtergrond ondertiteling"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/nn_NO.po b/po/nn_NO.po
+index 1f50117..3e492ad 100644
+--- a/po/nn_NO.po
++++ b/po/nn_NO.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2007-08-12 14:17+0200\n"
+ "Last-Translator: Truls Slevigen <truls@slevigen.no>\n"
+ "Language-Team: Norwegian\n"
+@@ -932,6 +932,9 @@ msgstr ""
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr ""
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/pl_PL.po b/po/pl_PL.po
+index 038d058..e99d90e 100644
+--- a/po/pl_PL.po
++++ b/po/pl_PL.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-09 12:59+0100\n"
+ "Last-Translator: Michael Rakowski <mrak@gmx.de>\n"
+ "Language-Team:  Polish\n"
+@@ -932,6 +932,9 @@ msgstr "Prze
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Przeºrocze podtytu≥Ûw: T≥o"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/pt_PT.po b/po/pt_PT.po
+index e409581..f795bae 100644
+--- a/po/pt_PT.po
++++ b/po/pt_PT.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-18 17:04+0100\n"
+ "Last-Translator: anonymous\n"
+ "Language-Team: Portuguese\n"
+@@ -931,6 +931,9 @@ msgstr "Transpar
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "TransparÍncia de background das legendas"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/ro_RO.po b/po/ro_RO.po
+index f52a7d8..c857472 100644
+--- a/po/ro_RO.po
++++ b/po/ro_RO.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-25 00:39+0100\n"
+ "Last-Translator: Lucian Muresan <lucianm@users.sourceforge.net>\n"
+ "Language-Team: Romanian\n"
+@@ -934,6 +934,9 @@ msgstr "Transparen
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparen˛a fundalului subtitr„rii"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/ru_RU.po b/po/ru_RU.po
+index c6d6aca..e55f00d 100644
+--- a/po/ru_RU.po
++++ b/po/ru_RU.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-12-15 14:37+0100\n"
+ "Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
+ "Language-Team: Russian\n"
+@@ -932,6 +932,9 @@ msgstr "
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "ø‡ﬁ◊‡–Á›ﬁ·‚Ï ‰ﬁ›– ·„—‚ÿ‚‡ﬁ“"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "∫ﬁ›“’‡‚’‡"
+ 
+diff --git a/po/sk_SK.po b/po/sk_SK.po
+index c66132a..44b0833 100644
+--- a/po/sk_SK.po
++++ b/po/sk_SK.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2009-09-30 12:50+0100\n"
+ "Last-Translator: Milan Hrala <hrala.milan@gmail.com>\n"
+ "Language-Team: Slovak\n"
+@@ -932,6 +932,9 @@ msgstr "Prieh
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Priehµadnosª pozadia titulkov"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/sl_SI.po b/po/sl_SI.po
+index 2c20440..2bd42ea 100644
+--- a/po/sl_SI.po
++++ b/po/sl_SI.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-28 19:44+0100\n"
+ "Last-Translator: Matjaz Thaler <matjaz.thaler@guest.arnes.si>\n"
+ "Language-Team: Slovenian\n"
+@@ -932,6 +932,9 @@ msgstr "Transparentnost podnapisov"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparentnost ozadja podnapisov"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/sv_SE.po b/po/sv_SE.po
+index 4ac9a0f..1cceb44 100644
+--- a/po/sv_SE.po
++++ b/po/sv_SE.po
+@@ -10,7 +10,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-03-12 18:25+0100\n"
+ "Last-Translator: Magnus Andersson <svankan@bahnhof.se>\n"
+ "Language-Team: Swedish\n"
+@@ -934,6 +934,9 @@ msgstr "Transparent f
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparent bakgrund textremsa"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/tr_TR.po b/po/tr_TR.po
+index 02a9642..73fec22 100644
+--- a/po/tr_TR.po
++++ b/po/tr_TR.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2008-02-28 00:33+0100\n"
+ "Last-Translator: Oktay YolgeÁen <oktay_73@yahoo.de>\n"
+ "Language-Team: Turkish\n"
+@@ -931,6 +931,9 @@ msgstr "Altyaz
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Altyaz˝ arka ˛effafl˝k"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/uk_UA.po b/po/uk_UA.po
+index 7e3010c..37e1f64 100644
+--- a/po/uk_UA.po
++++ b/po/uk_UA.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.7.7\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2009-05-31 13:17+0200\n"
+ "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
+ "Language-Team: Ukrainian\n"
+@@ -931,6 +931,9 @@ msgstr "–ü—Ä–æ–∑–æ—Ä—ñ—Å—Ç—å –ø–µ—Ä–µ–¥–Ω—å–æ–≥–æ –ø–ª–∞–Ω—É —Å—É–±—Ç–∏—Ç—Ä—ñ–≤"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "–ü—Ä–æ–∑–æ—Ä—ñ—Å—Ç—å –∑–∞–¥–Ω—å–æ–≥–æ –ø–ª–∞–Ω—É —Å—É–±—Ç–∏—Ç—Ä—ñ–≤"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "–ö–æ–Ω–≤–µ—Ä—Ç–µ—Ä"
+ 
+diff --git a/po/zh_CN.po b/po/zh_CN.po
+index 1d12f71..2969540 100644
+--- a/po/zh_CN.po
++++ b/po/zh_CN.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: VDR 1.6.0\n"
+ "Report-Msgid-Bugs-To: <vdr-bugs@tvdr.de>\n"
+-"POT-Creation-Date: 2010-01-17 16:18+0100\n"
++"POT-Creation-Date: 2010-02-13 14:31+0100\n"
+ "PO-Revision-Date: 2009-09-23 23:50+0800\n"
+ "Last-Translator: Nan Feng <nfgx@21cn.com>\n"
+ "Language-Team: Chinese\n"
+@@ -934,6 +934,9 @@ msgstr "Â≠óÂπïÂâçÊôØÈÄèÊòéÂ∫¶"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Â≠óÂπïËÉåÊôØÈÄèÊòéÂ∫¶"
+ 
++msgid "Setup.DVB$Record Teletext Subtitles"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "ÂàáÊç¢Âô®ËÆæÁΩÆ"
+ 
+diff --git a/receiver.c b/receiver.c
+index f922e98..4403410 100644
+--- a/receiver.c
++++ b/receiver.c
+@@ -82,7 +82,8 @@ bool cReceiver::SetPids(const cChannel *Channel)
              (Channel->Ppid() == Channel->Vpid() || AddPid(Channel->Ppid())) &&
              AddPids(Channel->Apids()) &&
              (!Setup.UseDolbyDigital || AddPids(Channel->Dpids())) &&
 -            AddPids(Channel->Spids());
-+            AddPids(Channel->Spids()) && AddPid(Channel->Tpid());
++            AddPids(Channel->Spids()) &&
++            (!Setup.RecordTtxtSubtitles || AddPid(Channel->Tpid()));
       }
  return true;
  }
-diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
---- vdr-1.7.12-vanilla/remux.c	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/remux.c	2010-02-03 09:28:25.000000000 +0200
-@@ -215,6 +215,30 @@
+diff --git a/remux.c b/remux.c
+index 070a06a..24fcbd3 100644
+--- a/remux.c
++++ b/remux.c
+@@ -215,6 +215,29 @@ int cPatPmtGenerator::MakeSubtitlingDescriptor(uchar *Target, const char *Langua
    return i;
  }
  
@@ -212,14 +956,13 @@ diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
 +  Target[i++] = SI::TeletextDescriptorTag;
 +  int l = i;
 +  Target[i++] = 0x00; // length
-+  for (int n = 0; Channel->TPages(n); n++) {
-+      const char *Language = Channel->Tlang(n);
-+      int Pages = Channel->TPages(n);
++  for (int n = 0; Channel->TeletextSubtitlePage(n).ttxtType; n++) {
++      const char* Language = Channel->TeletextSubtitlePage(n).ttxtLanguage;
 +      Target[i++] = *Language++;
 +      Target[i++] = *Language++;
 +      Target[i++] = *Language++;
-+      Target[i++] = ((Pages >> 13) & 0xf8) | ((Pages >> 8) & 0x7); // teletext type & magazine number
-+      Target[i++] = Pages & 0xff; // teletext page number
++      Target[i++] = (Channel->TeletextSubtitlePage(n).ttxtType << 3) + Channel->TeletextSubtitlePage(n).ttxtMagazine;
++      Target[i++] = Channel->TeletextSubtitlePage(n).ttxtPage;
 +      j++;
 +      }
 +  if (j > 0) {
@@ -233,7 +976,7 @@ diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
  int cPatPmtGenerator::MakeLanguageDescriptor(uchar *Target, const char *Language)
  {
    int i = 0;
-@@ -296,6 +320,7 @@
+@@ -296,6 +319,7 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
    if (Channel) {
       int Vpid = Channel->Vpid();
       int Ppid = Channel->Ppid();
@@ -241,7 +984,7 @@ diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
       uchar *p = buf;
       int i = 0;
       p[i++] = 0x02; // table id
-@@ -330,6 +355,10 @@
+@@ -330,6 +354,10 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
           i += MakeStream(buf + i, 0x06, Channel->Spid(n));
           i += MakeSubtitlingDescriptor(buf + i, Channel->Slang(n), Channel->SubtitlingType(n), Channel->CompositionPageId(n), Channel->AncillaryPageId(n));
           }
@@ -252,7 +995,7 @@ diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
  
       int sl = i - SectionLength - 2 + 4; // -2 = SectionLength storage, +4 = length of CRC
       buf[SectionLength] |= (sl >> 8) & 0x0F;
-@@ -403,6 +432,7 @@
+@@ -403,6 +431,7 @@ void cPatPmtParser::Reset(void)
    pmtPid = -1;
    vpid = vtype = 0;
    ppid = 0;
@@ -260,29 +1003,52 @@ diff -Nru vdr-1.7.12-vanilla/remux.c vdr-1.7.12-ttxtsubs/remux.c
  }
  
  void cPatPmtParser::ParsePat(const uchar *Data, int Length)
-@@ -488,6 +518,7 @@
+@@ -486,8 +515,10 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
+      int NumApids = 0;
+      int NumDpids = 0;
       int NumSpids = 0;
++     int NumTPages = 0;
       vpid = vtype = 0;
       ppid = 0;
 +     tpid = 0;
       apids[0] = 0;
       dpids[0] = 0;
       spids[0] = 0;
-@@ -586,6 +617,10 @@
+@@ -586,6 +617,29 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
                                      spids[NumSpids]= 0;
                                      }
                                   break;
-+                            case SI::TeletextDescriptorTag:
++                            case SI::TeletextDescriptorTag: {
 +                                 dbgpatpmt(" teletext");
 +                                 tpid = stream.getPid();
++                                 SI::TeletextDescriptor *sd = (SI::TeletextDescriptor *)d;
++                                 SI::TeletextDescriptor::Teletext ttxt;
++                                 if (NumTPages < MAXTXTPAGES) {
++                                    for (SI::Loop::Iterator it; sd->teletextLoop.getNext(ttxt, it); ) {
++                                        bool isSubtitlePage = (ttxt.getTeletextType() == 0x02) || (ttxt.getTeletextType() == 0x05);
++                                        if (isSubtitlePage && ttxt.languageCode[0]) {
++                                           dbgpatpmt(" '%s:%x.%x'", ttxt.languageCode, ttxt.getTeletextMagazineNumber(), ttxt.getTeletextPageNumber());
++                                           strn0cpy(teletextSubtitlePages[NumTPages].ttxtLanguage, I18nNormalizeLanguageCode(ttxt.languageCode), MAXLANGCODE1);
++                                           teletextSubtitlePages[NumTPages].ttxtPage = ttxt.getTeletextPageNumber();
++                                           teletextSubtitlePages[NumTPages].ttxtMagazine = ttxt.getTeletextMagazineNumber();
++                                           teletextSubtitlePages[NumTPages].ttxtType = ttxt.getTeletextType();
++                                           NumTPages++;
++                                           if (NumTPages >= MAXTXTPAGES)
++                                              break;
++                                           }
++                                        }
++                                    teletextSubtitlePages[NumTPages].ttxtType = 0; // indicates end of list
++                                    }
++                                 }
 +                                 break;
                              case SI::ISO639LanguageDescriptorTag: {
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
-diff -Nru vdr-1.7.12-vanilla/remux.h vdr-1.7.12-ttxtsubs/remux.h
---- vdr-1.7.12-vanilla/remux.h	2010-01-31 16:56:52.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/remux.h	2010-02-03 09:29:15.000000000 +0200
-@@ -170,6 +170,7 @@
+diff --git a/remux.h b/remux.h
+index 1115c4a..43809fc 100644
+--- a/remux.h
++++ b/remux.h
+@@ -170,6 +170,7 @@ protected:
    int MakeStream(uchar *Target, uchar Type, int Pid);
    int MakeAC3Descriptor(uchar *Target);
    int MakeSubtitlingDescriptor(uchar *Target, const char *Language, uchar SubtitlingType, uint16_t CompositionPageId, uint16_t AncillaryPageId);
@@ -290,7 +1056,7 @@ diff -Nru vdr-1.7.12-vanilla/remux.h vdr-1.7.12-ttxtsubs/remux.h
    int MakeLanguageDescriptor(uchar *Target, const char *Language);
    int MakeCRC(uchar *Target, const uchar *Data, int Length);
    void GeneratePmtPid(const cChannel *Channel);
-@@ -215,6 +216,7 @@
+@@ -215,6 +216,7 @@ private:
    int vpid;
    int ppid;
    int vtype;
@@ -298,17 +1064,55 @@ diff -Nru vdr-1.7.12-vanilla/remux.h vdr-1.7.12-ttxtsubs/remux.h
    int apids[MAXAPIDS + 1]; // list is zero-terminated
    int atypes[MAXAPIDS + 1]; // list is zero-terminated
    char alangs[MAXAPIDS][MAXLANGCODE2];
-@@ -259,6 +261,7 @@
+@@ -227,6 +229,7 @@ private:
+   uint16_t compositionPageIds[MAXSPIDS];
+   uint16_t ancillaryPageIds[MAXSPIDS];
+   bool updatePrimaryDevice;
++  tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES + 1]; // list is zero-terminated
+ protected:
+   int SectionLength(const uchar *Data, int Length) { return (Length >= 3) ? ((int(Data[1]) & 0x0F) << 8)| Data[2] : 0; }
+ public:
+@@ -259,6 +262,9 @@ public:
    int Vtype(void) const { return vtype; }
         ///< Returns the video stream type as defined by the current PMT, or 0 if no video
         ///< stream type has been detected, yet.
 +  int Tpid(void) { return tpid; }
++       ///< Returns the teletext pid as defined by the current PMT, or 0 if no teletext
++       ///< pid has been detected, yet.
    const int *Apids(void) const { return apids; }
    const int *Dpids(void) const { return dpids; }
    const int *Spids(void) const { return spids; }
-diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.c vdr-1.7.12-ttxtsubs/vdrttxtsubshooks.c
---- vdr-1.7.12-vanilla/vdrttxtsubshooks.c	1970-01-01 02:00:00.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/vdrttxtsubshooks.c	2010-02-03 09:21:22.000000000 +0200
+@@ -273,6 +279,7 @@ public:
+   uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
+   uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
+   uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
++  const tTeletextSubtitlePage* TeletextSubtitlePages() const { return teletextSubtitlePages; }
+   };
+ 
+ // TS to PES converter:
+diff --git a/vdr.5 b/vdr.5
+index 4b2cb90..c7da844 100644
+--- a/vdr.5
++++ b/vdr.5
+@@ -207,6 +207,13 @@ can be indicated by adding a second language code, delimited by a '+' sign, as i
+ .TP
+ .B TPID
+ The teletext PID.
++
++Fixed teletext subtitling pages can be defined separated by a semicolon.
++The pages (separated by commas) can contain ISO 639 language codes, delimited
++by a '=' sign, as in
++
++.B ...:2001;150=deu,151=fin:...
++
+ .TP
+ .B Conditional access
+ A hexadecimal integer defining how this channel can be accessed:
+diff --git a/vdrttxtsubshooks.c b/vdrttxtsubshooks.c
+new file mode 100644
+index 0000000..865596e
+--- /dev/null
++++ b/vdrttxtsubshooks.c
 @@ -0,0 +1,63 @@
 +/*
 + * vdr-ttxtsubs - A plugin for the Linux Video Disk Recorder
@@ -346,8 +1150,8 @@ diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.c vdr-1.7.12-ttxtsubs/vdrttxtsubsh
 + public:
 +  virtual void HideOSD(void) { if(gListener) gListener->HideOSD(); };
 +  virtual void ShowOSD(void) { if(gListener) gListener->ShowOSD(); };
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording)
-+    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording); };
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL)
++    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording, teletextSubtitlePages); };
 +  virtual int ManualPageNumber(const cChannel *channel)
 +    { if(gListener) return gListener->ManualPageNumber(channel); else return 0; };
 +};
@@ -373,10 +1177,12 @@ diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.c vdr-1.7.12-ttxtsubs/vdrttxtsubsh
 +  return &gProxy;
 +}
 +
-diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.h vdr-1.7.12-ttxtsubs/vdrttxtsubshooks.h
---- vdr-1.7.12-vanilla/vdrttxtsubshooks.h	1970-01-01 02:00:00.000000000 +0200
-+++ vdr-1.7.12-ttxtsubs/vdrttxtsubshooks.h	2010-02-03 09:33:22.000000000 +0200
-@@ -0,0 +1,45 @@
+diff --git a/vdrttxtsubshooks.h b/vdrttxtsubshooks.h
+new file mode 100644
+index 0000000..2e8e9ba
+--- /dev/null
++++ b/vdrttxtsubshooks.h
+@@ -0,0 +1,46 @@
 +/*
 + * vdr-ttxtsubs - A plugin for the Linux Video Disk Recorder
 + * Copyright (c) 2003 - 2008 Ragnar Sundblad <ragge@nada.kth.se>
@@ -400,10 +1206,11 @@ diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.h vdr-1.7.12-ttxtsubs/vdrttxtsubsh
 +#ifndef __VDRTTXTSUBSHOOKS_H
 +#define __VDRTTXTSUBSHOOKS_H
 +
-+#define TTXTSUBSVERSNUM 1
++#define TTXTSUBSVERSNUM 2
 +
 +class cDevice;
 +class cChannel;
++struct tTeletextSubtitlePage;
 +
 +class cVDRTtxtsubsHookListener {
 + public:
@@ -414,7 +1221,7 @@ diff -Nru vdr-1.7.12-vanilla/vdrttxtsubshooks.h vdr-1.7.12-ttxtsubs/vdrttxtsubsh
 +
 +  virtual void HideOSD(void) {};
 +  virtual void ShowOSD(void) {};
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true) {};
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL) {};
 +  virtual int ManualPageNumber(const cChannel *channel) { return 0; };
 +
 +  // used by VDR to call hook listeners
