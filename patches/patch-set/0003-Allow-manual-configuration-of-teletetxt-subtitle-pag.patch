@@ -1,28 +1,27 @@
-From f33ffd78393792ba23c4ee48b3543e182663dc97 Mon Sep 17 00:00:00 2001
+From 578e95faa4f0724c664418587a756590a2947f26 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
 
 ---
- channels.c |   49 +++++++++++++++++++++++++++++++++++++++++++++----
+ channels.c |   49 ++++++++++++++++++++++++++++++++++++++++++++++---
  channels.h |    1 +
  vdr.5      |    7 +++++++
- 3 files changed, 53 insertions(+), 4 deletions(-)
+ 3 files changed, 54 insertions(+), 3 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index 817b7d3..aaaea30 100644
+index 08ddf3e..0e23389 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -553,7 +553,7 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -553,6 +553,7 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
  
- void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[])
+ void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[], int numberOfPages)
  {
--  for (int i = 0; i < MAXTXTPAGES; i++)
-+  for (int i = fixedTeletextSubtitlePages; i < MAXTXTPAGES; i++)
-       teletextSubtitlePages[i] = pages[i];
-   teletextSubtitlePages[MAXTXTPAGES].ttxtType = 0;
++  totalTtxtSubtitlePages = fixedTtxtSubtitlePages;
+   for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++)
+       teletextSubtitlePages[totalTtxtSubtitlePages++] = pages[i];
  }
-@@ -765,11 +765,22 @@ cString cChannel::ToText(const cChannel *Channel)
+@@ -764,11 +765,22 @@ cString cChannel::ToText(const cChannel *Channel)
          q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs);
          }
       *q = 0;
@@ -30,9 +29,9 @@ index 817b7d3..aaaea30 100644
 +     char tpidbuf[TBufferSize];
 +     q = tpidbuf;
 +     q += snprintf(q, sizeof(tpidbuf), "%d", Channel->tpid);
-+     if (Channel->fixedTeletextSubtitlePages > 0) {
++     if (Channel->fixedTtxtSubtitlePages > 0) {
 +        q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), ";");
-+        for (int i = 0; i < Channel->fixedTeletextSubtitlePages; ++i) {
++        for (int i = 0; i < Channel->fixedTtxtSubtitlePages; ++i) {
 +            tTeletextSubtitlePage page = Channel->teletextSubtitlePages[i];
 +            q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), "%d=%s", page.PageNumber(), page.ttxtLanguage);
 +            }
@@ -46,7 +45,7 @@ index 817b7d3..aaaea30 100644
       }
    return buffer;
  }
-@@ -803,8 +814,9 @@ bool cChannel::Parse(const char *s)
+@@ -802,8 +814,9 @@ bool cChannel::Parse(const char *s)
       char *parambuf = NULL;
       char *vpidbuf = NULL;
       char *apidbuf = NULL;
@@ -57,27 +56,28 @@ index 817b7d3..aaaea30 100644
       if (fields >= 9) {
          if (fields == 9) {
             // allow reading of old format
-@@ -886,7 +898,35 @@ bool cChannel::Parse(const char *s)
+@@ -885,7 +898,36 @@ bool cChannel::Parse(const char *s)
                      }
                dpids[NumDpids] = 0;
                }
 -
 +           if (tpidbuf) {
 +              char *p;
-+              fixedTeletextSubtitlePages = 0;
++              fixedTtxtSubtitlePages = 0;
 +              // 2001;150=deu,151=fin
 +              if ((p = strchr(tpidbuf, ';')) != NULL) {
 +                 char *q, *strtok_next;
 +                 *p++ = 0;
 +                 while ((q = strtok_r(p, ",", &strtok_next)) != NULL) {
-+                       if (fixedTeletextSubtitlePages < MAXTXTPAGES) {
++                       if (fixedTtxtSubtitlePages < MAXTXTPAGES) {
 +                          int page;
 +                          char *l = strchr(q, '=');
 +                          if (l)
 +                             *l++ = 0;
 +                          if (sscanf(q, "%d", &page) == 1) {
-+                             teletextSubtitlePages[fixedTeletextSubtitlePages++] = tTeletextSubtitlePage(page);
-+                             strn0cpy(teletextSubtitlePages[fixedTeletextSubtitlePages].ttxtLanguage, l ? l : "und", MAXLANGCODE1);
++                             teletextSubtitlePages[fixedTtxtSubtitlePages++] = tTeletextSubtitlePage(page);
++                             if (l)
++                                strn0cpy(teletextSubtitlePages[fixedTtxtSubtitlePages].ttxtLanguage, l, MAXLANGCODE1);
 +                             }
 +                          else
 +                             esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
@@ -86,7 +86,7 @@ index 817b7d3..aaaea30 100644
 +                          esyslog("ERROR: too many Teletext pages!"); // no need to set ok to 'false'
 +                       p = NULL;
 +                       }
-+                 teletextSubtitlePages[fixedTeletextSubtitlePages].ttxtType = 0; // end of list
++                 totalTtxtSubtitlePages = fixedTtxtSubtitlePages;
 +                 }
 +              if (sscanf(tpidbuf, "%d", &tpid) != 1)
 +                 return false;
@@ -94,7 +94,7 @@ index 817b7d3..aaaea30 100644
             if (caidbuf) {
                char *p = caidbuf;
                char *q;
-@@ -923,6 +963,7 @@ bool cChannel::Parse(const char *s)
+@@ -922,6 +964,7 @@ bool cChannel::Parse(const char *s)
          free(sourcebuf);
          free(vpidbuf);
          free(apidbuf);
@@ -103,17 +103,17 @@ index 817b7d3..aaaea30 100644
          free(namebuf);
          if (!GetChannelID().Valid()) {
 diff --git a/channels.h b/channels.h
-index 18ed7c6..1ddef40 100644
+index acb346e..c61f770 100644
 --- a/channels.h
 +++ b/channels.h
 @@ -144,6 +144,7 @@ private:
    uint16_t compositionPageIds[MAXSPIDS];
    uint16_t ancillaryPageIds[MAXSPIDS];
    int tpid;
-+  int fixedTeletextSubtitlePages;
-   tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES + 1]; // list is termintated by ttxtType=0
++  int fixedTtxtSubtitlePages;
+   int totalTtxtSubtitlePages;
+   tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES];
    int caids[MAXCAIDS + 1]; // list is zero-terminated
-   int nid;
 diff --git a/vdr.5 b/vdr.5
 index 4b2cb90..c7da844 100644
 --- a/vdr.5

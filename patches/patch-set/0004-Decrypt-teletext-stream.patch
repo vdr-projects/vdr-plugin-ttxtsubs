@@ -1,21 +1,30 @@
-From 047e1fc5c4e7f6b4b987f3d19dba963d60126d55 Mon Sep 17 00:00:00 2001
+From 40f30d2e5ab735443071c61b5458b1d4fe9f5f89 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sun, 14 Feb 2010 01:30:34 +0100
 Subject: [PATCH 4/6] Decrypt teletext stream
 
 ---
- ci.c |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ ci.c |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
 diff --git a/ci.c b/ci.c
-index 6c7b031..f158a18 100644
+index 6c7b031..22fda9f 100644
 --- a/ci.c
 +++ b/ci.c
-@@ -1932,6 +1932,9 @@ bool cCamSlot::CanDecrypt(const cChannel *Channel)
+@@ -1911,6 +1911,8 @@ void cCamSlot::AddChannel(const cChannel *Channel)
+          AddPid(Channel->Sid(), *Apid, STREAM_TYPE_AUDIO);
+      for (const int *Dpid = Channel->Dpids(); *Dpid; Dpid++)
+          AddPid(Channel->Sid(), *Dpid, STREAM_TYPE_DOLBY);
++     if (Channel->Tpid() && Setup.SupportTeletext)
++        AddPid(Channel->Sid(), Channel->Tpid(), STREAM_TYPE_DOLBY);
+      }
+ }
+ 
+@@ -1932,6 +1934,9 @@ bool cCamSlot::CanDecrypt(const cChannel *Channel)
           CaPmt.AddPid(*Apid, STREAM_TYPE_AUDIO);
       for (const int *Dpid = Channel->Dpids(); *Dpid; Dpid++)
           CaPmt.AddPid(*Dpid, STREAM_TYPE_DOLBY);
-+     if (Channel->Tpid() && Setup.RecordTtxtSubtitles) {
++     if (Channel->Tpid() && Setup.SupportTeletext) {
 +        CaPmt.AddPid(Channel->Tpid(), STREAM_TYPE_DOLBY); // FIXME: STREAM_TYPE_DOLBY should probably be renamed STREAM_TYPE_PRIVATE
 +        }
       cas->SendPMT(&CaPmt);

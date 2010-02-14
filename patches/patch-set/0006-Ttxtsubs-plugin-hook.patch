@@ -1,4 +1,4 @@
-From 2432eec2b93648cf2b75155b6237293de91da1b6 Mon Sep 17 00:00:00 2001
+From 1eafdc9add03826b63f05c7b9235c2429f5b083c Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 00:28:21 +0100
 Subject: [PATCH 6/6] Ttxtsubs plugin hook
@@ -7,10 +7,10 @@ Subject: [PATCH 6/6] Ttxtsubs plugin hook
  Makefile           |    2 +
  device.c           |   20 ++++++++++++++++
  device.h           |    1 +
- pat.c              |    9 +++++++
+ pat.c              |    6 +++++
  vdrttxtsubshooks.c |   63 ++++++++++++++++++++++++++++++++++++++++++++++++++++
  vdrttxtsubshooks.h |   46 ++++++++++++++++++++++++++++++++++++++
- 6 files changed, 141 insertions(+), 0 deletions(-)
+ 6 files changed, 138 insertions(+), 0 deletions(-)
  create mode 100644 vdrttxtsubshooks.c
  create mode 100644 vdrttxtsubshooks.h
 
@@ -92,7 +92,7 @@ index 897de2a..2e36351 100644
  protected:
    const cPatPmtParser *PatPmtParser(void) const { return &patPmtParser; }
 diff --git a/pat.c b/pat.c
-index f4be6a6..444be21 100644
+index ff25501..c6e7834 100644
 --- a/pat.c
 +++ b/pat.c
 @@ -13,6 +13,7 @@
@@ -103,19 +103,16 @@ index f4be6a6..444be21 100644
  
  #define PMT_SCAN_TIMEOUT  10 // seconds
  
-@@ -473,6 +474,14 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
+@@ -473,6 +474,11 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
              }
          if (Setup.UpdateChannels >= 2) {
             Channel->SetPids(Vpid, Ppid, Vtype, Apids, ALangs, Dpids, DLangs, Spids, SLangs, Tpid);
 +           if (NumTPages < MAXTXTPAGES) {
 +              int manualPageNumber = cVDRTtxtsubsHookListener::Hook()->ManualPageNumber(Channel);
-+              if (manualPageNumber) {
-+                 TeletextSubtitlePages[NumTPages] = tTeletextSubtitlePage(manualPageNumber);
-+                 strn0cpy(TeletextSubtitlePages[NumTPages].ttxtLanguage, "und", MAXLANGCODE1);
-+                 NumTPages++;
-+                 }
++              if (manualPageNumber)
++                 TeletextSubtitlePages[NumTPages++] = tTeletextSubtitlePage(manualPageNumber);
 +              }
-            Channel->SetTeletextSubtitlePages(TeletextSubtitlePages);
+            Channel->SetTeletextSubtitlePages(TeletextSubtitlePages, NumTPages);
             Channel->SetCaIds(CaDescriptors->CaIds());
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
 diff --git a/vdrttxtsubshooks.c b/vdrttxtsubshooks.c

@@ -1,15 +1,15 @@
-From cd69cfb12c691834710beb346527920b8802552e Mon Sep 17 00:00:00 2001
+From c53754118c53807da2b62d3bb985bfd1e2bd0197 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
 
 ---
- remux.c |   26 ++++++++++++++++++++++++++
- remux.h |    6 ++++++
- 2 files changed, 32 insertions(+), 0 deletions(-)
+ remux.c |   24 ++++++++++++++++++++++++
+ remux.h |    5 +++++
+ 2 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/remux.c b/remux.c
-index 869b6e4..24fcbd3 100644
+index b5c7a06..ead63ea 100644
 --- a/remux.c
 +++ b/remux.c
 @@ -431,6 +431,7 @@ void cPatPmtParser::Reset(void)
@@ -20,18 +20,15 @@ index 869b6e4..24fcbd3 100644
  }
  
  void cPatPmtParser::ParsePat(const uchar *Data, int Length)
-@@ -514,8 +515,10 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
-      int NumApids = 0;
-      int NumDpids = 0;
+@@ -516,6 +517,7 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
       int NumSpids = 0;
-+     int NumTPages = 0;
       vpid = vtype = 0;
       ppid = 0;
 +     tpid = 0;
       apids[0] = 0;
       dpids[0] = 0;
       spids[0] = 0;
-@@ -614,6 +617,29 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
+@@ -615,6 +617,28 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
                                      spids[NumSpids]= 0;
                                      }
                                   break;
@@ -40,21 +37,20 @@ index 869b6e4..24fcbd3 100644
 +                                 tpid = stream.getPid();
 +                                 SI::TeletextDescriptor *sd = (SI::TeletextDescriptor *)d;
 +                                 SI::TeletextDescriptor::Teletext ttxt;
-+                                 if (NumTPages < MAXTXTPAGES) {
++                                 if (totalTtxtSubtitlePages < MAXTXTPAGES) {
 +                                    for (SI::Loop::Iterator it; sd->teletextLoop.getNext(ttxt, it); ) {
 +                                        bool isSubtitlePage = (ttxt.getTeletextType() == 0x02) || (ttxt.getTeletextType() == 0x05);
 +                                        if (isSubtitlePage && ttxt.languageCode[0]) {
 +                                           dbgpatpmt(" '%s:%x.%x'", ttxt.languageCode, ttxt.getTeletextMagazineNumber(), ttxt.getTeletextPageNumber());
-+                                           strn0cpy(teletextSubtitlePages[NumTPages].ttxtLanguage, I18nNormalizeLanguageCode(ttxt.languageCode), MAXLANGCODE1);
-+                                           teletextSubtitlePages[NumTPages].ttxtPage = ttxt.getTeletextPageNumber();
-+                                           teletextSubtitlePages[NumTPages].ttxtMagazine = ttxt.getTeletextMagazineNumber();
-+                                           teletextSubtitlePages[NumTPages].ttxtType = ttxt.getTeletextType();
-+                                           NumTPages++;
-+                                           if (NumTPages >= MAXTXTPAGES)
++                                           strn0cpy(teletextSubtitlePages[totalTtxtSubtitlePages].ttxtLanguage, I18nNormalizeLanguageCode(ttxt.languageCode), MAXLANGCODE1);
++                                           teletextSubtitlePages[totalTtxtSubtitlePages].ttxtPage = ttxt.getTeletextPageNumber();
++                                           teletextSubtitlePages[totalTtxtSubtitlePages].ttxtMagazine = ttxt.getTeletextMagazineNumber();
++                                           teletextSubtitlePages[totalTtxtSubtitlePages].ttxtType = ttxt.getTeletextType();
++                                           totalTtxtSubtitlePages++;
++                                           if (totalTtxtSubtitlePages >= MAXTXTPAGES)
 +                                              break;
 +                                           }
 +                                        }
-+                                    teletextSubtitlePages[NumTPages].ttxtType = 0; // indicates end of list
 +                                    }
 +                                 }
 +                                 break;
@@ -62,7 +58,7 @@ index 869b6e4..24fcbd3 100644
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
 diff --git a/remux.h b/remux.h
-index cef50d7..43809fc 100644
+index 5ee6722..390236a 100644
 --- a/remux.h
 +++ b/remux.h
 @@ -216,6 +216,7 @@ private:
@@ -73,15 +69,7 @@ index cef50d7..43809fc 100644
    int apids[MAXAPIDS + 1]; // list is zero-terminated
    int atypes[MAXAPIDS + 1]; // list is zero-terminated
    char alangs[MAXAPIDS][MAXLANGCODE2];
-@@ -228,6 +229,7 @@ private:
-   uint16_t compositionPageIds[MAXSPIDS];
-   uint16_t ancillaryPageIds[MAXSPIDS];
-   bool updatePrimaryDevice;
-+  tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES + 1]; // list is zero-terminated
- protected:
-   int SectionLength(const uchar *Data, int Length) { return (Length >= 3) ? ((int(Data[1]) & 0x0F) << 8)| Data[2] : 0; }
- public:
-@@ -260,6 +262,9 @@ public:
+@@ -262,6 +263,9 @@ public:
    int Vtype(void) const { return vtype; }
         ///< Returns the video stream type as defined by the current PMT, or 0 if no video
         ///< stream type has been detected, yet.
@@ -91,7 +79,7 @@ index cef50d7..43809fc 100644
    const int *Apids(void) const { return apids; }
    const int *Dpids(void) const { return dpids; }
    const int *Spids(void) const { return spids; }
-@@ -274,6 +279,7 @@ public:
+@@ -276,6 +280,7 @@ public:
    uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
