@@ -1,16 +1,16 @@
-From 856573ae5f4845a0dac545d64edd5c3f7f387de3 Mon Sep 17 00:00:00 2001
+From 89999b77f6c18c965d961cfbec9b42577de1ba01 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
 
 ---
- channels.c |   49 ++++++++++++++++++++++++++++++++++++++++++++++---
+ channels.c |   50 +++++++++++++++++++++++++++++++++++++++++++++++---
  channels.h |    1 +
  vdr.5      |    7 +++++++
- 3 files changed, 54 insertions(+), 3 deletions(-)
+ 3 files changed, 55 insertions(+), 3 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index 08ddf3e..0e23389 100644
+index 08ddf3e..488733e 100644
 --- a/channels.c
 +++ b/channels.c
 @@ -553,6 +553,7 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
@@ -56,7 +56,7 @@ index 08ddf3e..0e23389 100644
       if (fields >= 9) {
          if (fields == 9) {
             // allow reading of old format
-@@ -885,7 +898,36 @@ bool cChannel::Parse(const char *s)
+@@ -885,7 +898,37 @@ bool cChannel::Parse(const char *s)
                      }
                dpids[NumDpids] = 0;
                }
@@ -75,9 +75,10 @@ index 08ddf3e..0e23389 100644
 +                          if (l)
 +                             *l++ = 0;
 +                          if (sscanf(q, "%d", &page) == 1) {
-+                             teletextSubtitlePages[fixedTtxtSubtitlePages++] = tTeletextSubtitlePage(page);
++                             teletextSubtitlePages[fixedTtxtSubtitlePages] = tTeletextSubtitlePage(page);
 +                             if (l)
 +                                strn0cpy(teletextSubtitlePages[fixedTtxtSubtitlePages].ttxtLanguage, l, MAXLANGCODE1);
++                             fixedTtxtSubtitlePages++
 +                             }
 +                          else
 +                             esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
@@ -94,7 +95,7 @@ index 08ddf3e..0e23389 100644
             if (caidbuf) {
                char *p = caidbuf;
                char *q;
-@@ -922,6 +964,7 @@ bool cChannel::Parse(const char *s)
+@@ -922,6 +965,7 @@ bool cChannel::Parse(const char *s)
          free(sourcebuf);
          free(vpidbuf);
          free(apidbuf);
