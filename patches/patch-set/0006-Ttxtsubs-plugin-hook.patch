@@ -1,4 +1,4 @@
-From 1eafdc9add03826b63f05c7b9235c2429f5b083c Mon Sep 17 00:00:00 2001
+From 85bd01ba24dbfbb8653eada418cd57929fb4c016 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 00:28:21 +0100
 Subject: [PATCH 6/6] Ttxtsubs plugin hook
@@ -8,9 +8,10 @@ Subject: [PATCH 6/6] Ttxtsubs plugin hook
  device.c           |   20 ++++++++++++++++
  device.h           |    1 +
  pat.c              |    6 +++++
+ remux.h            |    3 +-
  vdrttxtsubshooks.c |   63 ++++++++++++++++++++++++++++++++++++++++++++++++++++
  vdrttxtsubshooks.h |   46 ++++++++++++++++++++++++++++++++++++++
- 6 files changed, 138 insertions(+), 0 deletions(-)
+ 7 files changed, 140 insertions(+), 1 deletions(-)
  create mode 100644 vdrttxtsubshooks.c
  create mode 100644 vdrttxtsubshooks.h
 
@@ -28,7 +29,7 @@ index 01408cb..b280030 100644
  DEFINES += -DREMOTE_KBD
  endif
 diff --git a/device.c b/device.c
-index cb31b83..86b6b2c 100644
+index cb31b83..fb4c655 100644
 --- a/device.c
 +++ b/device.c
 @@ -18,6 +18,7 @@
@@ -71,7 +72,7 @@ index cb31b83..86b6b2c 100644
 +                       tsToPesTeletext.PutTs(Data, Length);
 +                       if (const uchar *p = tsToPesTeletext.GetPes(l)) {
 +                          if ((l > 45) && (p[0] == 0x00) && (p[1] == 0x00) && (p[2] == 0x01) && (p[3] == 0xbd) && (p[8] == 0x24) && (p[45] >= 0x10) && (p[45] < 0x20))
-+                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false, patPmtParser.TeletextSubtitlePages());
++                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false, patPmtParser.TeletextSubtitlePages(), patPmtParser.TotalTeletextSubtitlePages());
 +                          tsToPesTeletext.Reset();
 +                          }
 +                       }
@@ -115,9 +116,23 @@ index ff25501..c6e7834 100644
             Channel->SetTeletextSubtitlePages(TeletextSubtitlePages, NumTPages);
             Channel->SetCaIds(CaDescriptors->CaIds());
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
+diff --git a/remux.h b/remux.h
+index 390236a..7bf712e 100644
+--- a/remux.h
++++ b/remux.h
+@@ -280,7 +280,8 @@ public:
+   uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
+   uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
+   uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
+-  const tTeletextSubtitlePage* TeletextSubtitlePages() const { return teletextSubtitlePages; }
++  const tTeletextSubtitlePage *TeletextSubtitlePages() const { return teletextSubtitlePages; }
++  int TotalTeletextSubtitlePages() const { return totalTtxtSubtitlePages; }
+   };
+ 
+ // TS to PES converter:
 diff --git a/vdrttxtsubshooks.c b/vdrttxtsubshooks.c
 new file mode 100644
-index 0000000..865596e
+index 0000000..2471788
 --- /dev/null
 +++ b/vdrttxtsubshooks.c
 @@ -0,0 +1,63 @@
@@ -157,8 +172,8 @@ index 0000000..865596e
 + public:
 +  virtual void HideOSD(void) { if(gListener) gListener->HideOSD(); };
 +  virtual void ShowOSD(void) { if(gListener) gListener->ShowOSD(); };
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL)
-+    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording, teletextSubtitlePages); };
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL, int pageCount = 0)
++    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording, teletextSubtitlePages, pageCount); };
 +  virtual int ManualPageNumber(const cChannel *channel)
 +    { if(gListener) return gListener->ManualPageNumber(channel); else return 0; };
 +};
@@ -186,7 +201,7 @@ index 0000000..865596e
 +
 diff --git a/vdrttxtsubshooks.h b/vdrttxtsubshooks.h
 new file mode 100644
-index 0000000..2e8e9ba
+index 0000000..2f97969
 --- /dev/null
 +++ b/vdrttxtsubshooks.h
 @@ -0,0 +1,46 @@
@@ -228,7 +243,7 @@ index 0000000..2e8e9ba
 +
 +  virtual void HideOSD(void) {};
 +  virtual void ShowOSD(void) {};
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL) {};
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL, int pageCount = 0) {};
 +  virtual int ManualPageNumber(const cChannel *channel) { return 0; };
 +
 +  // used by VDR to call hook listeners

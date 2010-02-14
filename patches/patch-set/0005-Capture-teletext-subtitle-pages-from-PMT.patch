@@ -1,4 +1,4 @@
-From c53754118c53807da2b62d3bb985bfd1e2bd0197 Mon Sep 17 00:00:00 2001
+From 0527d5ea66ee4752653b280ae0f75b47c9e36870 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT

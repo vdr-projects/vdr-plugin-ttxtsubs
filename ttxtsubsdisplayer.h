@@ -43,7 +43,7 @@ class cTtxtSubsDisplayer : public cThread {
 class cTtxtSubsPlayer : public cTtxtSubsDisplayer {
  public:
   cTtxtSubsPlayer(int backup_textpage);
-  virtual void PES_data(uchar *Data, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[]);
+  virtual void PES_data(uchar *Data, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount);
 
  private:
   void SearchLanguagePage(uint8_t *p, int len);

@@ -1,4 +1,4 @@
-From 40f30d2e5ab735443071c61b5458b1d4fe9f5f89 Mon Sep 17 00:00:00 2001
+From b941978d0b1bb23ce39f84682854ce3aeeac6c85 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sun, 14 Feb 2010 01:30:34 +0100
 Subject: [PATCH 4/6] Decrypt teletext stream

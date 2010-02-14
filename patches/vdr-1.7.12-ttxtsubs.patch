@@ -125,7 +125,7 @@ index c14df19..0e23389 100644
          free(namebuf);
          if (!GetChannelID().Valid()) {
 diff --git a/channels.h b/channels.h
-index b465f6a..c61f770 100644
+index b465f6a..897c8cd 100644
 --- a/channels.h
 +++ b/channels.h
 @@ -35,6 +35,7 @@
@@ -167,8 +167,8 @@ index b465f6a..c61f770 100644
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
    int Tpid(void) const { return tpid; }
-+  const tTeletextSubtitlePage *TeletextSubtitlePages() const { return teletextSubtitlePages; };
-+  int TotalTeletextSubtitlePages() const { return totalTtxtSubtitlePages; };
++  const tTeletextSubtitlePage *TeletextSubtitlePages() const { return teletextSubtitlePages; }
++  int TotalTeletextSubtitlePages() const { return totalTtxtSubtitlePages; }
    const int *Caids(void) const { return caids; }
    int Ca(int Index = 0) const { return Index < MAXCAIDS ? caids[Index] : 0; }
    int Nid(void) const { return nid; }
@@ -244,7 +244,7 @@ index be1d7bd..e7b094d 100644
    int SubtitleOffset;
    int SubtitleFgTransparency, SubtitleBgTransparency;
 diff --git a/device.c b/device.c
-index cb31b83..86b6b2c 100644
+index cb31b83..fb4c655 100644
 --- a/device.c
 +++ b/device.c
 @@ -18,6 +18,7 @@
@@ -287,7 +287,7 @@ index cb31b83..86b6b2c 100644
 +                       tsToPesTeletext.PutTs(Data, Length);
 +                       if (const uchar *p = tsToPesTeletext.GetPes(l)) {
 +                          if ((l > 45) && (p[0] == 0x00) && (p[1] == 0x00) && (p[2] == 0x01) && (p[3] == 0xbd) && (p[8] == 0x24) && (p[45] >= 0x10) && (p[45] < 0x20))
-+                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false, patPmtParser.TeletextSubtitlePages());
++                             cVDRTtxtsubsHookListener::Hook()->PlayerTeletextData((uchar *)p, l, false, patPmtParser.TeletextSubtitlePages(), patPmtParser.TotalTeletextSubtitlePages());
 +                          tsToPesTeletext.Reset();
 +                          }
 +                       }
@@ -1072,7 +1072,7 @@ index 070a06a..ead63ea 100644
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
 diff --git a/remux.h b/remux.h
-index 1115c4a..390236a 100644
+index 1115c4a..7bf712e 100644
 --- a/remux.h
 +++ b/remux.h
 @@ -170,6 +170,7 @@ protected:
@@ -1110,11 +1110,12 @@ index 1115c4a..390236a 100644
    const int *Apids(void) const { return apids; }
    const int *Dpids(void) const { return dpids; }
    const int *Spids(void) const { return spids; }
-@@ -273,6 +280,7 @@ public:
+@@ -273,6 +280,8 @@ public:
    uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
-+  const tTeletextSubtitlePage* TeletextSubtitlePages() const { return teletextSubtitlePages; }
++  const tTeletextSubtitlePage *TeletextSubtitlePages() const { return teletextSubtitlePages; }
++  int TotalTeletextSubtitlePages() const { return totalTtxtSubtitlePages; }
    };
  
  // TS to PES converter:
@@ -1138,7 +1139,7 @@ index 4b2cb90..c7da844 100644
  A hexadecimal integer defining how this channel can be accessed:
 diff --git a/vdrttxtsubshooks.c b/vdrttxtsubshooks.c
 new file mode 100644
-index 0000000..865596e
+index 0000000..2471788
 --- /dev/null
 +++ b/vdrttxtsubshooks.c
 @@ -0,0 +1,63 @@
@@ -1178,8 +1179,8 @@ index 0000000..865596e
 + public:
 +  virtual void HideOSD(void) { if(gListener) gListener->HideOSD(); };
 +  virtual void ShowOSD(void) { if(gListener) gListener->ShowOSD(); };
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL)
-+    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording, teletextSubtitlePages); };
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL, int pageCount = 0)
++    { if(gListener) gListener->PlayerTeletextData(p, length, IsPesRecording, teletextSubtitlePages, pageCount); };
 +  virtual int ManualPageNumber(const cChannel *channel)
 +    { if(gListener) return gListener->ManualPageNumber(channel); else return 0; };
 +};
@@ -1207,7 +1208,7 @@ index 0000000..865596e
 +
 diff --git a/vdrttxtsubshooks.h b/vdrttxtsubshooks.h
 new file mode 100644
-index 0000000..2e8e9ba
+index 0000000..2f97969
 --- /dev/null
 +++ b/vdrttxtsubshooks.h
 @@ -0,0 +1,46 @@
@@ -1249,7 +1250,7 @@ index 0000000..2e8e9ba
 +
 +  virtual void HideOSD(void) {};
 +  virtual void ShowOSD(void) {};
-+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL) {};
++  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording = true, const struct tTeletextSubtitlePage teletextSubtitlePages[] = NULL, int pageCount = 0) {};
 +  virtual int ManualPageNumber(const cChannel *channel) { return 0; };
 +
 +  // used by VDR to call hook listeners

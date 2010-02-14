@@ -150,7 +150,7 @@ public:
   // -- cVDRTtxtsubsHookListener
   virtual void HideOSD(void) { HideTtxt(); }
   virtual void ShowOSD(void) { ShowTtxt(); }
-  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[]);
+  virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount);
   virtual int ManualPageNumber(const cChannel *channel);
 
   // -- cThread
@@ -415,11 +415,11 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
   sem_post(&chswitchwait);
 }
 
-void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[])
+void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
 {
   mDisplLock.Lock();
   if (mDispl)
-    mDispl->PES_data(p, length, IsPesRecording, teletextSubtitlePages);
+    mDispl->PES_data(p, length, IsPesRecording, teletextSubtitlePages, pageCount);
   mDisplLock.Unlock();
 }
 

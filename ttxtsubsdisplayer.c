@@ -100,7 +100,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
 // Take PES packets and break out the teletext data
 // Buffer the data for processing in a separate thread
 // XXX We should do some filtering here to avoid unneccessary load!
-void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[])
+void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
 {
   int i;
 
@@ -115,7 +115,7 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
   {
     if (teletextSubtitlePages && teletextSubtitlePages[0].ttxtType)
     {
-      for (int p=0; teletextSubtitlePages[p].ttxtType; p++) {
+      for (int p=0; p < pageCount; p++) {
         isyslog("ttxtsubs: got page info from vdr: %s 0x%02X 0x%2X.0x%02X", teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType,
           teletextSubtitlePages[p].ttxtMagazine, teletextSubtitlePages[p].ttxtPage);
         int ch = globals.langChoise(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05);

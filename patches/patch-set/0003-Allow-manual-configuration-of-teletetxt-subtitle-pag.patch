@@ -1,4 +1,4 @@
-From 578e95faa4f0724c664418587a756590a2947f26 Mon Sep 17 00:00:00 2001
+From 856573ae5f4845a0dac545d64edd5c3f7f387de3 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
@@ -103,7 +103,7 @@ index 08ddf3e..0e23389 100644
          free(namebuf);
          if (!GetChannelID().Valid()) {
 diff --git a/channels.h b/channels.h
-index acb346e..c61f770 100644
+index 60973b7..897c8cd 100644
 --- a/channels.h
 +++ b/channels.h
 @@ -144,6 +144,7 @@ private:
