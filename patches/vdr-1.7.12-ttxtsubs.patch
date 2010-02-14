@@ -26,7 +26,7 @@ index 01408cb..b280030 100644
  DEFINES += -DREMOTE_KBD
  endif
 diff --git a/channels.c b/channels.c
-index c14df19..488733e 100644
+index c14df19..7fb726e 100644
 --- a/channels.c
 +++ b/channels.c
 @@ -551,6 +551,13 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
@@ -100,7 +100,7 @@ index c14df19..488733e 100644
 +                             teletextSubtitlePages[fixedTtxtSubtitlePages] = tTeletextSubtitlePage(page);
 +                             if (l)
 +                                strn0cpy(teletextSubtitlePages[fixedTtxtSubtitlePages].ttxtLanguage, l, MAXLANGCODE1);
-+                             fixedTtxtSubtitlePages++
++                             fixedTtxtSubtitlePages++;
 +                             }
 +                          else
 +                             esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
