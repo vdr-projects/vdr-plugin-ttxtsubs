@@ -1,7 +1,7 @@
 From 53a2a588490c058bb2a907d00dad88927bec4618 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 14:42:30 +0100
-Subject: [PATCH 2/5] Added setup option to enable teletext subtitle recording
+Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
 
 ---
  MANUAL      |    3 +++

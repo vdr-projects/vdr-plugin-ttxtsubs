@@ -1,7 +1,7 @@
-From 122be8fa91973f031586fdd2026585cb0510e19f Mon Sep 17 00:00:00 2001
+From 2432eec2b93648cf2b75155b6237293de91da1b6 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 00:28:21 +0100
-Subject: [PATCH 5/5] Ttxtsubs plugin hook
+Subject: [PATCH 6/6] Ttxtsubs plugin hook
 
 ---
  Makefile           |    2 +

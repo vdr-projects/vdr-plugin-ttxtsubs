@@ -1,7 +1,7 @@
-From a0823f9a5d13174c8942a4c7dff52e0270ad483e Mon Sep 17 00:00:00 2001
+From cd69cfb12c691834710beb346527920b8802552e Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
-Subject: [PATCH 4/5] Capture teletext subtitle pages from PMT
+Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
 
 ---
  remux.c |   26 ++++++++++++++++++++++++++

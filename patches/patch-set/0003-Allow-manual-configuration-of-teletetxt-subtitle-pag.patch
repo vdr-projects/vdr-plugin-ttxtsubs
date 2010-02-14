@@ -1,7 +1,7 @@
 From f33ffd78393792ba23c4ee48b3543e182663dc97 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
-Subject: [PATCH 3/5] Allow manual configuration of teletetxt subtitle pages in channels.conf
+Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
 
 ---
  channels.c |   49 +++++++++++++++++++++++++++++++++++++++++++++----

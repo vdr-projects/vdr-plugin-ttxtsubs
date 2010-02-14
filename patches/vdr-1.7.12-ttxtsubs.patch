@@ -177,6 +177,20 @@ index b465f6a..1ddef40 100644
    void SetCaIds(const int *CaIds); // list must be zero-terminated
    void SetCaDescriptors(int Level);
    void SetLinkChannels(cLinkChannels *LinkChannels);
+diff --git a/ci.c b/ci.c
+index 6c7b031..f158a18 100644
+--- a/ci.c
++++ b/ci.c
+@@ -1932,6 +1932,9 @@ bool cCamSlot::CanDecrypt(const cChannel *Channel)
+          CaPmt.AddPid(*Apid, STREAM_TYPE_AUDIO);
+      for (const int *Dpid = Channel->Dpids(); *Dpid; Dpid++)
+          CaPmt.AddPid(*Dpid, STREAM_TYPE_DOLBY);
++     if (Channel->Tpid() && Setup.RecordTtxtSubtitles) {
++        CaPmt.AddPid(Channel->Tpid(), STREAM_TYPE_DOLBY); // FIXME: STREAM_TYPE_DOLBY should probably be renamed STREAM_TYPE_PRIVATE
++        }
+      cas->SendPMT(&CaPmt);
+      cTimeMs Timeout(QUERY_REPLY_TIMEOUT);
+      do {
 diff --git a/config.c b/config.c
 index acdf4c4..4aaf720 100644
 --- a/config.c

@@ -19,6 +19,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - Position subtitles always centered at the bottom, independent of the
   OSD resolution and dropped custom text position settings (Closes #231)
 - Render subtitles outlined (Closes #51)
+- Decrypt encrypted teletext stream (Closes #241)
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
