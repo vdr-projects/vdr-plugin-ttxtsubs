@@ -42,7 +42,6 @@
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplayer.h"
 #include "utils.h"
-#include "siinfo.h"
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
 
@@ -159,7 +158,6 @@ public:
   
   // -- internal
  private:
-  void StartTtxtLive(const cDevice *Device, tChannelID chnid, int pid, int page);
   void StartTtxtPlay(int page);
   void StopTtxt(void);
   void ShowTtxt(void);
@@ -168,7 +166,8 @@ public:
   void parseHIs(const char *val);
 
 private:
-  cTtxtSubsDisplayer *mDispl;
+  cTtxtSubsPlayer *mDispl;
+  cMutex mDisplLock;;
 
   char mOldLanguage[4]; // language chosen from previous version
   int mOldHearingImpaired; // HI setting chosen from previous version
@@ -359,6 +358,7 @@ void cPluginTtxtsubs::Action(void)
     cn=switchChannel;
     dev=switchDevice;
     getchmutex.Unlock();
+    int page = 0;
     if (cn!=lastc) {
       StopTtxt();
       lastc=0;
@@ -367,71 +367,15 @@ void cPluginTtxtsubs::Action(void)
         cString x = mReplayChannelId.ToString();
         if (cs && cs->PageMode() == PAGE_MODE_MANUAL) {
            int tmp = cs->PageNumber();
-           int page = (tmp / 100);
+           page = (tmp / 100);
            tmp = tmp % 100;
            page = (page << 4) + (tmp / 10);
            page = (page << 4) + tmp % 10;
-           StartTtxtPlay(page);
-           lastc=cn;
          }
-        else
-        {
-           StartTtxtPlay(0x000);
-           lastc=cn;
-        }
       }
-      else {
-      cChannel *c = Channels.GetByNumber(cn);
-      if(c) {
-        //int manual_page = TtxtSubsChannelSettings.Page(c->GetChannelID());
-        //if (manual_page>0) { 
-        //  printf("ttxtsubs: manual page %03x selected\n", manual_page);
-        //  if (c->Tpid()) StartTtxtLive(dev, c->GetChannelID(), c->Tpid(), manual_page);
-        //} else if(manual_page==0) {
-          struct ttxtinfo info;
-          int pid, page;
-          char lang[4] = "";
-          bool geterror=true;
-          if((globals.dvbSources() == 0) || ((globals.dvbSources() == 1) && c->IsSat()) || ((globals.dvbSources() == 2) && c->IsTerr()) || ((globals.dvbSources() == 3) && c->IsCable()))
-          {
-             int tries=0; //sometimes it doesn't find subtitles even if they're there
-                          //the problem is that while the dish is moving it's picking the signal
-                          //from a different satellite, so what really should be done is to
-                          //check if the dish is positioned
-             while(tries<=2) {
-               if (geterror=GetTtxtInfo(dev->ActualDevice()->CardIndex(), c, &info)) {
-                 esyslog("ttxtsubs: Error: GetTtxtInfo failed!");
-                 break;
-               }
-               else {
-                 if(FindSubs(&info, &pid, &page, lang)) {
-                   //dprint("CHANNELSWITCH, pid: %d page: %x\n", pid, page);
-                   for(int i = 0; i < gNumLanguages; i++) {
-                      if(!memcmp(lang, gLanguages[i][0], 3) ||
-                         !memcmp(lang, gLanguages[i][1], 3)) {
-                        globals.mI18nLanguage = i - 1;
-                      }
-                   }
-                   if(globals.mI18nLanguage < 0 || globals.mI18nLanguage >= I18nLanguages()->Size())
-                     globals.mI18nLanguage = 0; // default to iso8859-1 if no predefined charset
-                   if (mReplay)
-                      StartTtxtPlay(page);
-                   else
-                      StartTtxtLive(dev, c->GetChannelID(), pid, page);
-                   FreeTtxtInfoData(&info);
-                   break; 
-                 } else {  //!FindSubs
-                   FreeTtxtInfoData(&info);
-                   tries++;
-                 }  
-               }
-             } //while(tries<=2)  
-          }
-          lastc=cn;
-        //}   
-      }
-      }
-    }  
+     StartTtxtPlay(0x000);
+     lastc=cn;
+    }
   }
 }
 
@@ -442,7 +386,6 @@ void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
   gettimeofday(&tv, NULL);  
 #endif
   //dprint("cPluginTtxtsubs::ChannelSwitch(devicenr: %d, channelnr: %d) - mDispl: %x\n",  Device->DeviceNumber(), ChannelNumber, mDispl); // XXX
-
   if(Device->IsPrimaryDevice() && !Device->Replaying()) {
     if(ChannelNumber) {
       getchmutex.Lock();
@@ -474,17 +417,10 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[])
 {
-  if (!mDispl)
-     return;
-
-  cTtxtSubsPlayer *r = dynamic_cast<cTtxtSubsPlayer *>(mDispl);
-
-  if(!r) {
-    esyslog("ttxtsubs: ERROR: not a cTtxtSubsPlayer!");
-    return;
-  }
-
-  r->PES_data(p, length, IsPesRecording, teletextSubtitlePages);
+  mDisplLock.Lock();
+  if (mDispl)
+    mDispl->PES_data(p, length, IsPesRecording, teletextSubtitlePages);
+  mDisplLock.Unlock();
 }
 
 int cPluginTtxtsubs::ManualPageNumber(const cChannel *channel)
@@ -497,23 +433,6 @@ int cPluginTtxtsubs::ManualPageNumber(const cChannel *channel)
 }
 
 // --  internal
-
-void cPluginTtxtsubs::StartTtxtLive(const cDevice *Device, tChannelID chnid, int pid, int page)
-{
-  //dprint("cPluginTtxtsubs::StartTtxtLive(devicenr: %d, pid: %d, page: %03x)\n",
-  //	 Device->DeviceNumber(), pid, page); // XXX
-
-  if(!mDispl) {
-    cTtxtSubsLiveReceiver *r;
-    //dprint("teletext subtitles started on pid %d\n", pid);
-    mDispl = r = new cTtxtSubsLiveReceiver(chnid, pid, page); // takes 0.01-0.015 s
-    if(!cDevice::PrimaryDevice()->ActualDevice()->AttachReceiver(r))
-                                    // takes 0.02-0.04 s on a full featured card
-      esyslog("ttxtsubs: Error: AttachReceiver failed!");
-    ShowTtxt();
-  } else
-    esyslog("ttxtsubs: Error: StartTtxtLive called when already started!");
-}
 
 void cPluginTtxtsubs::StartTtxtPlay(int backup_page)
 {
@@ -532,7 +451,9 @@ void cPluginTtxtsubs::StopTtxt(void)
   //dprint("cPluginTtxtsubs::StopTtxt\n");
 
   HideTtxt();
+  mDisplLock.Lock();
   DELETENULL(mDispl); // takes 0.03-0.04 s
+  mDisplLock.Unlock();
 }
 
 void cPluginTtxtsubs::ShowTtxt(void)

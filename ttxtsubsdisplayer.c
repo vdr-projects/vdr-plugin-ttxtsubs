@@ -21,8 +21,8 @@
 #include "ttxtsubsdisplayer.h"
 #include "ttxtsubsdisplay.h"
 #include "utils.h"
-#include "siinfo.h"
 #include "ttxtsubsglobals.h"
+#include <vdr/channels.h>
 
 // ----- class cTtxtSubsDisplayer -----
 
@@ -82,58 +82,6 @@ void cTtxtSubsDisplayer::ShowDisplay(void)
 void cTtxtSubsDisplayer::HideDisplay(void)
 {
   mDisp->Hide();
-}
-
-
-// ----- class cTtxtSubsLiveReceiver -----
-
-cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int textpage)
-  :
-#if defined(APIVERSNUM) && APIVERSNUM < 10712
-  cReceiver(ChnId, -1, Pid),
-#endif
-  cTtxtSubsDisplayer(textpage)
-{
-#if defined(APIVERSNUM) && APIVERSNUM >= 10712
-  AddPid(Pid);
-#endif
-  SetDescription("ttxtsubs live receiver");
-}
-
-cTtxtSubsLiveReceiver::~cTtxtSubsLiveReceiver(void)
-{
-  Detach();
-}
-
-void cTtxtSubsLiveReceiver::Activate(bool On)
-{
-  //dprint("cTtxtSubsLiveReceiver::Activate: On:%d\n", On);
-}
-
-// Take TS packets and break out the teletext data
-// Buffer the data for processing in a separate thread
-// XXX We should do some filtering here to avoid unneccessary load!
-void cTtxtSubsLiveReceiver::Receive(uchar *Data, int Length)
-{
-  int i;
-
-  if(Length != 188) // should never happen
-    return;
-
-  if(Data[1] & 0x80) // transport_error_indicator
-    return;
-
-  // payload_unit_start_indicator
-  for(i = (Data[1] & 0x40) ? 1 : 0; i < 4; i++) {
-    if(0xff == Data[4 + i*46]) // stuffing data
-      continue;
-
-    uint64_t sched_time = cTimeMs::Now() + globals.liveDelay(); 
-    cFrame *f = new cFrame(Data + 4 + i*46, 46 + sizeof(sched_time));
-    memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
-    mRingBuf.Put(f);
-    mGetCond.Broadcast();
-  }
 }
 
 // ----- class cTtxtSubsPlayer -----

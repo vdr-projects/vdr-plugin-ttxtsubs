@@ -18,7 +18,6 @@
  *
  */
 
-#include <vdr/receiver.h>
 #include <vdr/ringbuffer.h>
 
 class cTtxtSubsDisplay;
@@ -39,16 +38,6 @@ class cTtxtSubsDisplayer : public cThread {
   cCondVar mGetCond;
   cRingBufferFrame mRingBuf;
   int mRun;
-};
-
-class cTtxtSubsLiveReceiver : public cReceiver, public cTtxtSubsDisplayer {
- public:
-  cTtxtSubsLiveReceiver(tChannelID ChnId, int Pid, int textpage);
-  ~cTtxtSubsLiveReceiver(void);
-
- protected:
-  virtual void Activate(bool On);
-  virtual void Receive(uchar *Data, int Length);
 };
 
 class cTtxtSubsPlayer : public cTtxtSubsDisplayer {

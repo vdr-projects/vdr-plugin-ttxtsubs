@@ -20,6 +20,7 @@
 
 #include "teletext.h"
 #include <vdr/tools.h>
+#include <vdr/osd.h>
 
 struct ttxt_data_field;
 struct timeval;
