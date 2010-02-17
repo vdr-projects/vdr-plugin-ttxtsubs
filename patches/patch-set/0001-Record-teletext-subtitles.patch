@@ -1,29 +1,43 @@
-From 16f2ef39cd891a2333d9127c279d06d5e7204577 Mon Sep 17 00:00:00 2001
+From f10d7d8469b1c50f32e884743034c14dd16fae76 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:55:04 +0100
 Subject: [PATCH 1/6] Record teletext subtitles
 
 ---
- channels.c |    6 ++++++
+ channels.c |   20 ++++++++++++++++++++
  channels.h |   16 ++++++++++++++++
  pat.c      |   18 +++++++++++++++++-
  receiver.c |    2 +-
  remux.c    |   29 +++++++++++++++++++++++++++++
  remux.h    |    3 +++
- 6 files changed, 72 insertions(+), 2 deletions(-)
+ 6 files changed, 86 insertions(+), 2 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index c14df19..08ddf3e 100644
+index c14df19..863eab0 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -551,6 +551,12 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -551,6 +551,26 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
       }
  }
  
 +void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[], int numberOfPages)
 +{
-+  for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++)
-+      teletextSubtitlePages[totalTtxtSubtitlePages++] = pages[i];
++  int mod = CHANNELMOD_NONE;
++  if (totalTtxtSubtitlePages != numberOfPages)
++     mod |= CHANNELMOD_PIDS;
++  totalTtxtSubtitlePages = 0;
++  for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++) {
++      if (teletextSubtitlePages[totalTtxtSubtitlePages].ttxtMagazine != pages[i].ttxtMagazine ||
++          teletextSubtitlePages[totalTtxtSubtitlePages].ttxtPage != pages[i].ttxtPage ||
++          teletextSubtitlePages[totalTtxtSubtitlePages].ttxtType != pages[i].ttxtType ||
++          strcmp(teletextSubtitlePages[totalTtxtSubtitlePages].ttxtLanguage, pages[i].ttxtLanguage)) {
++         mod |= CHANNELMOD_PIDS;
++         teletextSubtitlePages[totalTtxtSubtitlePages] = pages[i];
++         }
++      totalTtxtSubtitlePages++;
++      }
++  modification |= mod;
++  Channels.SetModified();
 +}
 +
  void cChannel::SetCaIds(const int *CaIds)

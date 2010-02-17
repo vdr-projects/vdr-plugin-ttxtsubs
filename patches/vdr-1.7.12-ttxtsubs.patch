@@ -26,24 +26,37 @@ index 01408cb..b280030 100644
  DEFINES += -DREMOTE_KBD
  endif
 diff --git a/channels.c b/channels.c
-index c14df19..7fb726e 100644
+index c14df19..197588c 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -551,6 +551,13 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -551,6 +551,26 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
       }
  }
  
 +void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[], int numberOfPages)
 +{
++  int mod = CHANNELMOD_NONE;
++  if (totalTtxtSubtitlePages != numberOfPages)
++     mod |= CHANNELMOD_PIDS;
 +  totalTtxtSubtitlePages = fixedTtxtSubtitlePages;
-+  for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++)
-+      teletextSubtitlePages[totalTtxtSubtitlePages++] = pages[i];
++  for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++) {
++      if (teletextSubtitlePages[totalTtxtSubtitlePages].ttxtMagazine != pages[i].ttxtMagazine ||
++          teletextSubtitlePages[totalTtxtSubtitlePages].ttxtPage != pages[i].ttxtPage ||
++          teletextSubtitlePages[totalTtxtSubtitlePages].ttxtType != pages[i].ttxtType ||
++          strcmp(teletextSubtitlePages[totalTtxtSubtitlePages].ttxtLanguage, pages[i].ttxtLanguage)) {
++         mod |= CHANNELMOD_PIDS;
++         teletextSubtitlePages[totalTtxtSubtitlePages] = pages[i];
++         }
++      totalTtxtSubtitlePages++;
++      }
++  modification |= mod;
++  Channels.SetModified();
 +}
 +
  void cChannel::SetCaIds(const int *CaIds)
  {
    if (caids[0] && caids[0] <= CA_USER_MAX)
-@@ -758,11 +765,22 @@ cString cChannel::ToText(const cChannel *Channel)
+@@ -758,11 +778,22 @@ cString cChannel::ToText(const cChannel *Channel)
          q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs);
          }
       *q = 0;
@@ -67,7 +80,7 @@ index c14df19..7fb726e 100644
       }
    return buffer;
  }
-@@ -796,8 +814,9 @@ bool cChannel::Parse(const char *s)
+@@ -796,8 +827,9 @@ bool cChannel::Parse(const char *s)
       char *parambuf = NULL;
       char *vpidbuf = NULL;
       char *apidbuf = NULL;
@@ -78,7 +91,7 @@ index c14df19..7fb726e 100644
       if (fields >= 9) {
          if (fields == 9) {
             // allow reading of old format
-@@ -879,7 +898,37 @@ bool cChannel::Parse(const char *s)
+@@ -879,7 +911,37 @@ bool cChannel::Parse(const char *s)
                      }
                dpids[NumDpids] = 0;
                }
@@ -117,7 +130,7 @@ index c14df19..7fb726e 100644
             if (caidbuf) {
                char *p = caidbuf;
                char *q;
-@@ -916,6 +965,7 @@ bool cChannel::Parse(const char *s)
+@@ -916,6 +978,7 @@ bool cChannel::Parse(const char *s)
          free(sourcebuf);
          free(vpidbuf);
          free(apidbuf);
