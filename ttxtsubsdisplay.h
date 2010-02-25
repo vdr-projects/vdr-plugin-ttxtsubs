@@ -58,6 +58,7 @@ private:
 
 private:
     int _pageState;
+    bool _pageChanged;
     int _mag;
     int _no;
     int _doDisplay;

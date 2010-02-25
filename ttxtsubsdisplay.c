@@ -104,7 +104,8 @@ cTtxtSubsDisplay::cTtxtSubsDisplay(void)
         _doDisplay(1),
         _osd(NULL),
         _osdLock(),
-        _lastDataTime(NULL)
+        _lastDataTime(NULL),
+        _pageChanged(true)
 {
     memset(&_page.data, 0, sizeof(_page.data));
     _lastDataTime = (struct timeval *) calloc(1, sizeof(*_lastDataTime));
@@ -182,8 +183,12 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
         if ((tv.tv_usec - _lastDataTime->tv_usec) > 500000)
         {
             _pageState = interimshow;
-            ClearOSD();
-            ShowOSD();
+            if (_pageChanged)
+            {
+                ClearOSD();
+                ShowOSD();
+                _pageChanged = false;
+            }
         }
     }
 
@@ -209,8 +214,12 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
             if (_pageState == collecting)
             {
                 _pageState = finished;
-                ClearOSD();
-                ShowOSD();
+                if (_pageChanged)
+                {
+                    ClearOSD();
+                    ShowOSD();
+                   _pageChanged = false;
+                }
             }
             if (_pageState == interimshow)
                 _pageState = finished;
@@ -220,16 +229,17 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
         if (mag == _mag && no == _no)
         {
+            if (fi[3] & 0x80)  // Erase Page
+            {
+                memset(&_page, 0, sizeof(_page));
+                _page.flags |= erasepage;
+            }
+
             _page.mag = mag;
             _page.no = no;
             _page.flags = 0;
             _page.national_charset = 0;
 
-            if (fi[3] & 0x80)  // Erase Page
-            {
-                _page.flags |= erasepage;
-                memset(&_page.data, 0, sizeof(_page.data)); // only if erasepage is set?
-            }
             if (fi[5] & 0x20) // Newsflash
                 _page.flags |= newsflash;
             if (fi[5] & 0x80) // Subtitle
@@ -265,7 +275,14 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
         // mag == _page.mag: The magazines can be sent interleaved
         int i;
         for (i = 0; i < 40; i++)
-            _page.data[packet][i] = invtab[d->data[i]];
+        {
+            unsigned char c = invtab[d->data[i]];
+            if (c != _page.data[packet][i])
+            {
+                _page.data[packet][i] = c;
+                _pageChanged = true;
+            }
+        }
 
         _pageState = collecting;
         gettimeofday(_lastDataTime, NULL);
