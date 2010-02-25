@@ -229,17 +229,16 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
         if (mag == _mag && no == _no)
         {
-            if (fi[3] & 0x80)  // Erase Page
-            {
-                memset(&_page, 0, sizeof(_page));
-                _page.flags |= erasepage;
-            }
 
             _page.mag = mag;
             _page.no = no;
             _page.flags = 0;
-            _page.national_charset = 0;
 
+            if (fi[3] & 0x80)  // Erase Page
+            {
+                memset(&_page.data, 0, sizeof(_page.data));
+                _page.flags |= erasepage;
+            }
             if (fi[5] & 0x20) // Newsflash
                 _page.flags |= newsflash;
             if (fi[5] & 0x80) // Subtitle
