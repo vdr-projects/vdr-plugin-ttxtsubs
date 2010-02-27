@@ -1,6 +1,9 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2010-??-??: Version 0.3.0
+- Added Estonian translation by Arthur Konovalov (Closes #271)
+
 2010-02-27: Version 0.2.0
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
 - Some code refactoring

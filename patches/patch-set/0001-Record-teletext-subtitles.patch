@@ -238,5 +238,5 @@ index 1115c4a..5ee6722 100644
    int SectionLength(const uchar *Data, int Length) { return (Length >= 3) ? ((int(Data[1]) & 0x0F) << 8)| Data[2] : 0; }
  public:
 -- 
-1.6.5
+1.6.6.1
 

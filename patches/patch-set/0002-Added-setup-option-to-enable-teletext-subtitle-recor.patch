@@ -1,4 +1,4 @@
-From 6a6936e383c7f77353cf3e0a8205972e706920b8 Mon Sep 17 00:00:00 2001
+From 9c5503214af1b7f22840708f3621ce8b8c640bdc Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 14:42:30 +0100
 Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
@@ -243,7 +243,7 @@ index d2bf5b0..0eb591e 100644
  msgstr "LNB"
  
 diff --git a/po/et_EE.po b/po/et_EE.po
-index 97e2aee..4d8e612 100644
+index 97e2aee..4190c63 100644
 --- a/po/et_EE.po
 +++ b/po/et_EE.po
 @@ -7,7 +7,7 @@ msgid ""
@@ -260,7 +260,7 @@ index 97e2aee..4d8e612 100644
  msgstr "Subtiitri tausta läbipaistvus"
  
 +msgid "Setup.DVB$Enable teletext support"
-+msgstr ""
++msgstr "Teleteksti tugi"
 +
  msgid "LNB"
  msgstr "LNB"
@@ -694,5 +694,5 @@ index dab95b3..8bfb36e 100644
  return true;
  }
 -- 
-1.6.5
+1.6.6.1
 

@@ -531,7 +531,7 @@ index d2bf5b0..0eb591e 100644
  msgstr "LNB"
  
 diff --git a/po/et_EE.po b/po/et_EE.po
-index 97e2aee..4d8e612 100644
+index 97e2aee..4190c63 100644
 --- a/po/et_EE.po
 +++ b/po/et_EE.po
 @@ -7,7 +7,7 @@ msgid ""
@@ -548,7 +548,7 @@ index 97e2aee..4d8e612 100644
  msgstr "Subtiitri tausta läbipaistvus"
  
 +msgid "Setup.DVB$Enable teletext support"
-+msgstr ""
++msgstr "Teleteksti tugi"
 +
  msgid "LNB"
  msgstr "LNB"

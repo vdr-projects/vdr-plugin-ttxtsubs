@@ -1,4 +1,4 @@
-From d97e9b73e0de4c35242d1fffdd878173aeacbdda Mon Sep 17 00:00:00 2001
+From dcfcfc9320e84d652cb19c9eb3b29ea249873dc0 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
@@ -88,5 +88,5 @@ index 5ee6722..390236a 100644
  
  // TS to PES converter:
 -- 
-1.6.5
+1.6.6.1
 

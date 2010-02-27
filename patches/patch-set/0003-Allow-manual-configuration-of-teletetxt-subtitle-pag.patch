@@ -1,4 +1,4 @@
-From f73da362d10a468e46da395428ad91eac758eea2 Mon Sep 17 00:00:00 2001
+From d9df9449ab20a37789d6c771a118e551941433f4 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
@@ -135,5 +135,5 @@ index 4b2cb90..c7da844 100644
  .B Conditional access
  A hexadecimal integer defining how this channel can be accessed:
 -- 
-1.6.5
+1.6.6.1
 
