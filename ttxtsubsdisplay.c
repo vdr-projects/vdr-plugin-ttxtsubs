@@ -99,13 +99,13 @@ static cOSDSelfMemory gSelfMem;
 cTtxtSubsDisplay::cTtxtSubsDisplay(void)
         :
         _pageState(invalid),
+        _pageChanged(true),
         _mag(0),
         _no(0),
         _doDisplay(1),
         _osd(NULL),
         _osdLock(),
-        _lastDataTime(NULL),
-        _pageChanged(true)
+        _lastDataTime(NULL)
 {
     memset(&_page.data, 0, sizeof(_page.data));
     _lastDataTime = (struct timeval *) calloc(1, sizeof(*_lastDataTime));
