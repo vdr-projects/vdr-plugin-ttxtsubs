@@ -1,7 +1,7 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2010-02-xx: Version 0.2.0
+2010-02-27: Version 0.2.0
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
 - Some code refactoring
 - Major VDR patch update for 1.7.12 (Closes #236, References #139)) - The patch
@@ -20,6 +20,7 @@ VDR Plugin 'ttxtsubs' Revision History
   OSD resolution and dropped custom text position settings (Closes #231)
 - Render subtitles outlined (Closes #51)
 - Decrypt encrypted teletext stream (Closes #241)
+- Don't redisplay unchanged subtitle pages
 
 2009-04-26: Version 0.1.0
 - Updated VDR patch and plugin to VDR 1.7.6 with support for the TS recording
