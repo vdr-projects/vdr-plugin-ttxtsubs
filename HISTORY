@@ -7,6 +7,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - Trigger OSD update when an empty page is sent (making the previous subtitle
   disappear) (Closes #275)
 - French translation updated by Michaël Nival (Closes #278)
+- Makefile adjustments for VDR 1.7.13.
 
 2010-02-27: Version 0.2.0
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
