@@ -238,6 +238,7 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
             {
                 memset(&_page.data, 0, sizeof(_page.data));
                 _page.flags |= erasepage;
+                _pageChanged = true;
             }
             if (fi[5] & 0x20) // Newsflash
                 _page.flags |= newsflash;
