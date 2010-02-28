@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
 "POT-Creation-Date: 2010-02-07 14:29+0100\n"
-"PO-Revision-Date: 2009-01-04 19:05+0100\n"
+"PO-Revision-Date: 2010-02-28 14:43+0100\n"
 "Last-Translator: Nival Michaël\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,17 +28,16 @@ msgid "Display teletext subtitles"
 msgstr "Afficher le sous-titrage"
 
 msgid "deprecated"
-msgstr ""
+msgstr "obsolète"
 
 msgid "Page Selection"
 msgstr "Page de sélection"
 
 msgid "Display on/off"
-msgstr "Affichage"
+msgstr "Affichage on/off"
 
-#, fuzzy
 msgid "4:3/Letterbox (deprecated)"
-msgstr "4:3/Letterbox"
+msgstr "4:3/Letterbox (obsolète)"
 
 msgid "Page Mode"
 msgstr "Mode page"
@@ -56,10 +55,10 @@ msgid "Only DVB-C"
 msgstr "Seulement DVB-C"
 
 msgid "Display Subtitles"
-msgstr "Afficher le sous-titrage"
+msgstr "Afficher les sous-titre"
 
 msgid "Record Subtitles"
-msgstr "Enregistrer le sous-titrage"
+msgstr "Enregistrer les sous-titres"
 
 msgid "Live Delay"
 msgstr "Délai en directe"
@@ -82,9 +81,8 @@ msgstr "Sélection Source DVB"
 msgid "Font Size (pixel)"
 msgstr "Taille Police (pixel)"
 
-#, fuzzy
 msgid "Font OutlineWidth (pixel)"
-msgstr "Taille Police (pixel)"
+msgstr "Largeur contour (pixel)"
 
 msgid "Language"
 msgstr "Langues"
@@ -93,7 +91,7 @@ msgid "Hearing Impaired"
 msgstr "Malentendant"
 
 msgid "Subtitle Page Settings"
-msgstr "Conf. Page sous-titres TXT"
+msgstr "Conf. Page sous-titres"
 
 msgid "Auto"
 msgstr "Auto"
@@ -105,7 +103,8 @@ msgid "Disabled"
 msgstr "Désactivé"
 
 msgid "Subtitle Mode"
-msgstr "Mode de sous-titres TXT"
+msgstr "Mode de sous-titres"
 
 msgid "Manual Subtitle Page"
-msgstr "Page des sous-titres"
+msgstr "Page manuel des sous-titres"
+
