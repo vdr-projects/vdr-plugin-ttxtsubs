@@ -375,7 +375,7 @@ void cTtxtSubsDisplay::UpdateSubtitleTextLines()
 }
 
 void cTtxtSubsDisplay::DrawOutlinedText(int x, int y, const char* text, tColor textColor, tColor outlineColor,
-  tColor backgroundColor, const cFont* font, int width, int height)
+  tColor backgroundColor, const cFont* font)
 {
     for (int horizontalOffset = -globals.mOutlineWidth; horizontalOffset <= globals.mOutlineWidth; horizontalOffset++)
     {
@@ -383,12 +383,11 @@ void cTtxtSubsDisplay::DrawOutlinedText(int x, int y, const char* text, tColor t
         {
             if (horizontalOffset || verticalOffset)
             {
-                _osd->DrawText(x + horizontalOffset, y + verticalOffset, text, outlineColor, backgroundColor, font,
-                  width, height, taCenter);
+                _osd->DrawText(x + horizontalOffset, y + verticalOffset, text, outlineColor, backgroundColor, font);
             }
         }
     }
-    _osd->DrawText(x, y, text, textColor, backgroundColor, font, width, height, taCenter);
+    _osd->DrawText(x, y, text, textColor, backgroundColor, font);
 }
 
 void cTtxtSubsDisplay::ShowOSD(void)
@@ -407,7 +406,8 @@ void cTtxtSubsDisplay::ShowOSD(void)
     DELETENULL(_osd);
 
     int width = cOsd::OsdWidth();
-    int height = _numberOfSubTitleTextLines * _osdFont->Height() + 2 * globals.mOutlineWidth + 5;
+    int textHeight = _numberOfSubTitleTextLines * _osdFont->Height();
+    int height = textHeight + 2 * globals.mOutlineWidth + 10;
 
     _osd = cOsdProvider::NewOsd(cOsd::OsdLeft(), cOsd::OsdTop() + cOsd::OsdHeight() - height, OSD_LEVEL_SUBTITLES + 1);
     tArea Areas[] = { { 0, 0, width - 1, height - 1, 8 } };
@@ -426,15 +426,15 @@ void cTtxtSubsDisplay::ShowOSD(void)
     for(int textLineIndex = 0; textLineIndex < _numberOfSubTitleTextLines; textLineIndex++)
     {
         int lineWidth = _osdFont->Width(_subTitleTextLines[textLineIndex].text) + 2 * globals.mOutlineWidth + 5;
-        int lineHeight = (height / _numberOfSubTitleTextLines) + 5;
+        int lineHeight = (textHeight / _numberOfSubTitleTextLines);
         int x = (width - lineWidth) / 2;
-        int y = lineHeight * textLineIndex;
+        int y = lineHeight * textLineIndex + globals.mOutlineWidth + 5;
         tColor foregroundColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][0];
         tColor outlineColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][1];
         tColor backgroundColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][2];
 
         DrawOutlinedText(x, y, _subTitleTextLines[textLineIndex].text, foregroundColor, outlineColor, backgroundColor,
-          _osdFont, lineWidth, (height / _numberOfSubTitleTextLines));
+          _osdFont);
     }
     _osd->Flush();
 }

@@ -54,7 +54,7 @@ protected:
 private:
     void UpdateSubtitleTextLines();
     void DrawOutlinedText(int x, int y, const char* text, tColor textColor, tColor outlineColor, tColor backgroundColor,
-      const cFont* font, int width, int height);
+      const cFont* font);
 
 private:
     int _pageState;
