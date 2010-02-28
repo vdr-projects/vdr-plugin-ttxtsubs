@@ -1,21 +1,18 @@
 # VDR plugin language source file.
 # Copyright (C) 2007 Klaus Schmidinger <Klaus.Schmidinger@tvdr.de>
 # This file is distributed under the same license as the VDR package.
-# Hannu Savolainen <hannu@opensound.com>, 2002
-# Jaakko Hyv‰tti <jaakko@hyvatti.iki.fi>, 2002
-# Niko Tarnanen <niko.tarnanen@hut.fi>, 2003
 # Rolf Ahrenberg <rahrenbe@cc.hut.fi>, 2003
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: VDR 1.5.7\n"
+"Project-Id-Version: ttxtsubs 0.2.0\n"
 "Report-Msgid-Bugs-To: <author>\n"
 "POT-Creation-Date: 2010-02-07 14:29+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
-"Language-Team: <vdr@linuxtv.org>\n"
+"Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
@@ -25,10 +22,10 @@ msgid "Hide teletext subtitles"
 msgstr "Piilota tekstitys (Teksti-TV)"
 
 msgid "Display teletext subtitles"
-msgstr "N‰yt‰ tekstitys (Teksti-TV)"
+msgstr "N√§yt√§ tekstitys (Teksti-TV)"
 
 msgid "deprecated"
-msgstr ""
+msgstr "k√§yt√∂st√§ poistunut"
 
 msgid "Page Selection"
 msgstr "Tekstityssivun valinta"
@@ -36,9 +33,8 @@ msgstr "Tekstityssivun valinta"
 msgid "Display on/off"
 msgstr "aktivointi"
 
-#, fuzzy
 msgid "4:3/Letterbox (deprecated)"
-msgstr "kuvasuhde"
+msgstr "4:3/Letterbox (k√§yt√∂st√§ poistunut)"
 
 msgid "Page Mode"
 msgstr "sivun valinta"
@@ -56,13 +52,13 @@ msgid "Only DVB-C"
 msgstr "vain DVB-C"
 
 msgid "Display Subtitles"
-msgstr "N‰yt‰ tekstitykset"
+msgstr "N√§yt√§ tekstitykset"
 
 msgid "Record Subtitles"
 msgstr "Tallenna tekstitykset"
 
 msgid "Live Delay"
-msgstr "Viive Live-l‰hetyksess‰"
+msgstr "Viive Live-l√§hetyksess√§"
 
 msgid "Replay Delay (PES)"
 msgstr "Viive toistossa (PES)"
@@ -71,20 +67,19 @@ msgid "Replay Delay (TS)"
 msgstr "Viive toistossa (TS)"
 
 msgid "Main Menu Alternative"
-msgstr "P‰‰valikon toiminnot"
+msgstr "P√§√§valikon toiminnot"
 
 msgid "Workaround for some French chns"
-msgstr "Ranskalainen silm‰nk‰‰ntˆtemppu"
+msgstr "Ranskalainen silm√§nk√§√§nt√∂temppu"
 
 msgid "DVB Source Selection"
-msgstr "Tekstitysl‰hteen valinta"
+msgstr "Tekstitysl√§hteen valinta"
 
 msgid "Font Size (pixel)"
 msgstr "Kirjasintyypin koko (px)"
 
-#, fuzzy
 msgid "Font OutlineWidth (pixel)"
-msgstr "Kirjasintyypin koko (px)"
+msgstr "Kirjasinreunuksen koko (px)"
 
 msgid "Language"
 msgstr "Tekstityskieli"
