@@ -9,6 +9,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - French translation updated by Michaël Nival (Closes #278)
 - Makefile adjustments for VDR 1.7.13.
 - Fixed text rendering to not cut off bottom part (Closes #276)
+- Italian translation update by Diego Pierotto (Closes #283)
 
 2010-02-27: Version 0.2.0
 - Add Ukrainian translation by Yarema aka Knedlyk (Closes #130)
