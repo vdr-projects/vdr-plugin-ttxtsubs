@@ -1,0 +1,470 @@
+From e0f3ff726dae4e6a722f5469bec26b7732ee3573 Mon Sep 17 00:00:00 2001
+From: etobi <git@e-tobi.net>
+Date: Sat, 13 Feb 2010 14:42:30 +0100
+Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
+
+---
+ MANUAL      |    3 +++
+ config.c    |    3 +++
+ config.h    |    1 +
+ menu.c      |    1 +
+ po/ca_ES.po |    3 +++
+ po/cs_CZ.po |    3 +++
+ po/da_DK.po |    3 +++
+ po/de_DE.po |    3 +++
+ po/el_GR.po |    3 +++
+ po/es_ES.po |    3 +++
+ po/et_EE.po |    3 +++
+ po/fi_FI.po |    3 +++
+ po/fr_FR.po |    3 +++
+ po/hr_HR.po |    3 +++
+ po/hu_HU.po |    3 +++
+ po/it_IT.po |    3 +++
+ po/lt_LT.po |    3 +++
+ po/nl_NL.po |    3 +++
+ po/nn_NO.po |    3 +++
+ po/pl_PL.po |    3 +++
+ po/pt_PT.po |    3 +++
+ po/ro_RO.po |    3 +++
+ po/ru_RU.po |    3 +++
+ po/sk_SK.po |    3 +++
+ po/sl_SI.po |    3 +++
+ po/sv_SE.po |    3 +++
+ po/tr_TR.po |    3 +++
+ po/uk_UA.po |    3 +++
+ po/zh_CN.po |    3 +++
+ receiver.c  |    2 +-
+ 30 files changed, 84 insertions(+), 1 deletions(-)
+
+diff --git a/MANUAL b/MANUAL
+index ff80f55..533a110 100644
+--- a/MANUAL
++++ b/MANUAL
+@@ -721,6 +721,9 @@ Version 1.6
+                          background transparency. By default the values as broadcast
+                          are used.
+ 
++  Record Teletext Subtitles = no
++                         If set to 'yes', teletext subtitles will be recorded.
++
+   LNB:
+ 
+   SLOF               = 11700  The switching frequency (in MHz) between low and
+diff --git a/config.c b/config.c
+index acdf4c4..29377d9 100644
+--- a/config.c
++++ b/config.c
+@@ -333,6 +333,7 @@ cSetup::cSetup(void)
+   MarginStop = 10;
+   AudioLanguages[0] = -1;
+   DisplaySubtitles = 0;
++  SupportTeletext = 0;
+   SubtitleLanguages[0] = -1;
+   SubtitleOffset = 0;
+   SubtitleFgTransparency = 0;
+@@ -521,6 +522,7 @@ bool cSetup::Parse(const char *Name, const char *Value)
+   else if (!strcasecmp(Name, "MarginStop"))          MarginStop         = atoi(Value);
+   else if (!strcasecmp(Name, "AudioLanguages"))      return ParseLanguages(Value, AudioLanguages);
+   else if (!strcasecmp(Name, "DisplaySubtitles"))    DisplaySubtitles   = atoi(Value);
++  else if (!strcasecmp(Name, "SupportTeletext"))     SupportTeletext    = atoi(Value);
+   else if (!strcasecmp(Name, "SubtitleLanguages"))   return ParseLanguages(Value, SubtitleLanguages);
+   else if (!strcasecmp(Name, "SubtitleOffset"))      SubtitleOffset     = atoi(Value);
+   else if (!strcasecmp(Name, "SubtitleFgTransparency")) SubtitleFgTransparency = atoi(Value);
+@@ -614,6 +616,7 @@ bool cSetup::Save(void)
+   Store("MarginStop",         MarginStop);
+   StoreLanguages("AudioLanguages", AudioLanguages);
+   Store("DisplaySubtitles",   DisplaySubtitles);
++  Store("SupportTeletext",    SupportTeletext);
+   StoreLanguages("SubtitleLanguages", SubtitleLanguages);
+   Store("SubtitleOffset",     SubtitleOffset);
+   Store("SubtitleFgTransparency", SubtitleFgTransparency);
+diff --git a/config.h b/config.h
+index e4237f7..5a66814 100644
+--- a/config.h
++++ b/config.h
+@@ -235,6 +235,7 @@ public:
+   int MarginStart, MarginStop;
+   int AudioLanguages[I18N_MAX_LANGUAGES + 1];
+   int DisplaySubtitles;
++  int SupportTeletext;
+   int SubtitleLanguages[I18N_MAX_LANGUAGES + 1];
+   int SubtitleOffset;
+   int SubtitleFgTransparency, SubtitleBgTransparency;
+diff --git a/menu.c b/menu.c
+index 655eb4c..194b3de 100644
+--- a/menu.c
++++ b/menu.c
+@@ -2780,6 +2780,7 @@ void cMenuSetupDVB::Setup(void)
+      Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle foreground transparency"), &data.SubtitleFgTransparency, 0, 9));
+      Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle background transparency"), &data.SubtitleBgTransparency, 0, 10));
+      }
++  Add(new cMenuEditBoolItem(tr("Setup.DVB$Enable teletext support"), &data.SupportTeletext));
+ 
+   SetCurrent(Get(current));
+   Display();
+diff --git a/po/ca_ES.po b/po/ca_ES.po
+index 40198f8..9ba7e30 100644
+--- a/po/ca_ES.po
++++ b/po/ca_ES.po
+@@ -934,6 +934,9 @@ msgstr "Transpar
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparència fons subtítols"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "Configuració de l'LNB"
+ 
+diff --git a/po/cs_CZ.po b/po/cs_CZ.po
+index 63b5d1c..0c68400 100644
+--- a/po/cs_CZ.po
++++ b/po/cs_CZ.po
+@@ -932,6 +932,9 @@ msgstr "Pr
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Prùhlednost pozadí titulkù"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/da_DK.po b/po/da_DK.po
+index 99af59b..fca4669 100644
+--- a/po/da_DK.po
++++ b/po/da_DK.po
+@@ -931,6 +931,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Undertekst baggrundsgennemsigtighed"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/de_DE.po b/po/de_DE.po
+index 6181eb3..b385571 100644
+--- a/po/de_DE.po
++++ b/po/de_DE.po
+@@ -931,6 +931,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Untertitel-Transparenz Hintergrund"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr "Videotext-Unterstützung aktivieren"
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/el_GR.po b/po/el_GR.po
+index 70f6e54..ffb73a0 100644
+--- a/po/el_GR.po
++++ b/po/el_GR.po
+@@ -931,6 +931,9 @@ msgstr ""
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr ""
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/es_ES.po b/po/es_ES.po
+index f78c8cb..5ce2238 100644
+--- a/po/es_ES.po
++++ b/po/es_ES.po
+@@ -932,6 +932,9 @@ msgstr "Transparencia primer plano subt
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparencia fondo subtítulos"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/et_EE.po b/po/et_EE.po
+index 047a2f7..09e4b17 100644
+--- a/po/et_EE.po
++++ b/po/et_EE.po
+@@ -931,6 +931,9 @@ msgstr "Subtiitri l
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Subtiitri tausta läbipaistvus"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr "Teleteksti tugi"
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/fi_FI.po b/po/fi_FI.po
+index 49af156..17c7003 100644
+--- a/po/fi_FI.po
++++ b/po/fi_FI.po
+@@ -934,6 +934,9 @@ msgstr "Tekstityksen l
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Tekstityksen taustan läpinäkyvyys"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr "Salli teksti-TV-tuki"
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/fr_FR.po b/po/fr_FR.po
+index 7b23a5e..572902e 100644
+--- a/po/fr_FR.po
++++ b/po/fr_FR.po
+@@ -937,6 +937,9 @@ msgstr "Transparence de l'avant-plan"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparence du fond"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/hr_HR.po b/po/hr_HR.po
+index 56b1bd8..edb6fee 100644
+--- a/po/hr_HR.po
++++ b/po/hr_HR.po
+@@ -933,6 +933,9 @@ msgstr "Transparentnost titla"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparentnost pozadine titla"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/hu_HU.po b/po/hu_HU.po
+index 212d2fe..eefc7d7 100644
+--- a/po/hu_HU.po
++++ b/po/hu_HU.po
+@@ -934,6 +934,9 @@ msgstr "Felirat transzparenci
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Felirat hátterének transzparenciája"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/it_IT.po b/po/it_IT.po
+index ba7c57c..b2d5c3b 100644
+--- a/po/it_IT.po
++++ b/po/it_IT.po
+@@ -938,6 +938,9 @@ msgstr "Trasparenza sottotitoli"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Trasparenza sfondo sottotitoli"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/lt_LT.po b/po/lt_LT.po
+index acf2309..4beb77c 100644
+--- a/po/lt_LT.po
++++ b/po/lt_LT.po
+@@ -931,6 +931,9 @@ msgstr "SubtitrÅ³ priekinio vaizdo permatomumas"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "SubtitrÅ³ fono permatomumas"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "Konverteris (LNB)"
+ 
+diff --git a/po/nl_NL.po b/po/nl_NL.po
+index 1e1d382..a25263e 100644
+--- a/po/nl_NL.po
++++ b/po/nl_NL.po
+@@ -935,6 +935,9 @@ msgstr "Transparantie voorgrond ondertiteling"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparantie achtergrond ondertiteling"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/nn_NO.po b/po/nn_NO.po
+index 11668c7..92fb487 100644
+--- a/po/nn_NO.po
++++ b/po/nn_NO.po
+@@ -932,6 +932,9 @@ msgstr ""
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr ""
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/pl_PL.po b/po/pl_PL.po
+index d1944cb..0e72f00 100644
+--- a/po/pl_PL.po
++++ b/po/pl_PL.po
+@@ -932,6 +932,9 @@ msgstr "Prze
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Prze¼rocze podtytu³ów: T³o"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/pt_PT.po b/po/pt_PT.po
+index 99d8168..f2aa111 100644
+--- a/po/pt_PT.po
++++ b/po/pt_PT.po
+@@ -931,6 +931,9 @@ msgstr "Transpar
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparência de background das legendas"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/ro_RO.po b/po/ro_RO.po
+index 31e6b17..380d4db 100644
+--- a/po/ro_RO.po
++++ b/po/ro_RO.po
+@@ -934,6 +934,9 @@ msgstr "Transparen
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparenþa fundalului subtitrãrii"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/ru_RU.po b/po/ru_RU.po
+index 0796c19..418ccdb 100644
+--- a/po/ru_RU.po
++++ b/po/ru_RU.po
+@@ -932,6 +932,9 @@ msgstr "
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "¿àÞ×àÐçÝÞáâì äÞÝÐ áãÑâØâàÞÒ"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "ºÞÝÒÕàâÕà"
+ 
+diff --git a/po/sk_SK.po b/po/sk_SK.po
+index f53c251..55fdf40 100644
+--- a/po/sk_SK.po
++++ b/po/sk_SK.po
+@@ -932,6 +932,9 @@ msgstr "Prieh
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Priehµadnos» pozadia titulkov"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/sl_SI.po b/po/sl_SI.po
+index 88858e5..6135157 100644
+--- a/po/sl_SI.po
++++ b/po/sl_SI.po
+@@ -932,6 +932,9 @@ msgstr "Transparentnost podnapisov"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparentnost ozadja podnapisov"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/sv_SE.po b/po/sv_SE.po
+index 1c5821b..870bc05 100644
+--- a/po/sv_SE.po
++++ b/po/sv_SE.po
+@@ -934,6 +934,9 @@ msgstr "Transparent f
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Transparent bakgrund textremsa"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/tr_TR.po b/po/tr_TR.po
+index 763a6b6..6bf7f41 100644
+--- a/po/tr_TR.po
++++ b/po/tr_TR.po
+@@ -931,6 +931,9 @@ msgstr "Altyaz
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "Altyazý arka þeffaflýk"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "LNB"
+ 
+diff --git a/po/uk_UA.po b/po/uk_UA.po
+index 2c080fe..da179a0 100644
+--- a/po/uk_UA.po
++++ b/po/uk_UA.po
+@@ -931,6 +931,9 @@ msgstr "ÐŸÑ€Ð¾Ð·Ð¾Ñ€Ñ–ÑÑ‚ÑŒ Ð¿ÐµÑ€ÐµÐ´Ð½ÑŒÐ¾Ð³Ð¾ Ð¿Ð»Ð°Ð½Ñƒ ÑÑƒÐ±Ñ‚Ð¸Ñ‚Ñ€Ñ–Ð²"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "ÐŸÑ€Ð¾Ð·Ð¾Ñ€Ñ–ÑÑ‚ÑŒ Ð·Ð°Ð´Ð½ÑŒÐ¾Ð³Ð¾ Ð¿Ð»Ð°Ð½Ñƒ ÑÑƒÐ±Ñ‚Ð¸Ñ‚Ñ€Ñ–Ð²"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "ÐšÐ¾Ð½Ð²ÐµÑ€Ñ‚ÐµÑ€"
+ 
+diff --git a/po/zh_CN.po b/po/zh_CN.po
+index 30d1094..f886ae1 100644
+--- a/po/zh_CN.po
++++ b/po/zh_CN.po
+@@ -934,6 +934,9 @@ msgstr "å­—å¹•å‰æ™¯é€æ˜Žåº¦"
+ msgid "Setup.DVB$Subtitle background transparency"
+ msgstr "å­—å¹•èƒŒæ™¯é€æ˜Žåº¦"
+ 
++msgid "Setup.DVB$Enable teletext support"
++msgstr ""
++
+ msgid "LNB"
+ msgstr "åˆ‡æ¢å™¨è®¾ç½®"
+ 
+diff --git a/receiver.c b/receiver.c
+index a2c6781..ed28f1b 100644
+--- a/receiver.c
++++ b/receiver.c
+@@ -83,7 +83,7 @@ bool cReceiver::SetPids(const cChannel *Channel)
+             AddPids(Channel->Apids()) &&
+             AddPids(Channel->Dpids()) &&
+             AddPids(Channel->Spids()) &&
+-            AddPid(Channel->Tpid());
++            (!Setup.SupportTeletext || AddPid(Channel->Tpid()));
+      }
+ return true;
+ }
+-- 
+1.6.6.1
+
