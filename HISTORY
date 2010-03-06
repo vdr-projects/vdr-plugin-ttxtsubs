@@ -1,7 +1,7 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2010-??-??: Version 0.2.1
+2010-03-06: Version 0.2.1
 - Added Estonian translation by Arthur Konovalov (Closes #271)
 - Finnish translation updated by Rolf Ahrenberg
 - Trigger OSD update when an empty page is sent (making the previous subtitle
