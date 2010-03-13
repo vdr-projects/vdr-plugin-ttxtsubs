@@ -151,8 +151,14 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
     uint64_t sched_time=cTimeMs::Now() + (IsPesRecording ? globals.replayDelay() : globals.replayTsDelay());
     cFrame *f = new cFrame(p + i*46, 46 + sizeof(sched_time));
     memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
-    mRingBuf.Put(f);
-    mGetCond.Broadcast();
+    if (mRingBuf.Put(f))
+    {
+        mGetCond.Broadcast();
+    }
+    else
+    {
+        isyslog("ttxtsubs: buffer overflow!");
+    }
   }
 }
 
