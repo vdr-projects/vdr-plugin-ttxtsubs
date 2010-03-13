@@ -31,7 +31,7 @@ cTtxtSubsDisplayer::cTtxtSubsDisplayer(int textpage)
   mDisp(NULL),
   mGetMutex(),
   mGetCond(),
-  mRingBuf(18800, true),
+  mRingBuf(94000, true),
   mRun(0)
 {
   mDisp = new cTtxtSubsDisplay();
