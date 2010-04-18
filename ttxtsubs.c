@@ -22,10 +22,8 @@
 #include <vdr/status.h>
 #include <vdr/vdrttxtsubshooks.h>
 #include <vdr/menuitems.h>
-#include <vdr/thread.h>
 #include <vdr/config.h>
 #include <vdr/tools.h>
-#include <semaphore.h>
 
 #define TIMEMEASURE 0
 #if TIMEMEASURE
@@ -116,7 +114,7 @@ const char *gLanguageNames[] = {
 };
 int gNumLanguages = sizeof(gLanguages) / sizeof(gLanguages[0]);
 
-class cPluginTtxtsubs : public cPlugin, public cStatus, public cVDRTtxtsubsHookListener, public cThread {
+class cPluginTtxtsubs : public cPlugin, public cStatus, public cVDRTtxtsubsHookListener {
 public:
   cPluginTtxtsubs(void);
   virtual ~cPluginTtxtsubs();
@@ -153,9 +151,6 @@ public:
   virtual void PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount);
   virtual int ManualPageNumber(const cChannel *channel);
 
-  // -- cThread
-  void Action(void);
-  
   // -- internal
  private:
   void StartTtxtPlay(int page);
@@ -175,8 +170,6 @@ private:
   tChannelID mReplayChannelId;
 
   // wait for channel switch
-  sem_t chswitchwait;
-  cMutex getchmutex;
   int switchChannel;
   int lastc;
   const cDevice *switchDevice;
@@ -210,7 +203,6 @@ cPluginTtxtsubs::cPluginTtxtsubs(void)
   
   memset(mOldLanguage, 0, 4);
   strncpy(globals.mLanguages[0][0], "unk", 4);
-  sem_init(&chswitchwait,0,0);
   lastc=0;
 }
 
@@ -234,8 +226,6 @@ bool cPluginTtxtsubs::ProcessArgs(int argc, char *argv[])
 bool cPluginTtxtsubs::Start(void)
 {
   // Start any background activities the plugin shall perform.
-
-  cThread::Start();
 
   TtxtSubsChannelSettings.Load(AddDirectory(ConfigDirectory("ttxtsubs"),"channelsettings.dat"));
   if(!memcmp(globals.mLanguages[0][0], "unk", 3)) {
@@ -274,7 +264,6 @@ bool cPluginTtxtsubs::Start(void)
 
 void cPluginTtxtsubs::Stop(void)
 {
-  cThread::Cancel();
   StopTtxt();
 }
 
@@ -348,71 +337,26 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   return true;
 }
 
-void cPluginTtxtsubs::Action(void)
-{
-  while(true) {
-    sem_wait(&chswitchwait);
-    int cn;
-    const cDevice *dev;
-    getchmutex.Lock();
-    cn=switchChannel;
-    dev=switchDevice;
-    getchmutex.Unlock();
-    int page = 0;
-    if (cn!=lastc) {
-      StopTtxt();
-      lastc=0;
-      if (mReplay) {
-        cTtxtSubsChannelSetting *cs = TtxtSubsChannelSettings.Get(mReplayChannelId);
-        cString x = mReplayChannelId.ToString();
-        if (cs && cs->PageMode() == PAGE_MODE_MANUAL) {
-           int tmp = cs->PageNumber();
-           page = (tmp / 100);
-           tmp = tmp % 100;
-           page = (page << 4) + (tmp / 10);
-           page = (page << 4) + tmp % 10;
-         }
-      }
-     StartTtxtPlay(0x000);
-     lastc=cn;
-    }
-  }
-}
-
 void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 {
-#if TIMEMEASURE
-  struct timeval tv, tv2;
-  gettimeofday(&tv, NULL);  
-#endif
   //dprint("cPluginTtxtsubs::ChannelSwitch(devicenr: %d, channelnr: %d) - mDispl: %x\n",  Device->DeviceNumber(), ChannelNumber, mDispl); // XXX
-  if(Device->IsPrimaryDevice() && !Device->Replaying()) {
-    if(ChannelNumber) {
-      getchmutex.Lock();
-      switchChannel=ChannelNumber;
-      switchDevice=Device;
-      getchmutex.Unlock();
-      sem_post(&chswitchwait);
-    } 
+  if (Device->IsPrimaryDevice() && !Device->Replaying() && ChannelNumber && ChannelNumber != lastc)
+  {
+    StopTtxt();
+    StartTtxtPlay(0x000);
+    lastc=ChannelNumber;
   }
-#if TIMEMEASURE
-  gettimeofday(&tv2, NULL);  
-  TIMEVALSIMPL(tv, tv2);
-  // tv2.tv_sec - tv.tv_sec + 1000000 * (tv2.tv_usec - tv.tv_usec);
-  isyslog("ttxtsubs: Channel switch time: %d.%06d s",
-	  tv2.tv_sec - tv.tv_sec, tv2.tv_usec - tv.tv_usec);
-#endif
 }
 
 void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const char *FileName, bool On)
 {
   //dprint("cPluginTtxtsubs::Replaying\n"); // XXX
-  cRecordingInfo recInfo(FileName) ;
-  recInfo.Read();
-  mReplayChannelId = recInfo.ChannelID();
-  mReplay = On;
+  StopTtxt();
+  if (On)
+  {
+    StartTtxtPlay(0x000);
+  }
   lastc=-1;
-  sem_post(&chswitchwait);
 }
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
