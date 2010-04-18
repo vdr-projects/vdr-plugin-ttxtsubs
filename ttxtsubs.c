@@ -42,6 +42,7 @@
 #include "utils.h"
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
+#include "ttxtsubslivereceiver.h"
 
 #if defined(APIVERSNUM) && APIVERSNUM < 10706
 #error "This version of ttxtsubs only works with vdr version >= 1.7.6!"
@@ -166,13 +167,7 @@ private:
 
   char mOldLanguage[4]; // language chosen from previous version
   int mOldHearingImpaired; // HI setting chosen from previous version
-  bool mReplay;
-  tChannelID mReplayChannelId;
-
-  // wait for channel switch
-  int switchChannel;
-  int lastc;
-  const cDevice *switchDevice;
+  cTtxtSubsLiveReceiver* mLiveReceiver;
 };
 
 class cMenuSetupTtxtsubs : public cMenuSetupPage {
@@ -195,7 +190,7 @@ cPluginTtxtsubs::cPluginTtxtsubs(void)
   :
   mDispl(NULL),
   mOldHearingImpaired(0),
-  mReplay(false)
+  mLiveReceiver(0)
 {
   // Initialize any member variables here.
   // DON'T DO ANYTHING ELSE THAT MAY HAVE SIDE EFFECTS, REQUIRE GLOBAL
@@ -203,12 +198,12 @@ cPluginTtxtsubs::cPluginTtxtsubs(void)
   
   memset(mOldLanguage, 0, 4);
   strncpy(globals.mLanguages[0][0], "unk", 4);
-  lastc=0;
 }
 
 cPluginTtxtsubs::~cPluginTtxtsubs()
 {
   // Clean up after yourself!
+  DELETENULL(mLiveReceiver);
 }
 
 const char *cPluginTtxtsubs::CommandLineHelp(void)
@@ -340,11 +335,20 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber)
 {
   //dprint("cPluginTtxtsubs::ChannelSwitch(devicenr: %d, channelnr: %d) - mDispl: %x\n",  Device->DeviceNumber(), ChannelNumber, mDispl); // XXX
-  if (Device->IsPrimaryDevice() && !Device->Replaying() && ChannelNumber && ChannelNumber != lastc)
+  if (Device->IsPrimaryDevice() && !Device->Replaying() && ChannelNumber)
   {
     StopTtxt();
+    DELETENULL(mLiveReceiver);
+    if (!Device->Replaying() && !Device->Transferring())
+    {
+      cChannel* channel = Channels.GetByNumber(ChannelNumber);
+      if (channel && channel->Tpid())
+      {
+        mLiveReceiver = new cTtxtSubsLiveReceiver(channel, this);
+        cDevice::PrimaryDevice()->AttachReceiver(mLiveReceiver);
+      }
+    }
     StartTtxtPlay(0x000);
-    lastc=ChannelNumber;
   }
 }
 
@@ -354,9 +358,9 @@ void cPluginTtxtsubs::Replaying(const cControl *Control, const char *Name, const
   StopTtxt();
   if (On)
   {
+    DELETENULL(mLiveReceiver);
     StartTtxtPlay(0x000);
   }
-  lastc=-1;
 }
 
 void cPluginTtxtsubs::PlayerTeletextData(uint8_t *p, int length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
