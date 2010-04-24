@@ -1,109 +1,99 @@
-This is a "plugin" for the Video Disk Recorder (VDR).
+vdr-ttxtsubs - a teletext subtitle plugin for the Linux Video Disk Recorder
+===========================================================================
 
-Written by:                  Ragnar Sundblad <ragge@nada.kth.se>
-
-Project's homepage:          http://www.nada.kth.se/~ragge/vdr/ttxtsubs/
-
-Latest version available at: http://projects.vdr-developer.org/projects/show/plg-ttxtsubs
-
-Copyright:
-
-(C) 2003 - 2008 Ragnar Sundblad
-
-
-License:
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-more details.
-
-You should have received a copy of the GNU General Public License along with
-this program (see file `COPYING`); if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-MA 02110-1301 USA
-
+About
+-----
 
 Description:
+  This plug-in implements displaying, recording and replaying teletext
+  based subtitles using the on screen display.
 
-This plugin implements displaying, recording and replaying teletext
-based subtitles using the on screen display.
+Current Maintainer:
+  Tobias Grimm <vdr@e-tobi.net>
 
+Original Author:
+  Ragnar Sundblad <ragge@nada.kth.se>
 
-Long Description:
+Homepage:
+  http://projects.vdr-developer.org/projects/show/plg-ttxtsubs
 
-The teletext decoder/displayer is currently very basic and limited. It
-can't show colours and it doesn't take into account the editors
-attempts to place the text on different places on the screen.
+Old homepage:
+  http://www.nada.kth.se/~ragge/vdr/ttxtsubs/
 
-The DVB drivers from the Metzlers as of late February 2003 and
-Convergence/linuxtv.org as of March 5 2003 have firmware fixes against
-OSD problems. (Thanks a lot guys!) An upgrade to either of those is
-strongly recommended. If the plugin is used with earlier firmware,
-data may get lost when the OSD is updated possibly resulting in bad
-video and audio, especially when recording or playing recordings.
+Copyright:
+  (C) 2003 - 2008 Ragnar Sundblad
+  (C) 2009 - 2010 Tobias Grimm
 
-Both the live displayer and the recorder finds subtitling PID and page
-for the selected language, and optionally for the hearing impaired, by
-scanning the DVB Service Information. You don't have to set up channel
-Tpids. Though, if you have set a Sid it will be used to speed up
-Service Information scanning. (Can't say it makes much of a
-difference, though).
+License:
+  This program is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version.
 
-The recorder writes a filtered subset of the teletext data with only
-the subtitle pages and an index page at page 100 (or subsequent page
-if that page number is used for subtitling). The filtered stream is
-written as a private_stream_1 with subtype 0x1f (the last teletext
-subtype). An ordinary teletext PES stream recorded for example by
-setting Dpid1 to a teletext PID will typically have a subtype of
-0x10.
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  more details.
 
-The recording player scans the index page to find the selected
-language. (If it can't find an index page it will use the page number
-from the current channel. This may be removed in the future.) The
-index page itself can't be viewed with this plugin.
-
-If you can't select your language, look up its 3 letter acronym in
-<http://www.loc.gov/standards/iso639-2/englangn_ascii.html> and/or
-check the output from ttxtsubs, and enter the language code in your
-VDR setup.conf at ttxtsubs.language. This will hopefully be easier in
-a future release.
-
-Consider this code alpha quality. The code could use some major
-cleanup. The program design was from the beginning just not, as it
-started as a test hack, and it has from then been incompletely
-reworked a few times.
+  You should have received a copy of the GNU General Public License along with
+  this program (see file `COPYING`); if not, write to the
+  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+  MA 02110-1301 USA
 
 
-Installation:
+Introduction
+------------
 
-This plugin is for VDR >= 1.7.6. It currently needs a few hooks in, and
-changes to, VDR to work. A patch file is included and it should
-be harmless if you don't have the plugin loaded, so even if you patch
-VDR and later decide not to use this plugin you don't necessarily have
-to reinstall VDR. It is probably possible to build the plugin for
-other version of VDR, but don't count on it.
+This plug-in is for VDR >= 1.7.6. It currently needs a some changes to the VDR
+code in order to work. A patch file is included in patches/ which can be safely
+applied even if you don't use the ttxtsubs plug-in. For your convenience, the
+patch is also available as a set of logical chunks, each covering a specific
+feature.
 
-cd /put/your/path/here/VDR/PLUGINS/src
-tar -xzf /put/your/path/here/vdr-ttxtsubs-X.Y.Z.tgz
-ln -s ttxtsubs-X.Y.Z ttxtsubs
-cd /put/your/path/here/VDR
-patch -p1 < PLUGINS/src/ttxtsubs/patches/vdr-X.Y.Z-ttxtsubs.patch
-make
-make plugins
-./vdr -P ttxtsubs
+The main responsibilities of the VDR patch are to enable the reception of the
+teletext data stream and to discover the subtitle pages. So even without the
+plug-in, the patch will allow you to record teletext subtitles, which e.g. can
+be shown in 3'rd partly players like VLC.
 
+
+Usage
+-----
+
+Important: In order to be able to receive the teletext subtitles, you must
+enable the teletext subtitle support in VDR's setup. You will find this setting
+in the DVB section of the setup.
+
+Ideally the available subtitle pages / languages will be auto-detected. But this
+might not be possible with all broadcasters. Especially the German broadcasters
+don't care very much about the DVB standard in this regard and you have to
+configure the subtitle page(s) for each channel manually.
+
+In order to do so, you have to stop VDR and edit the channels.conf. After the
+Tpid entry, you can add tuples of language codes and page numbers like this:
+
+    ...:2001;150=deu,151=fin:...
+
+See `man 5 vdr` for a detailed description of the channels.conf.
+
+Future versions of the plug-in will provide an OSD setup for this setting, but
+right now you are on your own.
+
+To see the subtitles, you also must select the subtitle languages you would
+like to see in the plug-ins OSD setup. In the future this might get somehow
+merged with VDRs built-in DVB-subtitle selection.
+
+In the plug-ins setup you can also configure some parameters which control how
+the subtitles will be displayed.
+
+
+Additional notes
+----------------
 
 A Note about reported problems with Digitainer II:
 
-If you own a Digitainer II, you may run into an issue with the OSD and a corrupted
-main menu. OlvierH reported, that the following setting at least partially solves
-this:
+If you own a Digitainer II, you may run into an issue with the OSD and a
+corrupted main menu. OlvierH reported, that the following setting at leas
+partially solves this:
 
 Advanced Chipset Features - AGP &P2P Bridge Control - VGA Share Memory Size: 64M
 (default is 32M)

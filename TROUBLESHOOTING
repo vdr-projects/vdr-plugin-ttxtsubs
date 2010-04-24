@@ -1,3 +1,47 @@
+General troubleshooting
+-----------------------
+
+Don't see any subtitles?
+
+  1. Do you really have the patch for VDR applied and are you really running
+     this patched VDR version?
+  2. Do you have the teletext subtitle option in VDR's setup menu in the DVB
+     section enabled?
+  3. Are you sure your broadcaster supports automatic detection of the subtitle
+     pages? If not, you must manually configure the subtitle pages in the
+     channels.conf!
+  4. Are you sure the current broadcasting does have subtitles at all? No
+     channel sends subtitles 24/7, so please make sure the current broadcasting
+     really contains subtitles. You may want to check this with the OSDTeletext
+     plug-in by manually going to the subtitle page.
+  5. Do you have selected the subtitle languages you want to see in
+     the plug-ins setup?
+
+Nothing works, want to report a bug?
+
+Please report bugs to:
+
+ http://projects.vdr-developer.org/projects/plg-ttxtsubs/issues
+
+...and include the following information:
+
+ - VDR version, plug-in version, patch version
+ - VDR's channels.conf and setup.conf
+ - Syslog and stderr messages
+ - If possible the complete patched VDR source tree
+ - If possible a small 5min-recording which should contain subtitles. You can
+   use a service like e.g. use a duckload.com to upload this (the bug-tracker
+   does not allow attachments larger than 5 MB). You should include the delete
+   link, so we can remove the recording after downloading it. 
+
+
+Advanced troubleshooting
+-------------------------
+
+The following describes some more detailed troubleshooting procedures but
+is partially deprecated (Especially the references to the ttxtsubs output
+on STDERR or the syslog):
+
 Ttxtsubs is made to be fully automatic with no other user settable
 settings than preferred subtitling language or languages and a few
 appearance options. This is how set top boxes work, and, in my
@@ -30,7 +74,6 @@ the subtitles aren't announced in the channel's "service information",
 at least not correctly. You can double check this using dvbsnoop, see
 below.
 
-
 To find the subtitles, a DVB receiver as ttxtsubs scans the channel's
 "Service Information". This meta data contains information about what
 PIDs to use for receiving the channel, such as what PID to use for
@@ -59,13 +102,11 @@ Note that the PID may be different for each language and purpose. This
 is one reason why ttxtsubs has to find out the PID itself and doesn't
 care at all about how you set up the channel's TPid.
 
-
 To find out what ttxtsubs is doing, you must currently (0.0.5pre2)
 look at the stderr output in the shell where you run VDR. In a future
 version, it may instead show this in the VDR menus in a more user
 friendly manner. At the end of this text you can find some typical
 messages from ttxtsubs with explanations.
-
 
 You can use dvbsnoop, http://dvbsnoop.sourceforge.net, to check what
 the service information really says.

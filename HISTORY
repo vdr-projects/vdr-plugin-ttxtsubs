@@ -6,6 +6,7 @@ VDR Plugin 'ttxtsubs' Revision History
   (Dropped 1.7.12 and 1.7.13 patch)
 - Got rid of the backround thread
 - Fixed live TV subtitles on FF cards, where there is no transfer mode
+- Updated README and TROUBLESHOOTING (Closes #323)
 
 2010-03-06: Version 0.2.1
 - Added Estonian translation by Arthur Konovalov (Closes #271)
