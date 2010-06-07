@@ -1,4 +1,4 @@
-From 2f325a640f1d71222d3d7082776b7e1c55489bbd Mon Sep 17 00:00:00 2001
+From 4cf2bdca0d81dc419315657cea0087bd905e078f Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 00:28:21 +0100
 Subject: [PATCH 6/6] Ttxtsubs plugin hook
@@ -16,7 +16,7 @@ Subject: [PATCH 6/6] Ttxtsubs plugin hook
  create mode 100644 vdrttxtsubshooks.h
 
 diff --git a/Makefile b/Makefile
-index 31f05b0..a45b189 100644
+index d788484..f854b2e 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -44,6 +44,8 @@ OBJS = audio.o channels.o ci.o config.o cutter.o device.o diseqc.o dvbdevice.o d
@@ -29,7 +29,7 @@ index 31f05b0..a45b189 100644
  DEFINES += -DREMOTE_KBD
  endif
 diff --git a/device.c b/device.c
-index ac4d6d4..773cf21 100644
+index 681049b..4dbd920 100644
 --- a/device.c
 +++ b/device.c
 @@ -18,6 +18,7 @@
@@ -81,10 +81,10 @@ index ac4d6d4..773cf21 100644
                }
             else if (Pid == patPmtParser.Ppid()) {
 diff --git a/device.h b/device.h
-index 9ce814a..426dc8f 100644
+index cb3bc2c..f531e70 100644
 --- a/device.h
 +++ b/device.h
-@@ -519,6 +519,7 @@ private:
+@@ -522,6 +522,7 @@ private:
    cTsToPes tsToPesVideo;
    cTsToPes tsToPesAudio;
    cTsToPes tsToPesSubtitle;
@@ -93,7 +93,7 @@ index 9ce814a..426dc8f 100644
  protected:
    const cPatPmtParser *PatPmtParser(void) const { return &patPmtParser; }
 diff --git a/pat.c b/pat.c
-index 684ba81..4541682 100644
+index 2172729..e313e23 100644
 --- a/pat.c
 +++ b/pat.c
 @@ -13,6 +13,7 @@
@@ -104,10 +104,10 @@ index 684ba81..4541682 100644
  
  #define PMT_SCAN_TIMEOUT  10 // seconds
  
-@@ -496,6 +497,11 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
+@@ -505,6 +506,11 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
              }
          if (Setup.UpdateChannels >= 2) {
-            Channel->SetPids(Vpid, Ppid, Vtype, Apids, ALangs, Dpids, DLangs, Spids, SLangs, Tpid);
+            Channel->SetPids(Vpid, Ppid, Vtype, Apids, Atypes, ALangs, Dpids, Dtypes, DLangs, Spids, SLangs, Tpid);
 +           if (NumTPages < MAXTXTPAGES) {
 +              int manualPageNumber = cVDRTtxtsubsHookListener::Hook()->ManualPageNumber(Channel);
 +              if (manualPageNumber)
@@ -117,10 +117,10 @@ index 684ba81..4541682 100644
             Channel->SetCaIds(CaDescriptors->CaIds());
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
 diff --git a/remux.h b/remux.h
-index 390236a..7bf712e 100644
+index 511d604..6f816dc 100644
 --- a/remux.h
 +++ b/remux.h
-@@ -280,7 +280,8 @@ public:
+@@ -281,7 +281,8 @@ public:
    uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
@@ -252,5 +252,5 @@ index 0000000..2f97969
 +
 +#endif
 -- 
-1.7.0
+1.7.1
 

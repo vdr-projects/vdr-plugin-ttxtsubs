@@ -1,4 +1,4 @@
-From 7bcbfa881c63c68e7c9bc35132891ae8d7929d75 Mon Sep 17 00:00:00 2001
+From 261f539f0dc1d84fe7a032bac2ec16434d9851e7 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in channels.conf
@@ -10,10 +10,10 @@ Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages in c
  3 files changed, 56 insertions(+), 5 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index f0b8a13..878c5ef 100644
+index ebb6665..8e7e1a1 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -368,9 +368,9 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -379,9 +379,9 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
  void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[], int numberOfPages)
  {
    int mod = CHANNELMOD_NONE;
@@ -25,8 +25,8 @@ index f0b8a13..878c5ef 100644
    for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++) {
        if (teletextSubtitlePages[totalTtxtSubtitlePages].ttxtMagazine != pages[i].ttxtMagazine ||
            teletextSubtitlePages[totalTtxtSubtitlePages].ttxtPage != pages[i].ttxtPage ||
-@@ -513,11 +513,22 @@ cString cChannel::ToText(const cChannel *Channel)
-         q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs);
+@@ -524,11 +524,22 @@ cString cChannel::ToText(const cChannel *Channel)
+         q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs, Channel->dtypes);
          }
       *q = 0;
 +     const int TBufferSize = 5 + 1 + (MAXTXTPAGES * (3 + 1 + MAXLANGCODE1 + 1)) + 10; // '12345;150=deu,151=fin,...', +10: paranoia
@@ -49,7 +49,7 @@ index f0b8a13..878c5ef 100644
       }
    return buffer;
  }
-@@ -551,8 +562,9 @@ bool cChannel::Parse(const char *s)
+@@ -562,8 +573,9 @@ bool cChannel::Parse(const char *s)
       char *parambuf = NULL;
       char *vpidbuf = NULL;
       char *apidbuf = NULL;
@@ -60,9 +60,9 @@ index f0b8a13..878c5ef 100644
       if (fields >= 9) {
          if (fields == 9) {
             // allow reading of old format
-@@ -635,7 +647,37 @@ bool cChannel::Parse(const char *s)
-                     }
+@@ -662,7 +674,37 @@ bool cChannel::Parse(const char *s)
                dpids[NumDpids] = 0;
+               dtypes[NumDpids] = 0;
                }
 -
 +           if (tpidbuf) {
@@ -99,7 +99,7 @@ index f0b8a13..878c5ef 100644
             if (caidbuf) {
                char *p = caidbuf;
                char *q;
-@@ -672,6 +714,7 @@ bool cChannel::Parse(const char *s)
+@@ -699,6 +741,7 @@ bool cChannel::Parse(const char *s)
          free(sourcebuf);
          free(vpidbuf);
          free(apidbuf);
@@ -108,10 +108,10 @@ index f0b8a13..878c5ef 100644
          free(namebuf);
          if (!GetChannelID().Valid()) {
 diff --git a/channels.h b/channels.h
-index 905a9b4..be94422 100644
+index f9ff774..63c8b9c 100644
 --- a/channels.h
 +++ b/channels.h
-@@ -124,6 +124,7 @@ private:
+@@ -126,6 +126,7 @@ private:
    uint16_t compositionPageIds[MAXSPIDS];
    uint16_t ancillaryPageIds[MAXSPIDS];
    int tpid;
@@ -120,10 +120,10 @@ index 905a9b4..be94422 100644
    tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES];
    int caids[MAXCAIDS + 1]; // list is zero-terminated
 diff --git a/vdr.5 b/vdr.5
-index dbef7dc..001dfc3 100644
+index 68711b5..9b8ed05 100644
 --- a/vdr.5
 +++ b/vdr.5
-@@ -207,6 +207,13 @@ can be indicated by adding a second language code, delimited by a '+' sign, as i
+@@ -214,6 +214,13 @@ if there is an audio type.
  .TP
  .B TPID
  The teletext PID.
@@ -138,5 +138,5 @@ index dbef7dc..001dfc3 100644
  .B Conditional access
  A hexadecimal integer defining how this channel can be accessed:
 -- 
-1.7.0
+1.7.1
 

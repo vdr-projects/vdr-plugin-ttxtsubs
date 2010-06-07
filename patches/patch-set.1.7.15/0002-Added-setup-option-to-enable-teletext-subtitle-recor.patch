@@ -1,4 +1,4 @@
-From e7aefd8eb168fc435318a99f267a6de4ec3281bf Mon Sep 17 00:00:00 2001
+From 4ede25d08ba25bee414020ff2b4c76590ad3f92c Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 14:42:30 +0100
 Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
@@ -37,10 +37,10 @@ Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
  30 files changed, 84 insertions(+), 1 deletions(-)
 
 diff --git a/MANUAL b/MANUAL
-index 3fd528f..01c98b9 100644
+index 7fae53b..6b0ae57 100644
 --- a/MANUAL
 +++ b/MANUAL
-@@ -725,6 +725,9 @@ Version 1.6
+@@ -730,6 +730,9 @@ Version 1.6
                           background transparency. By default the values as broadcast
                           are used.
  
@@ -51,7 +51,7 @@ index 3fd528f..01c98b9 100644
  
    SLOF               = 11700  The switching frequency (in MHz) between low and
 diff --git a/config.c b/config.c
-index aa18ebc..351f56d 100644
+index 73b11b1..f2eebe6 100644
 --- a/config.c
 +++ b/config.c
 @@ -333,6 +333,7 @@ cSetup::cSetup(void)
@@ -62,7 +62,7 @@ index aa18ebc..351f56d 100644
    SubtitleLanguages[0] = -1;
    SubtitleOffset = 0;
    SubtitleFgTransparency = 0;
-@@ -523,6 +524,7 @@ bool cSetup::Parse(const char *Name, const char *Value)
+@@ -524,6 +525,7 @@ bool cSetup::Parse(const char *Name, const char *Value)
    else if (!strcasecmp(Name, "MarginStop"))          MarginStop         = atoi(Value);
    else if (!strcasecmp(Name, "AudioLanguages"))      return ParseLanguages(Value, AudioLanguages);
    else if (!strcasecmp(Name, "DisplaySubtitles"))    DisplaySubtitles   = atoi(Value);
@@ -70,7 +70,7 @@ index aa18ebc..351f56d 100644
    else if (!strcasecmp(Name, "SubtitleLanguages"))   return ParseLanguages(Value, SubtitleLanguages);
    else if (!strcasecmp(Name, "SubtitleOffset"))      SubtitleOffset     = atoi(Value);
    else if (!strcasecmp(Name, "SubtitleFgTransparency")) SubtitleFgTransparency = atoi(Value);
-@@ -618,6 +620,7 @@ bool cSetup::Save(void)
+@@ -620,6 +622,7 @@ bool cSetup::Save(void)
    Store("MarginStop",         MarginStop);
    StoreLanguages("AudioLanguages", AudioLanguages);
    Store("DisplaySubtitles",   DisplaySubtitles);
@@ -79,7 +79,7 @@ index aa18ebc..351f56d 100644
    Store("SubtitleOffset",     SubtitleOffset);
    Store("SubtitleFgTransparency", SubtitleFgTransparency);
 diff --git a/config.h b/config.h
-index f4996bb..ed355dd 100644
+index 7041eb7..289d4b6 100644
 --- a/config.h
 +++ b/config.h
 @@ -235,6 +235,7 @@ public:
@@ -91,10 +91,10 @@ index f4996bb..ed355dd 100644
    int SubtitleOffset;
    int SubtitleFgTransparency, SubtitleBgTransparency;
 diff --git a/menu.c b/menu.c
-index e3b49ce..493d6ed 100644
+index 19cfabb..d2deeb3 100644
 --- a/menu.c
 +++ b/menu.c
-@@ -2788,6 +2788,7 @@ void cMenuSetupDVB::Setup(void)
+@@ -2790,6 +2790,7 @@ void cMenuSetupDVB::Setup(void)
       Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle foreground transparency"), &data.SubtitleFgTransparency, 0, 9));
       Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle background transparency"), &data.SubtitleBgTransparency, 0, 10));
       }
@@ -103,10 +103,10 @@ index e3b49ce..493d6ed 100644
    SetCurrent(Get(current));
    Display();
 diff --git a/po/ca_ES.po b/po/ca_ES.po
-index 1dd35e3..af5627d 100644
+index 247113b..aba1ae3 100644
 --- a/po/ca_ES.po
 +++ b/po/ca_ES.po
-@@ -937,6 +937,9 @@ msgstr "Transpar
+@@ -943,6 +943,9 @@ msgstr "Transpar
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transpar�ncia fons subt�tols"
  
@@ -117,12 +117,12 @@ index 1dd35e3..af5627d 100644
  msgstr "Configuraci� de l'LNB"
  
 diff --git a/po/cs_CZ.po b/po/cs_CZ.po
-index e8c6687..68c5202 100644
+index f6313ba..aec6f4e 100644
 --- a/po/cs_CZ.po
 +++ b/po/cs_CZ.po
-@@ -935,6 +935,9 @@ msgstr "Pr
+@@ -942,6 +942,9 @@ msgstr "Průhlednost písma titulků"
  msgid "Setup.DVB$Subtitle background transparency"
- msgstr "Pr�hlednost pozad� titulk�"
+ msgstr "Průhlednost pozadí titulků"
  
 +msgid "Setup.DVB$Enable teletext support"
 +msgstr ""
@@ -131,10 +131,10 @@ index e8c6687..68c5202 100644
  msgstr "LNB"
  
 diff --git a/po/da_DK.po b/po/da_DK.po
-index 580d82a..44bb590 100644
+index 40cdebd..192173d 100644
 --- a/po/da_DK.po
 +++ b/po/da_DK.po
-@@ -934,6 +934,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
+@@ -940,6 +940,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Undertekst baggrundsgennemsigtighed"
  
@@ -145,10 +145,10 @@ index 580d82a..44bb590 100644
  msgstr "LNB"
  
 diff --git a/po/de_DE.po b/po/de_DE.po
-index 42caadc..07e96f6 100644
+index 4d4f3df..a3227a0 100644
 --- a/po/de_DE.po
 +++ b/po/de_DE.po
-@@ -934,6 +934,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
+@@ -940,6 +940,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Untertitel-Transparenz Hintergrund"
  
@@ -159,10 +159,10 @@ index 42caadc..07e96f6 100644
  msgstr "LNB"
  
 diff --git a/po/el_GR.po b/po/el_GR.po
-index 344b641..4206815 100644
+index 5414ebc..913f39e 100644
 --- a/po/el_GR.po
 +++ b/po/el_GR.po
-@@ -934,6 +934,9 @@ msgstr ""
+@@ -940,6 +940,9 @@ msgstr ""
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr ""
  
@@ -173,10 +173,10 @@ index 344b641..4206815 100644
  msgstr "LNB"
  
 diff --git a/po/es_ES.po b/po/es_ES.po
-index 4630a3b..a15e452 100644
+index 217f775..78a9491 100644
 --- a/po/es_ES.po
 +++ b/po/es_ES.po
-@@ -935,6 +935,9 @@ msgstr "Transparencia primer plano subt
+@@ -941,6 +941,9 @@ msgstr "Transparencia primer plano subt
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparencia fondo subt�tulos"
  
@@ -187,10 +187,10 @@ index 4630a3b..a15e452 100644
  msgstr "LNB"
  
 diff --git a/po/et_EE.po b/po/et_EE.po
-index 803a539..f834e16 100644
+index 5010dc4..af2e2d3 100644
 --- a/po/et_EE.po
 +++ b/po/et_EE.po
-@@ -934,6 +934,9 @@ msgstr "Subtiitri l
+@@ -940,6 +940,9 @@ msgstr "Subtiitri l
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Subtiitri tausta l�bipaistvus"
  
@@ -201,12 +201,12 @@ index 803a539..f834e16 100644
  msgstr "LNB"
  
 diff --git a/po/fi_FI.po b/po/fi_FI.po
-index 70e4d58..f07e5f7 100644
+index cd57e7c..e6a22bf 100644
 --- a/po/fi_FI.po
 +++ b/po/fi_FI.po
-@@ -937,6 +937,9 @@ msgstr "Tekstityksen l
+@@ -943,6 +943,9 @@ msgstr "Tekstityksen läpinäkyvyys"
  msgid "Setup.DVB$Subtitle background transparency"
- msgstr "Tekstityksen taustan l�pin�kyvyys"
+ msgstr "Tekstityksen taustan läpinäkyvyys"
  
 +msgid "Setup.DVB$Enable teletext support"
 +msgstr "Salli teksti-TV-tuki"
@@ -215,10 +215,10 @@ index 70e4d58..f07e5f7 100644
  msgstr "LNB"
  
 diff --git a/po/fr_FR.po b/po/fr_FR.po
-index 74d8ceb..9437bb4 100644
+index 0d4cb7c..770038e 100644
 --- a/po/fr_FR.po
 +++ b/po/fr_FR.po
-@@ -940,6 +940,9 @@ msgstr "Transparence de l'avant-plan"
+@@ -946,6 +946,9 @@ msgstr "Transparence de l'avant-plan"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparence du fond"
  
@@ -229,10 +229,10 @@ index 74d8ceb..9437bb4 100644
  msgstr "LNB"
  
 diff --git a/po/hr_HR.po b/po/hr_HR.po
-index 55912e5..60f6483 100644
+index 96ee695..51f596c 100644
 --- a/po/hr_HR.po
 +++ b/po/hr_HR.po
-@@ -936,6 +936,9 @@ msgstr "Transparentnost titla"
+@@ -942,6 +942,9 @@ msgstr "Transparentnost titla"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparentnost pozadine titla"
  
@@ -243,10 +243,10 @@ index 55912e5..60f6483 100644
  msgstr "LNB"
  
 diff --git a/po/hu_HU.po b/po/hu_HU.po
-index ccc10cc..51e7c0f 100644
+index a17b209..2f70812 100644
 --- a/po/hu_HU.po
 +++ b/po/hu_HU.po
-@@ -937,6 +937,9 @@ msgstr "Felirat transzparenci
+@@ -943,6 +943,9 @@ msgstr "Felirat transzparenci
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Felirat h�tter�nek transzparenci�ja"
  
@@ -257,10 +257,10 @@ index ccc10cc..51e7c0f 100644
  msgstr "LNB"
  
 diff --git a/po/it_IT.po b/po/it_IT.po
-index c478284..25684ef 100644
+index 89d4237..5a055b2 100644
 --- a/po/it_IT.po
 +++ b/po/it_IT.po
-@@ -941,6 +941,9 @@ msgstr "Trasparenza sottotitoli"
+@@ -947,6 +947,9 @@ msgstr "Trasparenza sottotitoli"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Trasparenza sfondo sottotitoli"
  
@@ -271,10 +271,10 @@ index c478284..25684ef 100644
  msgstr "LNB"
  
 diff --git a/po/lt_LT.po b/po/lt_LT.po
-index d79f03f..31b2457 100644
+index 02465e6..8b5d996 100644
 --- a/po/lt_LT.po
 +++ b/po/lt_LT.po
-@@ -934,6 +934,9 @@ msgstr "Subtitrų priekinio vaizdo permatomumas"
+@@ -940,6 +940,9 @@ msgstr "Subtitrų priekinio vaizdo permatomumas"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Subtitrų fono permatomumas"
  
@@ -285,10 +285,10 @@ index d79f03f..31b2457 100644
  msgstr "Konverteris (LNB)"
  
 diff --git a/po/nl_NL.po b/po/nl_NL.po
-index f4d9120..e9a3679 100644
+index f570337..73a02b3 100644
 --- a/po/nl_NL.po
 +++ b/po/nl_NL.po
-@@ -938,6 +938,9 @@ msgstr "Transparantie voorgrond ondertiteling"
+@@ -944,6 +944,9 @@ msgstr "Transparantie voorgrond ondertiteling"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparantie achtergrond ondertiteling"
  
@@ -299,10 +299,10 @@ index f4d9120..e9a3679 100644
  msgstr "LNB"
  
 diff --git a/po/nn_NO.po b/po/nn_NO.po
-index e739b35..82b64be 100644
+index 2f40cfe..0934c9a 100644
 --- a/po/nn_NO.po
 +++ b/po/nn_NO.po
-@@ -935,6 +935,9 @@ msgstr ""
+@@ -941,6 +941,9 @@ msgstr ""
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr ""
  
@@ -313,10 +313,10 @@ index e739b35..82b64be 100644
  msgstr "LNB"
  
 diff --git a/po/pl_PL.po b/po/pl_PL.po
-index 9af0227..83a4748 100644
+index 9620e1b..39057fd 100644
 --- a/po/pl_PL.po
 +++ b/po/pl_PL.po
-@@ -935,6 +935,9 @@ msgstr "Prze
+@@ -941,6 +941,9 @@ msgstr "Prze
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Prze�rocze podtytu��w: T�o"
  
@@ -327,10 +327,10 @@ index 9af0227..83a4748 100644
  msgstr "LNB"
  
 diff --git a/po/pt_PT.po b/po/pt_PT.po
-index edea421..b1158e3 100644
+index 0510d9d..3bea1f1 100644
 --- a/po/pt_PT.po
 +++ b/po/pt_PT.po
-@@ -934,6 +934,9 @@ msgstr "Transpar
+@@ -940,6 +940,9 @@ msgstr "Transpar
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transpar�ncia de background das legendas"
  
@@ -341,10 +341,10 @@ index edea421..b1158e3 100644
  msgstr "LNB"
  
 diff --git a/po/ro_RO.po b/po/ro_RO.po
-index ffac7e9..32061de 100644
+index e0a2119..1d4a412 100644
 --- a/po/ro_RO.po
 +++ b/po/ro_RO.po
-@@ -937,6 +937,9 @@ msgstr "Transparen
+@@ -943,6 +943,9 @@ msgstr "Transparen
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparen�a fundalului subtitr�rii"
  
@@ -355,10 +355,10 @@ index ffac7e9..32061de 100644
  msgstr "LNB"
  
 diff --git a/po/ru_RU.po b/po/ru_RU.po
-index 4409394..0182ee7 100644
+index 889b98b..89029e1 100644
 --- a/po/ru_RU.po
 +++ b/po/ru_RU.po
-@@ -935,6 +935,9 @@ msgstr "
+@@ -941,6 +941,9 @@ msgstr "
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "������������ ���� ���������"
  
@@ -369,10 +369,10 @@ index 4409394..0182ee7 100644
  msgstr "���������"
  
 diff --git a/po/sk_SK.po b/po/sk_SK.po
-index bedb133..b240231 100644
+index 129fad3..eff0bd1 100644
 --- a/po/sk_SK.po
 +++ b/po/sk_SK.po
-@@ -935,6 +935,9 @@ msgstr "Prieh
+@@ -941,6 +941,9 @@ msgstr "Prieh
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Prieh�adnos� pozadia titulkov"
  
@@ -383,10 +383,10 @@ index bedb133..b240231 100644
  msgstr "LNB"
  
 diff --git a/po/sl_SI.po b/po/sl_SI.po
-index 7f45b02..869d99b 100644
+index 9f1e806..7f2bdd7 100644
 --- a/po/sl_SI.po
 +++ b/po/sl_SI.po
-@@ -935,6 +935,9 @@ msgstr "Transparentnost podnapisov"
+@@ -941,6 +941,9 @@ msgstr "Transparentnost podnapisov"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparentnost ozadja podnapisov"
  
@@ -397,10 +397,10 @@ index 7f45b02..869d99b 100644
  msgstr "LNB"
  
 diff --git a/po/sv_SE.po b/po/sv_SE.po
-index 732e179..263c7ff 100644
+index e9d39dd..9c366d2 100644
 --- a/po/sv_SE.po
 +++ b/po/sv_SE.po
-@@ -937,6 +937,9 @@ msgstr "Transparent f
+@@ -943,6 +943,9 @@ msgstr "Transparent f
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparent bakgrund textremsa"
  
@@ -411,10 +411,10 @@ index 732e179..263c7ff 100644
  msgstr "LNB"
  
 diff --git a/po/tr_TR.po b/po/tr_TR.po
-index 1a3382c..4e2c68f 100644
+index 9acd1c1..50a6295 100644
 --- a/po/tr_TR.po
 +++ b/po/tr_TR.po
-@@ -934,6 +934,9 @@ msgstr "Altyaz
+@@ -940,6 +940,9 @@ msgstr "Altyaz
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Altyaz� arka �effafl�k"
  
@@ -425,10 +425,10 @@ index 1a3382c..4e2c68f 100644
  msgstr "LNB"
  
 diff --git a/po/uk_UA.po b/po/uk_UA.po
-index a373fb5..5cec5c1 100644
+index b62fca7..25e7095 100644
 --- a/po/uk_UA.po
 +++ b/po/uk_UA.po
-@@ -934,6 +934,9 @@ msgstr "Прозорість переднього плану субтитрів"
+@@ -940,6 +940,9 @@ msgstr "Прозорість переднього плану субтитрів"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Прозорість заднього плану субтитрів"
  
@@ -439,10 +439,10 @@ index a373fb5..5cec5c1 100644
  msgstr "Конвертер"
  
 diff --git a/po/zh_CN.po b/po/zh_CN.po
-index 48c4a38..580c190 100644
+index bffa301..141c362 100644
 --- a/po/zh_CN.po
 +++ b/po/zh_CN.po
-@@ -937,6 +937,9 @@ msgstr "字幕前景透明度"
+@@ -943,6 +943,9 @@ msgstr "字幕前景透明度"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "字幕背景透明度"
  
@@ -466,5 +466,5 @@ index a2c6781..ed28f1b 100644
  return true;
  }
 -- 
-1.7.0
+1.7.1
 
