@@ -13,69 +13,69 @@ msgstr ""
 "Language-Team: Spanish <vdr@linuxtv.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
-msgstr "SubtÌtulos teletexto"
+msgstr "Subt√≠tulos teletexto"
 
 msgid "Hide teletext subtitles"
-msgstr "Esconde subtÌtulos teletexto"
+msgstr "Esconde subt√≠tulos teletexto"
 
 msgid "Display teletext subtitles"
-msgstr "Visualiza subtÌtulos teletexto"
+msgstr "Visualiza subt√≠tulos teletexto"
 
 msgid "deprecated"
 msgstr ""
 
 msgid "Page Selection"
-msgstr "SelecciÛn p·gina subtÌtulos"
+msgstr "Selecci√≥n p√°gina subt√≠tulos"
 
 msgid "Display on/off"
-msgstr "Visualiza sÌ/no"
+msgstr "Visualiza s√≠/no"
 
 #, fuzzy
 msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
-msgstr "Modo p·gina"
+msgstr "Modo p√°gina"
 
 msgid "All"
 msgstr "Todas"
 
 msgid "Only DVB-S"
-msgstr "SÛlo DVB-S"
+msgstr "S√≥lo DVB-S"
 
 msgid "Only DVB-T"
-msgstr "SÛlo DVB-T"
+msgstr "S√≥lo DVB-T"
 
 msgid "Only DVB-C"
-msgstr "SÛlo DVB-C"
+msgstr "S√≥lo DVB-C"
 
 msgid "Display Subtitles"
-msgstr "Visualiza subtÌtulos"
+msgstr "Visualiza subt√≠tulos"
 
 msgid "Record Subtitles"
-msgstr "Graba subtÌtulos"
+msgstr "Graba subt√≠tulos"
 
 msgid "Live Delay"
 msgstr "Retardo en directo"
 
 msgid "Replay Delay (PES)"
-msgstr "Retardo en reproducciÛn (PES)"
+msgstr "Retardo en reproducci√≥n (PES)"
 
 msgid "Replay Delay (TS)"
-msgstr "Retardo en reproducciÛn (TS)"
+msgstr "Retardo en reproducci√≥n (TS)"
 
 msgid "Main Menu Alternative"
-msgstr "Alternativa del men˙ principal"
+msgstr "Alternativa del men√∫ principal"
 
 msgid "Workaround for some French chns"
-msgstr "CorrecciÛn para canales franceses"
+msgstr "Correcci√≥n para canales franceses"
 
 msgid "DVB Source Selection"
-msgstr "SelecciÛn fuente DVB"
+msgstr "Selecci√≥n fuente DVB"
 
 msgid "Font Size (pixel)"
 msgstr ""
@@ -90,10 +90,10 @@ msgid "Hearing Impaired"
 msgstr "No oyente"
 
 msgid "Subtitle Page Settings"
-msgstr "Opciones p·gina subtÌtulos"
+msgstr "Opciones p√°gina subt√≠tulos"
 
 msgid "Auto"
-msgstr "Autom·tico"
+msgstr "Autom√°tico"
 
 msgid "Manual"
 msgstr "Manual"
@@ -102,7 +102,7 @@ msgid "Disabled"
 msgstr "Desactivados"
 
 msgid "Subtitle Mode"
-msgstr "Modo subtÌtulos"
+msgstr "Modo subt√≠tulos"
 
 msgid "Manual Subtitle Page"
-msgstr "P·gina manual subtÌtulos"
+msgstr "P√°gina manual subt√≠tulos"

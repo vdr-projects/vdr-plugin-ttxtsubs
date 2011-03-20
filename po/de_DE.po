@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: German <vdr@linuxtv.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
@@ -60,19 +60,19 @@ msgid "Record Subtitles"
 msgstr "Nimm Untertitel auf"
 
 msgid "Live Delay"
-msgstr "Live Verzögerung"
+msgstr "Live VerzÃ¶gerung"
 
 msgid "Replay Delay (PES)"
-msgstr "Wiedergabe Verzögerung (PES)"
+msgstr "Wiedergabe VerzÃ¶gerung (PES)"
 
 msgid "Replay Delay (TS)"
-msgstr "Wiedergabe Verzögerung (TS)"
+msgstr "Wiedergabe VerzÃ¶gerung (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Hauptmenu Alternative"
 
 msgid "Workaround for some French chns"
-msgstr "Workaround für französische Kanäle"
+msgstr "Workaround fÃ¼r franzÃ¶sische KanÃ¤le"
 
 msgid "DVB Source Selection"
 msgstr "DVB Quelle Auswahl"
@@ -87,7 +87,7 @@ msgid "Language"
 msgstr "Sprache"
 
 msgid "Hearing Impaired"
-msgstr "Gehörlose"
+msgstr "GehÃ¶rlose"
 
 msgid "Subtitle Page Settings"
 msgstr "Untertitelseiten Einstellung"

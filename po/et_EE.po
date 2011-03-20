@@ -13,14 +13,14 @@ msgstr ""
 "Language-Team: Estonian <vdr@linuxtv.org>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
 msgstr "Teleteksti subtiitrid"
 
 msgid "Hide teletext subtitles"
-msgstr "Teletekst subtiitrid välja"
+msgstr "Teletekst subtiitrid vÃ¤lja"
 
 msgid "Display teletext subtitles"
 msgstr "Teletekst subtiitrid sisse"
@@ -29,10 +29,10 @@ msgid "deprecated"
 msgstr "iganenud"
 
 msgid "Page Selection"
-msgstr "Lehekülje valik"
+msgstr "LehekÃ¼lje valik"
 
 msgid "Display on/off"
-msgstr "sisse/välja"
+msgstr "sisse/vÃ¤lja"
 
 msgid "4:3/Letterbox (deprecated)"
 msgstr "pildisuhe (iganenud)"
@@ -41,7 +41,7 @@ msgid "Page Mode"
 msgstr "lk valik"
 
 msgid "All"
-msgstr "kõik"
+msgstr "kÃµik"
 
 msgid "Only DVB-S"
 msgstr "DVB-S"
@@ -68,7 +68,7 @@ msgid "Replay Delay (TS)"
 msgstr "Salvestuse viivitus (TS)"
 
 msgid "Main Menu Alternative"
-msgstr "Peamenüü valikud"
+msgstr "PeamenÃ¼Ã¼ valikud"
 
 msgid "Workaround for some French chns"
 msgstr "Parandus prantsuse kanalitel"
@@ -89,19 +89,19 @@ msgid "Hearing Impaired"
 msgstr "kuulmispuudega"
 
 msgid "Subtitle Page Settings"
-msgstr "Subtiitrite lehekülje valikud"
+msgstr "Subtiitrite lehekÃ¼lje valikud"
 
 msgid "Auto"
 msgstr "automaatne"
 
 msgid "Manual"
-msgstr "käsitsi"
+msgstr "kÃ¤sitsi"
 
 msgid "Disabled"
-msgstr "väljas"
+msgstr "vÃ¤ljas"
 
 msgid "Subtitle Mode"
 msgstr "Subtiitrite laad"
 
 msgid "Manual Subtitle Page"
-msgstr "Subtiitrite lehekülg"
+msgstr "Subtiitrite lehekÃ¼lg"

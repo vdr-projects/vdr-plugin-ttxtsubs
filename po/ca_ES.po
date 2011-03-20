@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the VDR package.
 # Marc Rovira Vall <tm05462@salleURL.edu>, 2003
 # Ramon Roca <ramon.roca@xcombo.com>, 2003
-# Jordi Vil‡ <jvila@tinet.org>, 2003
+# Jordi Vil√† <jvila@tinet.org>, 2003
 #
 msgid ""
 msgstr ""
@@ -11,27 +11,27 @@ msgstr ""
 "Report-Msgid-Bugs-To: <author>\n"
 "POT-Creation-Date: 2011-03-20 22:52+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
-"Last-Translator: Jordi Vil‡ <jvila@tinet.org>\n"
+"Last-Translator: Jordi Vil√† <jvila@tinet.org>\n"
 "Language-Team: Catalan <vdr@linuxtv.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
-msgstr "SubtÌtols teletext"
+msgstr "Subt√≠tols teletext"
 
 msgid "Hide teletext subtitles"
-msgstr "Amaga subtÌtols teletext"
+msgstr "Amaga subt√≠tols teletext"
 
 msgid "Display teletext subtitles"
-msgstr "Visualitza subtÌtols teletext"
+msgstr "Visualitza subt√≠tols teletext"
 
 msgid "deprecated"
 msgstr ""
 
 msgid "Page Selection"
-msgstr "SelecciÛ p‡gina subtÌtols"
+msgstr "Selecci√≥ p√†gina subt√≠tols"
 
 msgid "Display on/off"
 msgstr "Visualitza si/no"
@@ -41,43 +41,43 @@ msgid "4:3/Letterbox (deprecated)"
 msgstr "4:3/Letterbox"
 
 msgid "Page Mode"
-msgstr "Modalitat p‡gina"
+msgstr "Modalitat p√†gina"
 
 msgid "All"
 msgstr "Totes"
 
 msgid "Only DVB-S"
-msgstr "NomÈs DVB-S"
+msgstr "Nom√©s DVB-S"
 
 msgid "Only DVB-T"
-msgstr "NomÈs DVB-T"
+msgstr "Nom√©s DVB-T"
 
 msgid "Only DVB-C"
-msgstr "NomÈs DVB-C"
+msgstr "Nom√©s DVB-C"
 
 msgid "Display Subtitles"
-msgstr "Visualitza subtÌtols"
+msgstr "Visualitza subt√≠tols"
 
 msgid "Record Subtitles"
-msgstr "Grava subtÌtols"
+msgstr "Grava subt√≠tols"
 
 msgid "Live Delay"
 msgstr "Retard en directe"
 
 msgid "Replay Delay (PES)"
-msgstr "Retard en reproducciÛ (PES)"
+msgstr "Retard en reproducci√≥ (PES)"
 
 msgid "Replay Delay (TS)"
-msgstr "Retard en reproducciÛ (TS)"
+msgstr "Retard en reproducci√≥ (TS)"
 
 msgid "Main Menu Alternative"
-msgstr "Alternativa del men˙ principal"
+msgstr "Alternativa del men√∫ principal"
 
 msgid "Workaround for some French chns"
-msgstr "CorrecciÛ per a canals francesos"
+msgstr "Correcci√≥ per a canals francesos"
 
 msgid "DVB Source Selection"
-msgstr "SelecciÛ font DVB"
+msgstr "Selecci√≥ font DVB"
 
 msgid "Font Size (pixel)"
 msgstr ""
@@ -92,10 +92,10 @@ msgid "Hearing Impaired"
 msgstr "Discapacitats auditius"
 
 msgid "Subtitle Page Settings"
-msgstr "Opcions p‡gina subtÌtols"
+msgstr "Opcions p√†gina subt√≠tols"
 
 msgid "Auto"
-msgstr "Autom‡tic"
+msgstr "Autom√†tic"
 
 msgid "Manual"
 msgstr "Manual"
@@ -104,7 +104,7 @@ msgid "Disabled"
 msgstr "Desactivats"
 
 msgid "Subtitle Mode"
-msgstr "Modalitat subtÌtols"
+msgstr "Modalitat subt√≠tols"
 
 msgid "Manual Subtitle Page"
-msgstr "P‡gina manual subtÌtols"
+msgstr "P√†gina manual subt√≠tols"

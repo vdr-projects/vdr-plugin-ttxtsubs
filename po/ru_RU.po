@@ -13,97 +13,97 @@ msgstr ""
 "Language-Team: Russian <vdr@linuxtv.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-5\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Teletext subtitles"
-msgstr "ВХЫХвХЪбв-бгСвШвал"
+msgstr "РўРµР»РµС‚РµРєСЃС‚-СЃСѓР±С‚РёС‚СЂС‹"
 
 msgid "Hide teletext subtitles"
-msgstr "БЪалвм бгСвШвал"
+msgstr "РЎРєСЂС‹С‚СЊ СЃСѓР±С‚РёС‚СЂС‹"
 
 msgid "Display teletext subtitles"
-msgstr "їЮЪРЧлТРвм бгСвШвал"
+msgstr "РџРѕРєР°Р·С‹РІР°С‚СЊ СЃСѓР±С‚РёС‚СЂС‹"
 
 msgid "deprecated"
 msgstr ""
 
 msgid "Page Selection"
-msgstr "ІлСЮа бваРЭШжл"
+msgstr "Р’С‹Р±РѕСЂ СЃС‚СЂР°РЅРёС†С‹"
 
 msgid "Display on/off"
-msgstr "ТЪЫозШвм/ТлЪЫозШвм"
+msgstr "РІРєР»СЋС‡РёС‚СЊ/РІС‹РєР»СЋС‡РёС‚СЊ"
 
 #, fuzzy
 msgid "4:3/Letterbox (deprecated)"
-msgstr "4:3/иШаЮЪШЩ нЪаРЭ"
+msgstr "4:3/С€РёСЂРѕРєРёР№ СЌРєСЂР°РЅ"
 
 msgid "Page Mode"
-msgstr "АХЦШЬ бваРЭШжл"
+msgstr "Р РµР¶РёРј СЃС‚СЂР°РЅРёС†С‹"
 
 msgid "All"
-msgstr "ІбХ"
+msgstr "Р’СЃРµ"
 
 msgid "Only DVB-S"
-msgstr "ВЮЫмЪЮ DVB-S"
+msgstr "РўРѕР»СЊРєРѕ DVB-S"
 
 msgid "Only DVB-T"
-msgstr "ВЮЫмЪЮ  DVB-T"
+msgstr "РўРѕР»СЊРєРѕ  DVB-T"
 
 msgid "Only DVB-C"
-msgstr "ВЮЫмЪЮ DVB-C"
+msgstr "РўРѕР»СЊРєРѕ DVB-C"
 
 msgid "Display Subtitles"
-msgstr "їЮЪРЧлТРвм бгСвШвал"
+msgstr "РџРѕРєР°Р·С‹РІР°С‚СЊ СЃСѓР±С‚РёС‚СЂС‹"
 
 msgid "Record Subtitles"
-msgstr "·РЯШблТРвм бгСвШвал"
+msgstr "Р—Р°РїРёСЃС‹РІР°С‚СЊ СЃСѓР±С‚РёС‚СЂС‹"
 
 msgid "Live Delay"
-msgstr "Live ЧРФХаЦЪР"
+msgstr "Live Р·Р°РґРµСЂР¶РєР°"
 
 msgid "Replay Delay (PES)"
-msgstr "·РФХаЦЪР ТЮбЯаЮШЧТХФХЭШп (PES)"
+msgstr "Р—Р°РґРµСЂР¶РєР° РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ (PES)"
 
 msgid "Replay Delay (TS)"
-msgstr "·РФХаЦЪР ТЮбЯаЮШЧТХФХЭШп (TS)"
+msgstr "Р—Р°РґРµСЂР¶РєР° РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ (TS)"
 
 msgid "Main Menu Alternative"
-msgstr "єЮЬРЭФР Т УЫРТЭЮЬ ЬХЭо"
+msgstr "РљРѕРјР°РЅРґР° РІ РіР»Р°РІРЅРѕРј РјРµРЅСЋ"
 
 msgid "Workaround for some French chns"
-msgstr "БЯХж. ЭРбваЮЩЪШ ФЫп даРЭж. ЪРЭРЫЮТ"
+msgstr "РЎРїРµС†. РЅР°СЃС‚СЂРѕР№РєРё РґР»СЏ С„СЂР°РЅС†. РєР°РЅР°Р»РѕРІ"
 
 msgid "DVB Source Selection"
-msgstr "ІлСЮа DVB ШбвЮзЭШЪР"
+msgstr "Р’С‹Р±РѕСЂ DVB РёСЃС‚РѕС‡РЅРёРєР°"
 
 msgid "Font Size (pixel)"
-msgstr "АРЧЬХа дЮЭвР  (pixel)"
+msgstr "Р Р°Р·РјРµСЂ С„РѕРЅС‚Р°  (pixel)"
 
 #, fuzzy
 msgid "Font OutlineWidth (pixel)"
-msgstr "АРЧЬХа дЮЭвР  (pixel)"
+msgstr "Р Р°Р·РјРµСЂ С„РѕРЅС‚Р°  (pixel)"
 
 msgid "Language"
-msgstr "ПЧлЪ"
+msgstr "РЇР·С‹Рє"
 
 msgid "Hearing Impaired"
-msgstr "ФЫп бЫРСЮбЫлиРйШе"
+msgstr "РґР»СЏ СЃР»Р°Р±РѕСЃР»С‹С€Р°С‰РёС…"
 
 msgid "Subtitle Page Settings"
-msgstr "ЅРбваЮЩЪШ бваРЭШжл бгСвШваЮТ"
+msgstr "РќР°СЃС‚СЂРѕР№РєРё СЃС‚СЂР°РЅРёС†С‹ СЃСѓР±С‚РёС‚СЂРѕРІ"
 
 msgid "Auto"
-msgstr "°ТвЮ"
+msgstr "РђРІС‚Рѕ"
 
 msgid "Manual"
-msgstr "АгзЭ."
+msgstr "Р СѓС‡РЅ."
 
 msgid "Disabled"
-msgstr "ЮвЪЫозХЭЮ"
+msgstr "РѕС‚РєР»СЋС‡РµРЅРѕ"
 
 msgid "Subtitle Mode"
-msgstr "АХЦШЬ бгСвШваЮТ"
+msgstr "Р РµР¶РёРј СЃСѓР±С‚РёС‚СЂРѕРІ"
 
 msgid "Manual Subtitle Page"
-msgstr "АгзЭЮЩ ТлСЮа бваРЭШжл"
+msgstr "Р СѓС‡РЅРѕР№ РІС‹Р±РѕСЂ СЃС‚СЂР°РЅРёС†С‹"
