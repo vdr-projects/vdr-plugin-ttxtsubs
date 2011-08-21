@@ -423,6 +423,17 @@ void cTtxtSubsDisplay::ShowOSD(void)
 
     _osd->DrawRectangle(0, 0, width - 1, height - 1, clrTransparent);
 
+    if(globals.mOutlineWidth < 2){
+       int maxwidth = 0;
+       for (int line = 0; line < _numberOfSubTitleTextLines; line++) {
+           int linewidth = _osdFont->Width(_subTitleTextLines[line].text);
+           if(linewidth > maxwidth)
+             maxwidth = linewidth;
+       }
+       maxwidth+=40;
+       _osd->DrawRectangle((width/2)-(maxwidth/2), 0, (width/2)+(maxwidth/2), height - 1, 0x8a000000);
+    }
+
     for(int textLineIndex = 0; textLineIndex < _numberOfSubTitleTextLines; textLineIndex++)
     {
         int lineWidth = _osdFont->Width(_subTitleTextLines[textLineIndex].text) + 2 * globals.mOutlineWidth + 5;
