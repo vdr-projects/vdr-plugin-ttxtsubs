@@ -6,6 +6,7 @@ VDR Plugin 'ttxtsubs' Revision History
   change the channel (patch provided by Rolf Ahrenberg)
 - Converted *.po to UTF-8
 - Updated patch for VDR 1.7.20 (Closes #689)
+- Don't log all page info received from VDR (Closes #331)
 
 2010-05-08: Version 0.2.2
 - Fixed channel retune triggering in VDR patch and updated patch to 1.7.14

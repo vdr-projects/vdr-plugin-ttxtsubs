@@ -116,15 +116,15 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
     if (teletextSubtitlePages && teletextSubtitlePages[0].ttxtType)
     {
       for (int p=0; p < pageCount; p++) {
-        isyslog("ttxtsubs: got page info from vdr: %s 0x%02X 0x%2X.0x%02X", teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType,
-          teletextSubtitlePages[p].ttxtMagazine, teletextSubtitlePages[p].ttxtPage);
+        // isyslog("ttxtsubs: got page info from vdr: %s 0x%02X 0x%2X.0x%02X", teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType,
+        //   teletextSubtitlePages[p].ttxtMagazine, teletextSubtitlePages[p].ttxtPage);
         int ch = globals.langChoise(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05);
         if (ch >= 0 && ch < mLangChoise) {
           mLangChoise = ch;
           int bcdPage = (teletextSubtitlePages[p].ttxtMagazine << 8) + teletextSubtitlePages[p].ttxtPage;
           mDisp->SetPage(bcdPage);
           mFoundLangPage = 1;
-          fprintf(stderr, "Found subtitle page: %03x\n", bcdPage); // XXX
+          isyslog("Found subtitle page: %03x\n", bcdPage);
         }
       }
     }
