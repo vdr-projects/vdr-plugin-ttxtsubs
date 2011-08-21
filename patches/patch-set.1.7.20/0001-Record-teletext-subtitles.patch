@@ -1,4 +1,4 @@
-From 067f957830a04977e090ece6bee0c188871fae7c Mon Sep 17 00:00:00 2001
+From 9f3bb093c7db326d050cce3745d376c8d1eb5810 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:55:04 +0100
 Subject: [PATCH 1/6] Record teletext subtitles
@@ -13,10 +13,10 @@ Subject: [PATCH 1/6] Record teletext subtitles
  6 files changed, 87 insertions(+), 2 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index ebc7eb1..ebb6665 100644
+index c689850..907688e 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -376,6 +376,26 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -378,6 +378,26 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
       }
  }
  
@@ -44,13 +44,13 @@ index ebc7eb1..ebb6665 100644
  {
    if (caids[0] && caids[0] <= CA_USER_MAX)
 diff --git a/channels.h b/channels.h
-index b867297..f9ff774 100644
+index 51f9830..3fc443c 100644
 --- a/channels.h
 +++ b/channels.h
 @@ -35,6 +35,7 @@
  #define MAXDPIDS 16 // dolby (AC3 + DTS)
  #define MAXSPIDS 32 // subtitles
- #define MAXCAIDS  8 // conditional access
+ #define MAXCAIDS 12 // conditional access
 +#define MAXTXTPAGES 8 // teletext pages
  
  #define MAXLANGCODE1 4 // a 3 letter language code, zero terminated
@@ -99,7 +99,7 @@ index b867297..f9ff774 100644
    void SetCaDescriptors(int Level);
    void SetLinkChannels(cLinkChannels *LinkChannels);
 diff --git a/pat.c b/pat.c
-index 56ad5ae..2172729 100644
+index b7493ec..d2b8ce8 100644
 --- a/pat.c
 +++ b/pat.c
 @@ -343,6 +343,8 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
@@ -134,7 +134,7 @@ index 56ad5ae..2172729 100644
                                   break;
                              case SI::ISO639LanguageDescriptorTag: {
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
-@@ -490,6 +505,7 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
+@@ -537,6 +552,7 @@ void cPatFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length
              }
          if (Setup.UpdateChannels >= 2) {
             Channel->SetPids(Vpid, Ppid, Vtype, Apids, Atypes, ALangs, Dpids, Dtypes, DLangs, Spids, SLangs, Tpid);
@@ -143,10 +143,10 @@ index 56ad5ae..2172729 100644
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
             }
 diff --git a/receiver.c b/receiver.c
-index 58dda78..a2c6781 100644
+index 6a9ba04..1312b9b 100644
 --- a/receiver.c
 +++ b/receiver.c
-@@ -82,7 +82,8 @@ bool cReceiver::SetPids(const cChannel *Channel)
+@@ -81,7 +81,8 @@ bool cReceiver::SetPids(const cChannel *Channel)
              (Channel->Ppid() == Channel->Vpid() || AddPid(Channel->Ppid())) &&
              AddPids(Channel->Apids()) &&
              AddPids(Channel->Dpids()) &&
@@ -157,10 +157,10 @@ index 58dda78..a2c6781 100644
  return true;
  }
 diff --git a/remux.c b/remux.c
-index 5206544..024c7c9 100644
+index f174f61..11e34c7 100644
 --- a/remux.c
 +++ b/remux.c
-@@ -215,6 +215,29 @@ int cPatPmtGenerator::MakeSubtitlingDescriptor(uchar *Target, const char *Langua
+@@ -219,6 +219,29 @@ int cPatPmtGenerator::MakeSubtitlingDescriptor(uchar *Target, const char *Langua
    return i;
  }
  
@@ -190,7 +190,7 @@ index 5206544..024c7c9 100644
  int cPatPmtGenerator::MakeLanguageDescriptor(uchar *Target, const char *Language)
  {
    int i = 0;
-@@ -302,6 +325,7 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
+@@ -306,6 +329,7 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
    if (Channel) {
       int Vpid = Channel->Vpid();
       int Ppid = Channel->Ppid();
@@ -198,7 +198,7 @@ index 5206544..024c7c9 100644
       uchar *p = buf;
       int i = 0;
       p[i++] = 0x02; // table id
-@@ -334,6 +358,10 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
+@@ -338,6 +362,10 @@ void cPatPmtGenerator::GeneratePmt(const cChannel *Channel)
           i += MakeStream(buf + i, 0x06, Channel->Spid(n));
           i += MakeSubtitlingDescriptor(buf + i, Channel->Slang(n), Channel->SubtitlingType(n), Channel->CompositionPageId(n), Channel->AncillaryPageId(n));
           }
@@ -209,7 +209,7 @@ index 5206544..024c7c9 100644
  
       int sl = i - SectionLength - 2 + 4; // -2 = SectionLength storage, +4 = length of CRC
       buf[SectionLength] |= (sl >> 8) & 0x0F;
-@@ -497,6 +525,7 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
+@@ -501,6 +529,7 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
       spids[0] = 0;
       atypes[0] = 0;
       dtypes[0] = 0;
@@ -218,10 +218,10 @@ index 5206544..024c7c9 100644
       for (SI::Loop::Iterator it; Pmt.streamLoop.getNext(stream, it); ) {
           dbgpatpmt("     stream type = %02X, pid = %d", stream.getStreamType(), stream.getPid());
 diff --git a/remux.h b/remux.h
-index 7b62187..9cb8a7e 100644
+index 3204bb4..492044c 100644
 --- a/remux.h
 +++ b/remux.h
-@@ -171,6 +171,7 @@ protected:
+@@ -174,6 +174,7 @@ protected:
    int MakeStream(uchar *Target, uchar Type, int Pid);
    int MakeAC3Descriptor(uchar *Target, uchar Type);
    int MakeSubtitlingDescriptor(uchar *Target, const char *Language, uchar SubtitlingType, uint16_t CompositionPageId, uint16_t AncillaryPageId);
@@ -229,7 +229,7 @@ index 7b62187..9cb8a7e 100644
    int MakeLanguageDescriptor(uchar *Target, const char *Language);
    int MakeCRC(uchar *Target, const uchar *Data, int Length);
    void GeneratePmtPid(const cChannel *Channel);
-@@ -228,6 +229,8 @@ private:
+@@ -231,6 +232,8 @@ private:
    uint16_t compositionPageIds[MAXSPIDS];
    uint16_t ancillaryPageIds[MAXSPIDS];
    bool updatePrimaryDevice;
@@ -239,5 +239,5 @@ index 7b62187..9cb8a7e 100644
    int SectionLength(const uchar *Data, int Length) { return (Length >= 3) ? ((int(Data[1]) & 0x0F) << 8)| Data[2] : 0; }
  public:
 -- 
-1.7.1
+1.7.5.4
 

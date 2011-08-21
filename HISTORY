@@ -1,10 +1,11 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2011-xx-xx: Version 0.2.3
+2011-08-21: Version 0.2.3
 - Made changes in font settings be applied instantly, without the need to
   change the channel (patch provided by Rolf Ahrenberg)
 - Converted *.po to UTF-8
+- Updated patch for VDR 1.7.20 (Closes #689)
 
 2010-05-08: Version 0.2.2
 - Fixed channel retune triggering in VDR patch and updated patch to 1.7.14
