@@ -1,4 +1,4 @@
-From 8ffcf9b992ec861604034b312ddb8dd14358bc60 Mon Sep 17 00:00:00 2001
+From 9960c81bed0689a397f8a3b9e3de91a3f75e5237 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
@@ -9,7 +9,7 @@ Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
  2 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/remux.c b/remux.c
-index 11e34c7..0c1b361 100644
+index adec265..4f9950f 100644
 --- a/remux.c
 +++ b/remux.c
 @@ -439,6 +439,7 @@ void cPatPmtParser::Reset(void)
@@ -58,7 +58,7 @@ index 11e34c7..0c1b361 100644
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
 diff --git a/remux.h b/remux.h
-index 492044c..23fb645 100644
+index 80d6afd..5f15dfe 100644
 --- a/remux.h
 +++ b/remux.h
 @@ -220,6 +220,7 @@ private:
@@ -88,5 +88,5 @@ index 492044c..23fb645 100644
  
  // TS to PES converter:
 -- 
-1.7.5.4
+1.7.6.3
 

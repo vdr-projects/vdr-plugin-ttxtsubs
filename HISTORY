@@ -1,6 +1,25 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+2011-10-08: Version 0.2.4
+- Updated patch for VDR 1.7.21 (Closes #745)
+
+  !!! With this release the channels.conf format has changed !!!
+  !!! You may need to manually update your channels.conf     !!!
+
+  With VDR 1.7.21 the subtitle PIDs are stored in the channels.conf as an
+  extension to the teletext PID (see vdr.5 for details).
+
+  This change made it neccessary to change the extension of the tpid in
+  channels.conf used by the ttxtsubs patch:
+
+  old: ...:201;150=deu,151=fin:...
+  new  ...:201+150=deu,151=fin;2001,2002:...
+
+  ...where 201 is the TPID, 150 and 151 are the teletext pages for the
+  German and Finnish teletext subtitles and 2001,2002 are the DVB
+  subtitle PIDs.
+
 2011-08-21: Version 0.2.3
 - Made changes in font settings be applied instantly, without the need to
   change the channel (patch provided by Rolf Ahrenberg)

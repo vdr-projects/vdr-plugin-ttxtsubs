@@ -1,4 +1,4 @@
-From ac44ba83d8bfdd36fc41d42947c09e365e5f33b1 Mon Sep 17 00:00:00 2001
+From e2833f1f09f24154b664e956ae31bcae6d101ce9 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sun, 14 Feb 2010 01:30:34 +0100
 Subject: [PATCH 4/6] Decrypt teletext stream
@@ -31,5 +31,5 @@ index 59d62ef..b024f67 100644
       cTimeMs Timeout(QUERY_REPLY_TIMEOUT);
       do {
 -- 
-1.7.5.4
+1.7.6.3
 

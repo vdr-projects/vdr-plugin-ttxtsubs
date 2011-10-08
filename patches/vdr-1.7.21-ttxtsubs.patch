@@ -26,7 +26,7 @@ index 18d7eb9..3da4382 100644
  DEFINES += -DREMOTE_KBD
  endif
 diff --git a/channels.c b/channels.c
-index c689850..76b9338 100644
+index b9204f2..44d4be2 100644
 --- a/channels.c
 +++ b/channels.c
 @@ -378,6 +378,26 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
@@ -56,88 +56,58 @@ index c689850..76b9338 100644
  void cChannel::SetCaIds(const int *CaIds)
  {
    if (caids[0] && caids[0] <= CA_USER_MAX)
-@@ -506,11 +526,22 @@ cString cChannel::ToText(const cChannel *Channel)
+@@ -506,10 +526,17 @@ cString cChannel::ToText(const cChannel *Channel)
          q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs, Channel->dtypes);
          }
       *q = 0;
-+     const int TBufferSize = 5 + 1 + (MAXTXTPAGES * (3 + 1 + MAXLANGCODE1 + 1)) + 10; // '12345;150=deu,151=fin,...', +10: paranoia
-+     char tpidbuf[TBufferSize];
-+     q = tpidbuf;
-+     q += snprintf(q, sizeof(tpidbuf), "%d", Channel->tpid);
+-     const int TBufferSize = MAXSPIDS * (5 + 1 + MAXLANGCODE2) + 10; // 5 digits plus delimiting ',' or ';' plus optional '=cod+cod', +10: paranoia and tpid
++     const int TBufferSize = (MAXTXTPAGES * MAXSPIDS) * (5 + 1 + MAXLANGCODE2) + 10; // 5 digits plus delimiting ',' or ';' plus optional '=cod+cod', +10: paranoia and tpid
+      char tpidbuf[TBufferSize];
+      q = tpidbuf;
+      q += snprintf(q, sizeof(tpidbuf), "%d", Channel->tpid);
 +     if (Channel->fixedTtxtSubtitlePages > 0) {
-+        q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), ";");
++        *q++ = '+';
 +        for (int i = 0; i < Channel->fixedTtxtSubtitlePages; ++i) {
 +            tTeletextSubtitlePage page = Channel->teletextSubtitlePages[i];
 +            q += snprintf(q, sizeof(tpidbuf) - (q - tpidbuf), "%d=%s", page.PageNumber(), page.ttxtLanguage);
 +            }
 +        }
-      char caidbuf[MAXCAIDS * 5 + 10]; // 5: 4 digits plus delimiting ',', 10: paranoia
-      q = caidbuf;
-      q += IntArrayToString(q, Channel->caids, 16);
-      *q = 0;
--     buffer = cString::sprintf("%s:%d:%s:%s:%d:%s:%s:%d:%s:%d:%d:%d:%d\n", FullName, Channel->frequency, *Channel->parameters, *cSource::ToString(Channel->source), Channel->srate, vpidbuf, apidbuf, Channel->tpid, caidbuf, Channel->sid, Channel->nid, Channel->tid, Channel->rid);
-+     buffer = cString::sprintf("%s:%d:%s:%s:%d:%s:%s:%s:%s:%d:%d:%d:%d\n", FullName, Channel->frequency, *Channel->parameters, *cSource::ToString(Channel->source), Channel->srate, vpidbuf, apidbuf, tpidbuf, caidbuf, Channel->sid, Channel->nid, Channel->tid, Channel->rid);
-      }
-   return buffer;
- }
-@@ -544,8 +575,9 @@ bool cChannel::Parse(const char *s)
-      char *parambuf = NULL;
-      char *vpidbuf = NULL;
-      char *apidbuf = NULL;
-+     char *tpidbuf = NULL;
-      char *caidbuf = NULL;
--     int fields = sscanf(s, "%a[^:]:%d :%a[^:]:%a[^:] :%d :%a[^:]:%a[^:]:%d :%a[^:]:%d :%d :%d :%d ", &namebuf, &frequency, &parambuf, &sourcebuf, &srate, &vpidbuf, &apidbuf, &tpid, &caidbuf, &sid, &nid, &tid, &rid);
-+     int fields = sscanf(s, "%a[^:]:%d :%a[^:]:%a[^:] :%d :%a[^:]:%a[^:]:%a[^:]:%a[^:]:%d :%d :%d :%d ", &namebuf, &frequency, &parambuf, &sourcebuf, &srate, &vpidbuf, &apidbuf, &tpidbuf, &caidbuf, &sid, &nid, &tid, &rid);
-      if (fields >= 9) {
-         if (fields == 9) {
-            // allow reading of old format
-@@ -644,7 +676,37 @@ bool cChannel::Parse(const char *s)
-               dpids[NumDpids] = 0;
-               dtypes[NumDpids] = 0;
+      if (Channel->spids[0]) {
+         *q++ = ';';
+         q += IntArrayToString(q, Channel->spids, 10, Channel->slangs);
+@@ -678,6 +705,32 @@ bool cChannel::Parse(const char *s)
+                     }
+               spids[NumSpids] = 0;
                }
--
-+           if (tpidbuf) {
-+              char *p;
-+              fixedTtxtSubtitlePages = 0;
-+              // 2001;150=deu,151=fin
-+              if ((p = strchr(tpidbuf, ';')) != NULL) {
-+                 char *q, *strtok_next;
-+                 *p++ = 0;
-+                 while ((q = strtok_r(p, ",", &strtok_next)) != NULL) {
-+                       if (fixedTtxtSubtitlePages < MAXTXTPAGES) {
-+                          int page;
-+                          char *l = strchr(q, '=');
++           fixedTtxtSubtitlePages = 0;
++           if ((p = strchr(tpidbuf, '+')) != NULL) {
++              *p++ = 0;
++              char *q;
++              char *strtok_next;
++              while ((q = strtok_r(p, ",", &strtok_next)) != NULL) {
++                    if (fixedTtxtSubtitlePages < MAXTXTPAGES) {
++                       int page;
++                       char *l = strchr(q, '=');
++                       if (l)
++                          *l++ = 0;
++                       if (sscanf(q, "%d", &page) == 1) {
++                          teletextSubtitlePages[fixedTtxtSubtitlePages] = tTeletextSubtitlePage(page);
 +                          if (l)
-+                             *l++ = 0;
-+                          if (sscanf(q, "%d", &page) == 1) {
-+                             teletextSubtitlePages[fixedTtxtSubtitlePages] = tTeletextSubtitlePage(page);
-+                             if (l)
-+                                strn0cpy(teletextSubtitlePages[fixedTtxtSubtitlePages].ttxtLanguage, l, MAXLANGCODE1);
-+                             fixedTtxtSubtitlePages++;
-+                             }
-+                          else
-+                             esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
++                             strn0cpy(teletextSubtitlePages[fixedTtxtSubtitlePages].ttxtLanguage, l, MAXLANGCODE2);
++                          fixedTtxtSubtitlePages++;
 +                          }
 +                       else
-+                          esyslog("ERROR: too many Teletext pages!"); // no need to set ok to 'false'
-+                       p = NULL;
++                          esyslog("ERROR: invalid Teletext page!"); // no need to set ok to 'false'
 +                       }
-+                 totalTtxtSubtitlePages = fixedTtxtSubtitlePages;
-+                 }
-+              if (sscanf(tpidbuf, "%d", &tpid) != 1)
-+                 return false;
++                    else
++                       esyslog("ERROR: too many Teletext pages!"); // no need to set ok to 'false'
++                    p = NULL;
++                    }
++              totalTtxtSubtitlePages = fixedTtxtSubtitlePages;
 +              }
+            if (sscanf(tpidbuf, "%d", &tpid) != 1)
+               return false;
             if (caidbuf) {
-               char *p = caidbuf;
-               char *q;
-@@ -681,6 +743,7 @@ bool cChannel::Parse(const char *s)
-         free(sourcebuf);
-         free(vpidbuf);
-         free(apidbuf);
-+        free(tpidbuf);
-         free(caidbuf);
-         free(namebuf);
-         if (!GetChannelID().Valid()) {
 diff --git a/channels.h b/channels.h
 index 51f9830..6e7367f 100644
 --- a/channels.h
@@ -218,7 +188,7 @@ index 59d62ef..b024f67 100644
       cTimeMs Timeout(QUERY_REPLY_TIMEOUT);
       do {
 diff --git a/config.c b/config.c
-index 6767b5c..4137abb 100644
+index 73bb00d..982bd78 100644
 --- a/config.c
 +++ b/config.c
 @@ -333,6 +333,7 @@ cSetup::cSetup(void)
@@ -246,7 +216,7 @@ index 6767b5c..4137abb 100644
    Store("SubtitleOffset",     SubtitleOffset);
    Store("SubtitleFgTransparency", SubtitleFgTransparency);
 diff --git a/config.h b/config.h
-index 19f8768..c4c2bc4 100644
+index c51e3df..e46b4bd 100644
 --- a/config.h
 +++ b/config.h
 @@ -235,6 +235,7 @@ public:
@@ -258,7 +228,7 @@ index 19f8768..c4c2bc4 100644
    int SubtitleOffset;
    int SubtitleFgTransparency, SubtitleBgTransparency;
 diff --git a/device.c b/device.c
-index 0759993..f4b3e2a 100644
+index ba098d8..84bdd30 100644
 --- a/device.c
 +++ b/device.c
 @@ -18,6 +18,7 @@
@@ -269,7 +239,7 @@ index 0759993..f4b3e2a 100644
  
  // --- cLiveSubtitle ---------------------------------------------------------
  
-@@ -1245,6 +1246,13 @@ int cDevice::PlayPesPacket(const uchar *Data, int Length, bool VideoOnly)
+@@ -1250,6 +1251,13 @@ int cDevice::PlayPesPacket(const uchar *Data, int Length, bool VideoOnly)
                    }
                 break;
            case 0xBD: { // private stream 1
@@ -283,7 +253,7 @@ index 0759993..f4b3e2a 100644
                 int PayloadOffset = Data[8] + 9;
  
                 // Compatibility mode for old subtitles plugin:
-@@ -1404,6 +1412,7 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
+@@ -1409,6 +1417,7 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
       tsToPesVideo.Reset();
       tsToPesAudio.Reset();
       tsToPesSubtitle.Reset();
@@ -291,7 +261,7 @@ index 0759993..f4b3e2a 100644
       }
    else if (Length < TS_SIZE) {
       esyslog("ERROR: skipped %d bytes of TS fragment", Length);
-@@ -1449,6 +1458,17 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
+@@ -1454,6 +1463,17 @@ int cDevice::PlayTs(const uchar *Data, int Length, bool VideoOnly)
                      if (!VideoOnly || HasIBPTrickSpeed())
                         PlayTsSubtitle(Data, TS_SIZE);
                      }
@@ -310,10 +280,10 @@ index 0759993..f4b3e2a 100644
                }
             else if (Pid == patPmtParser.Ppid()) {
 diff --git a/device.h b/device.h
-index d937e5f..841a5d4 100644
+index fd587a8..078f080 100644
 --- a/device.h
 +++ b/device.h
-@@ -534,6 +534,7 @@ private:
+@@ -538,6 +538,7 @@ private:
    cTsToPes tsToPesVideo;
    cTsToPes tsToPesAudio;
    cTsToPes tsToPesSubtitle;
@@ -322,10 +292,10 @@ index d937e5f..841a5d4 100644
  protected:
    const cPatPmtParser *PatPmtParser(void) const { return &patPmtParser; }
 diff --git a/menu.c b/menu.c
-index 3978514..8831fb4 100644
+index ef2bb46..3548ccd 100644
 --- a/menu.c
 +++ b/menu.c
-@@ -2797,6 +2797,7 @@ void cMenuSetupDVB::Setup(void)
+@@ -2798,6 +2798,7 @@ void cMenuSetupDVB::Setup(void)
       Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle foreground transparency"), &data.SubtitleFgTransparency, 0, 9));
       Add(new cMenuEditIntItem( tr("Setup.DVB$Subtitle background transparency"), &data.SubtitleBgTransparency, 0, 10));
       }
@@ -391,10 +361,10 @@ index b7493ec..9262491 100644
             Channel->SetSubtitlingDescriptors(SubtitlingTypes, CompositionPageIds, AncillaryPageIds);
             }
 diff --git a/po/ca_ES.po b/po/ca_ES.po
-index 835f93d..0e973fa 100644
+index b104fea..1c09d79 100644
 --- a/po/ca_ES.po
 +++ b/po/ca_ES.po
-@@ -944,6 +944,9 @@ msgstr "Transpar
+@@ -950,6 +950,9 @@ msgstr "Transpar
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transpar�ncia fons subt�tols"
  
@@ -405,10 +375,10 @@ index 835f93d..0e973fa 100644
  msgstr "Configuraci� de l'LNB"
  
 diff --git a/po/cs_CZ.po b/po/cs_CZ.po
-index e6ebdfd..bfc8085 100644
+index bcafac7..370609f 100644
 --- a/po/cs_CZ.po
 +++ b/po/cs_CZ.po
-@@ -943,6 +943,9 @@ msgstr "Průhlednost písma titulků"
+@@ -949,6 +949,9 @@ msgstr "Průhlednost písma titulků"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Průhlednost pozadí titulků"
  
@@ -419,10 +389,10 @@ index e6ebdfd..bfc8085 100644
  msgstr "LNB"
  
 diff --git a/po/da_DK.po b/po/da_DK.po
-index c837986..a7c0230 100644
+index 81b11eb..5daca8d 100644
 --- a/po/da_DK.po
 +++ b/po/da_DK.po
-@@ -941,6 +941,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
+@@ -947,6 +947,9 @@ msgstr "Undertekst forgrundsgennemsigtighed"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Undertekst baggrundsgennemsigtighed"
  
@@ -433,10 +403,10 @@ index c837986..a7c0230 100644
  msgstr "LNB"
  
 diff --git a/po/de_DE.po b/po/de_DE.po
-index 75dc3a6..b4f459c 100644
+index 6d5b822..0a00a5a 100644
 --- a/po/de_DE.po
 +++ b/po/de_DE.po
-@@ -941,6 +941,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
+@@ -947,6 +947,9 @@ msgstr "Untertitel-Transparenz Vordergrund"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Untertitel-Transparenz Hintergrund"
  
@@ -447,10 +417,10 @@ index 75dc3a6..b4f459c 100644
  msgstr "LNB"
  
 diff --git a/po/el_GR.po b/po/el_GR.po
-index a35fa3b..46fdac5 100644
+index 9756ea7..5d4d6ea 100644
 --- a/po/el_GR.po
 +++ b/po/el_GR.po
-@@ -941,6 +941,9 @@ msgstr ""
+@@ -947,6 +947,9 @@ msgstr ""
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr ""
  
@@ -461,10 +431,10 @@ index a35fa3b..46fdac5 100644
  msgstr "LNB"
  
 diff --git a/po/es_ES.po b/po/es_ES.po
-index 88b693e..afcf548 100644
+index 193e75e..1f36b60 100644
 --- a/po/es_ES.po
 +++ b/po/es_ES.po
-@@ -942,6 +942,9 @@ msgstr "Transparencia primer plano subt
+@@ -948,6 +948,9 @@ msgstr "Transparencia primer plano subt
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparencia fondo subt�tulos"
  
@@ -475,10 +445,10 @@ index 88b693e..afcf548 100644
  msgstr "LNB"
  
 diff --git a/po/et_EE.po b/po/et_EE.po
-index 8c8ad1f..07d92f8 100644
+index 49794dd..83ff319 100644
 --- a/po/et_EE.po
 +++ b/po/et_EE.po
-@@ -941,6 +941,9 @@ msgstr "Subtiitri l
+@@ -947,6 +947,9 @@ msgstr "Subtiitri l
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Subtiitri tausta l�bipaistvus"
  
@@ -489,10 +459,10 @@ index 8c8ad1f..07d92f8 100644
  msgstr "LNB"
  
 diff --git a/po/fi_FI.po b/po/fi_FI.po
-index 1b06c3f..0fda001 100644
+index b093e88..4abf6a8 100644
 --- a/po/fi_FI.po
 +++ b/po/fi_FI.po
-@@ -944,6 +944,9 @@ msgstr "Tekstityksen läpinäkyvyys"
+@@ -950,6 +950,9 @@ msgstr "Tekstityksen läpinäkyvyys"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Tekstityksen taustan läpinäkyvyys"
  
@@ -503,10 +473,10 @@ index 1b06c3f..0fda001 100644
  msgstr "LNB"
  
 diff --git a/po/fr_FR.po b/po/fr_FR.po
-index 68a581c..7a7d948 100644
+index b5c5120..86a961a 100644
 --- a/po/fr_FR.po
 +++ b/po/fr_FR.po
-@@ -947,6 +947,9 @@ msgstr "Transparence de l'avant-plan"
+@@ -953,6 +953,9 @@ msgstr "Transparence de l'avant-plan"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparence du fond"
  
@@ -517,10 +487,10 @@ index 68a581c..7a7d948 100644
  msgstr "LNB"
  
 diff --git a/po/hr_HR.po b/po/hr_HR.po
-index 69104b4..aea74c6 100644
+index ed519a2..43f2ea5 100644
 --- a/po/hr_HR.po
 +++ b/po/hr_HR.po
-@@ -943,6 +943,9 @@ msgstr "Transparentnost titla"
+@@ -949,6 +949,9 @@ msgstr "Transparentnost titla"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparentnost pozadine titla"
  
@@ -531,10 +501,10 @@ index 69104b4..aea74c6 100644
  msgstr "LNB"
  
 diff --git a/po/hu_HU.po b/po/hu_HU.po
-index b7cf1a7..125ffe6 100644
+index 17b905f..06f4505 100644
 --- a/po/hu_HU.po
 +++ b/po/hu_HU.po
-@@ -944,6 +944,9 @@ msgstr "Felirat transzparenci
+@@ -950,6 +950,9 @@ msgstr "Felirat transzparenci
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Felirat h�tter�nek transzparenci�ja"
  
@@ -545,10 +515,10 @@ index b7cf1a7..125ffe6 100644
  msgstr "LNB"
  
 diff --git a/po/it_IT.po b/po/it_IT.po
-index 24e5412..02b33bd 100644
+index 501300e..e0227d3 100644
 --- a/po/it_IT.po
 +++ b/po/it_IT.po
-@@ -948,6 +948,9 @@ msgstr "Trasparenza sottotitoli"
+@@ -954,6 +954,9 @@ msgstr "Trasparenza sottotitoli"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Trasparenza sfondo sottotitoli"
  
@@ -559,10 +529,10 @@ index 24e5412..02b33bd 100644
  msgstr "LNB"
  
 diff --git a/po/lt_LT.po b/po/lt_LT.po
-index a8dfcb9..adbac95 100644
+index 6cb1faa..4efc707 100644
 --- a/po/lt_LT.po
 +++ b/po/lt_LT.po
-@@ -941,6 +941,9 @@ msgstr "Subtitrų fonto permatomumas"
+@@ -947,6 +947,9 @@ msgstr "Subtitrų fonto permatomumas"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Subtitrų fono permatomumas"
  
@@ -573,10 +543,10 @@ index a8dfcb9..adbac95 100644
  msgstr "Konverteris (LNB)"
  
 diff --git a/po/nl_NL.po b/po/nl_NL.po
-index 66febc5..4fa7d9f 100644
+index ae2b85e..34a71e9 100644
 --- a/po/nl_NL.po
 +++ b/po/nl_NL.po
-@@ -945,6 +945,9 @@ msgstr "Transparantie voorgrond ondertiteling"
+@@ -951,6 +951,9 @@ msgstr "Transparantie voorgrond ondertiteling"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparantie achtergrond ondertiteling"
  
@@ -587,10 +557,10 @@ index 66febc5..4fa7d9f 100644
  msgstr "LNB"
  
 diff --git a/po/nn_NO.po b/po/nn_NO.po
-index a49ab6b..24e697d 100644
+index 8ec8dfb..9c129ee 100644
 --- a/po/nn_NO.po
 +++ b/po/nn_NO.po
-@@ -942,6 +942,9 @@ msgstr ""
+@@ -948,6 +948,9 @@ msgstr ""
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr ""
  
@@ -601,10 +571,10 @@ index a49ab6b..24e697d 100644
  msgstr "LNB"
  
 diff --git a/po/pl_PL.po b/po/pl_PL.po
-index e56f3bf..3202caf 100644
+index a5c1b47..9645eca 100644
 --- a/po/pl_PL.po
 +++ b/po/pl_PL.po
-@@ -942,6 +942,9 @@ msgstr "Prze
+@@ -948,6 +948,9 @@ msgstr "Prze
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Prze�rocze podtytu��w: T�o"
  
@@ -615,10 +585,10 @@ index e56f3bf..3202caf 100644
  msgstr "LNB"
  
 diff --git a/po/pt_PT.po b/po/pt_PT.po
-index 2eae063..39319b9 100644
+index c443312..3c108ea 100644
 --- a/po/pt_PT.po
 +++ b/po/pt_PT.po
-@@ -942,6 +942,9 @@ msgstr "Transpar
+@@ -948,6 +948,9 @@ msgstr "Transpar
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transpar�ncia de fundo das legendas"
  
@@ -629,10 +599,10 @@ index 2eae063..39319b9 100644
  msgstr "LNB"
  
 diff --git a/po/ro_RO.po b/po/ro_RO.po
-index cd1a4d0..d4bd3db 100644
+index f8c5a1e..35ec9ec 100644
 --- a/po/ro_RO.po
 +++ b/po/ro_RO.po
-@@ -944,6 +944,9 @@ msgstr "Transparen
+@@ -950,6 +950,9 @@ msgstr "Transparen
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparen�a fundalului subtitr�rii"
  
@@ -643,10 +613,10 @@ index cd1a4d0..d4bd3db 100644
  msgstr "LNB"
  
 diff --git a/po/ru_RU.po b/po/ru_RU.po
-index 57210f0..ac7b507 100644
+index e683b8b..b90e565 100644
 --- a/po/ru_RU.po
 +++ b/po/ru_RU.po
-@@ -942,6 +942,9 @@ msgstr "
+@@ -948,6 +948,9 @@ msgstr "
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "������������ ���� ���������"
  
@@ -657,10 +627,10 @@ index 57210f0..ac7b507 100644
  msgstr "���������"
  
 diff --git a/po/sk_SK.po b/po/sk_SK.po
-index a8faa76..e46ae57 100644
+index 46edef5..aabb641 100644
 --- a/po/sk_SK.po
 +++ b/po/sk_SK.po
-@@ -941,6 +941,9 @@ msgstr "Prieh
+@@ -947,6 +947,9 @@ msgstr "Prieh
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Prieh�adnos� pozadia titulkov"
  
@@ -671,10 +641,10 @@ index a8faa76..e46ae57 100644
  msgstr "LNB"
  
 diff --git a/po/sl_SI.po b/po/sl_SI.po
-index 2e6667d..8cc86bd 100644
+index 89c6923..8ef4387 100644
 --- a/po/sl_SI.po
 +++ b/po/sl_SI.po
-@@ -942,6 +942,9 @@ msgstr "Transparentnost podnapisov"
+@@ -948,6 +948,9 @@ msgstr "Transparentnost podnapisov"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparentnost ozadja podnapisov"
  
@@ -685,10 +655,10 @@ index 2e6667d..8cc86bd 100644
  msgstr "LNB"
  
 diff --git a/po/sv_SE.po b/po/sv_SE.po
-index 41b6592..99e166b 100644
+index 150f95e..020c64d 100644
 --- a/po/sv_SE.po
 +++ b/po/sv_SE.po
-@@ -944,6 +944,9 @@ msgstr "Transparent f
+@@ -950,6 +950,9 @@ msgstr "Transparent f
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Transparent bakgrund textremsa"
  
@@ -699,10 +669,10 @@ index 41b6592..99e166b 100644
  msgstr "LNB"
  
 diff --git a/po/tr_TR.po b/po/tr_TR.po
-index b0ad00f..2831961 100644
+index 194943b..338c649 100644
 --- a/po/tr_TR.po
 +++ b/po/tr_TR.po
-@@ -941,6 +941,9 @@ msgstr "Altyaz
+@@ -947,6 +947,9 @@ msgstr "Altyaz
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Altyaz� arka �effafl�k"
  
@@ -713,10 +683,10 @@ index b0ad00f..2831961 100644
  msgstr "LNB"
  
 diff --git a/po/uk_UA.po b/po/uk_UA.po
-index f316e29..5e7c5ea 100644
+index 433ec70..c0a7947 100644
 --- a/po/uk_UA.po
 +++ b/po/uk_UA.po
-@@ -941,6 +941,9 @@ msgstr "Прозорість переднього плану субтитрів"
+@@ -947,6 +947,9 @@ msgstr "Прозорість переднього плану субтитрів"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "Прозорість заднього плану субтитрів"
  
@@ -727,10 +697,10 @@ index f316e29..5e7c5ea 100644
  msgstr "Конвертер"
  
 diff --git a/po/zh_CN.po b/po/zh_CN.po
-index 11ccd84..49bb638 100644
+index c28fe88..8a594e3 100644
 --- a/po/zh_CN.po
 +++ b/po/zh_CN.po
-@@ -944,6 +944,9 @@ msgstr "字幕前景透明度"
+@@ -950,6 +950,9 @@ msgstr "字幕前景透明度"
  msgid "Setup.DVB$Subtitle background transparency"
  msgstr "字幕背景透明度"
  
@@ -755,7 +725,7 @@ index 6a9ba04..a5c8967 100644
  return true;
  }
 diff --git a/remux.c b/remux.c
-index f174f61..0c1b361 100644
+index 78ab294..4f9950f 100644
 --- a/remux.c
 +++ b/remux.c
 @@ -219,6 +219,29 @@ int cPatPmtGenerator::MakeSubtitlingDescriptor(uchar *Target, const char *Langua
@@ -859,7 +829,7 @@ index f174f61..0c1b361 100644
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
 diff --git a/remux.h b/remux.h
-index 3204bb4..d6b0274 100644
+index b882279..4af51e5 100644
 --- a/remux.h
 +++ b/remux.h
 @@ -174,6 +174,7 @@ protected:
@@ -907,19 +877,18 @@ index 3204bb4..d6b0274 100644
  
  // TS to PES converter:
 diff --git a/vdr.5 b/vdr.5
-index 6274c1a..dff559d 100644
+index c46a2bf..96e142a 100644
 --- a/vdr.5
 +++ b/vdr.5
-@@ -214,6 +214,13 @@ if there is an audio type.
- .TP
- .B TPID
- The teletext PID.
+@@ -225,6 +225,12 @@ by an '=' sign, as in
+ 
+ .B ...:201;2001=deu,2002=eng:...
+ 
++Manual teletext subtitling pages can be defined separated by a '+' sign.
++The pages (separated by commas) can contain language codes, delimited by a '='
++sign, as in
 +
-+Fixed teletext subtitling pages can be defined separated by a semicolon.
-+The pages (separated by commas) can contain ISO 639 language codes, delimited
-+by a '=' sign, as in
-+
-+.B ...:2001;150=deu,151=fin:...
++.B ...:201+150=deu,151=fin;2001,2002:...
 +
  .TP
  .B Conditional access
