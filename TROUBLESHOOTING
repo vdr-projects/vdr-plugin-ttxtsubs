@@ -63,9 +63,7 @@ Troubleshooting ttxtsubs
 
 A good thing to check first is how another set top box behaves. If the
 other set top box automatically finds and displays teletext subtitles
-while ttxtsubs don't, there is probably a problem in ttxtsubs. If the
-channel in question is a French, please see the French channel problem
-section below.
+while ttxtsubs don't, there is probably a problem in ttxtsubs.
 
 If neither the set top box nor ttxtsubs automatically finds the
 subtitles but you can get them by manually entering the teletext page
@@ -196,36 +194,6 @@ By sending a teletext subtitles descriptor according to this
 specification, my and other decoders that are using it will be able to
 automatically pick them up and present the subtitles to the viewer.
 -----
-
-
-There is a known problem with some French channels. Because of some
-old specification interpretation mistake, some channels send the
-teletext page number in decimal coded as binary, and not as the
-standard says in hexadecimal. Since there are set top boxes sold that
-has the same bug so that they can work with there channels, they are
-reluctant to correct this. The service information for those channels
-typically say that the subtitles are on page 858 or 859 when they
-really are on page 888 or 889. To still be able to use those channels,
-you can in ttxtsubs turn on the "Workaround for some French chns"
-option which will remap numbers in the X5Y range into X8Y. Since this
-would also remap the page number for a channel that really is using
-for example page 859, this is an option that is off by default.  If
-you see this problem, please contact the channel provider and make
-them understand that time will only make it harder to correct this
-mistake as more decoders with this bug will be out there and software
-updates for older set top boxes will be harder and harder to get.
-Some channels do what they can to gradually correct this by sending
-both a descriptor for French subtitles on page 859 (whish is
-interpreted as page 889 on the old non standard decoders), and as
-French for the Hearing Impaired on page 889 which is the setting that
-can be used on standard compliant decoders.
-(For the technically interrested: The hundreds figure is in teletext
-called "magazine" and is sent separately from the 8 bit "page
-number". Each magazine can actually have up to 256 pages and the page
-number is really in hex, but only the 100 pages which use only the
-figures 0-9 are normally seen by the user as only those numbers can be
-entered on the remote control keyboard. 59 hex is 89 decimal, and here
-is where something went wrong.)
 
 
 Note that some channels don't use teletext subtitles but instead use

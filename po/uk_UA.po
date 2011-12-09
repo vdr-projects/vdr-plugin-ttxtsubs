@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:44+0200\n"
+"POT-Creation-Date: 2011-12-09 20:59+0200\n"
 "PO-Revision-Date: 2009-05-28 14:05+0100\n"
 "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
 "Language-Team: Ukrainian <vdr@linuxtv.org>\n"
@@ -59,9 +59,6 @@ msgstr "Затримка Програвання (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в головному меню"
-
-msgid "Workaround for some French chns"
-msgstr "Спец. настройки для франц. каналів"
 
 msgid "DVB Source Selection"
 msgstr "Вибір DVB джерела"

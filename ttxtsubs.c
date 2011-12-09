@@ -181,7 +181,6 @@ class cMenuSetupTtxtsubs : public cMenuSetupPage {
   cPluginTtxtsubs *mTtxtsubs;
   int mLanguageNo[MAXLANGUAGES];
   int mLangHI[MAXLANGUAGES];
-  int mSavedFrenchSpecial;
   int mDoStore;
   cTtxtsubsConf mConf;
 };
@@ -316,7 +315,6 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
-  else if(!strcasecmp(Name, "FrenchSpecial")) globals.mFrenchSpecial = atoi(Value);
   else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
   else if(!strcasecmp(Name, "OutlineWidth")) globals.mOutlineWidth = atoi(Value);
@@ -484,7 +482,6 @@ const char * dvbSources[5];
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
   mTtxtsubs(ttxtsubs),
-  mSavedFrenchSpecial(globals.mFrenchSpecial),
   mDoStore(doStore),
   mConf(globals)
 {
@@ -526,8 +523,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
 			    numMainMenuAlts, mainMenuAlts));
-  Add(new cMenuEditBoolItem(tr("Workaround for some French chns"),
-			    &mConf.mFrenchSpecial));
   if(mConf.mDvbSources < 0 || mConf.mDvbSources >= numDvbSources)
     mConf.mDvbSources = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("DVB Source Selection"),
@@ -587,7 +582,6 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("Display", mConf.mDoDisplay);
   SetupStore("ReplayDelay", mConf.mReplayDelay);
   SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
-  SetupStore("FrenchSpecial", mConf.mFrenchSpecial);
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
   SetupStore("DvbSources", mConf.mDvbSources);
   SetupStore("FontSize", mConf.mFontSize);

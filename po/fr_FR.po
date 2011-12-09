@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:44+0200\n"
+"POT-Creation-Date: 2011-12-09 20:59+0200\n"
 "PO-Revision-Date: 2010-02-28 14:43+0100\n"
 "Last-Translator: Nival Michaël\n"
 "Language-Team: French <vdr@linuxtv.org>\n"
@@ -66,9 +66,6 @@ msgstr "Delai à la lecture (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Choix du menu principal"
-
-msgid "Workaround for some French chns"
-msgstr "Contournement chaînes françaises"
 
 msgid "DVB Source Selection"
 msgstr "Sélection Source DVB"

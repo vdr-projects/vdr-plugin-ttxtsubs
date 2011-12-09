@@ -38,7 +38,6 @@ class cTtxtsubsConf {
       mDoDisplay = 1;
       mRealDoDisplay =1;
       mMainMenuEntry = 0;
-      mFrenchSpecial = 0;
       mDvbSources = 0;
       mFontSize = 20;
       mOutlineWidth = 2;
@@ -52,7 +51,6 @@ class cTtxtsubsConf {
  public:
   int doDisplay(void) {return mRealDoDisplay;}
   int mainMenuEntry(void) {return mMainMenuEntry;}
-  int frenchSpecial(void) {return mFrenchSpecial;}
   int dvbSources(void) {return mDvbSources;}
   int fontSize(void) {return mFontSize;}
   int outlineWidth(void) {return mOutlineWidth;}
@@ -68,7 +66,6 @@ class cTtxtsubsConf {
   int mDoDisplay;
   int mRealDoDisplay;
   int mMainMenuEntry;
-  int mFrenchSpecial;
   int mDvbSources;
   int mFontSize;
   int mOutlineWidth;

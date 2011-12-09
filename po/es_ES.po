@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:44+0200\n"
+"POT-Creation-Date: 2011-12-09 20:59+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Ruben Nunez Francisco <ruben.nunez@tang-it.com>\n"
 "Language-Team: Spanish <vdr@linuxtv.org>\n"
@@ -64,9 +64,6 @@ msgstr "Retardo en reproducción (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Alternativa del menú principal"
-
-msgid "Workaround for some French chns"
-msgstr "Corrección para canales franceses"
 
 msgid "DVB Source Selection"
 msgstr "Selección fuente DVB"
