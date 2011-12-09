@@ -23,9 +23,10 @@
 #include "ttxtsubslivereceiver.h"
 
 cTtxtSubsLiveReceiver::cTtxtSubsLiveReceiver(cChannel* channel, cVDRTtxtsubsHookListener* hook)
+  :
+  _channel(channel),
+  _hook(hook)
 {
-  _channel = channel;
-  _hook = hook;
   AddPid(channel->Tpid());
 }
 

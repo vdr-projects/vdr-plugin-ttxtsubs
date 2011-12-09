@@ -485,6 +485,7 @@ const char * dvbSources[5];
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
   mTtxtsubs(ttxtsubs),
+  mSavedFrenchSpecial(globals.mFrenchSpecial),
   mDoStore(doStore),
   mConf(globals)
 {
@@ -505,8 +506,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   }
   const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
   const int numDvbSources = sizeof(dvbSources) / sizeof(dvbSources[0]) - 1;
-
-  mSavedFrenchSpecial = mConf.mFrenchSpecial;
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     mLanguageNo[n] = -1;

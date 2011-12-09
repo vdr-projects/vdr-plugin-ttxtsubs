@@ -28,13 +28,12 @@
 
 cTtxtSubsDisplayer::cTtxtSubsDisplayer(int textpage)
   :
-  mDisp(NULL),
+  mDisp(new cTtxtSubsDisplay()),
   mGetMutex(),
   mGetCond(),
   mRingBuf(94000, true),
   mRun(0)
 {
-  mDisp = new cTtxtSubsDisplay();
   mDisp->SetPage(textpage);
 
   mRun = 1;

@@ -105,12 +105,11 @@ cTtxtSubsDisplay::cTtxtSubsDisplay(void)
         _doDisplay(1),
         _osd(NULL),
         _osdLock(),
-        _lastDataTime(NULL)
+        _lastDataTime((struct timeval *) calloc(1, sizeof(*_lastDataTime))),
+        _osdFont(cFont::CreateFont(Setup.FontOsd, globals.mFontSize))
 {
     memset(&_page.data, 0, sizeof(_page.data));
-    _lastDataTime = (struct timeval *) calloc(1, sizeof(*_lastDataTime));
 
-    _osdFont = cFont::CreateFont(Setup.FontOsd, globals.mFontSize);
     if (!_osdFont || !_osdFont->Height())
     {
         _osdFont = cFont::GetFont(fontOsd);

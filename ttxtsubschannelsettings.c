@@ -25,10 +25,11 @@
 #include <vdr/tools.h>
 
 cTtxtSubsChannelSetting::cTtxtSubsChannelSetting(const cChannel *Channel, int PageMode, int PageNumber)
+  :
+  channelid(Channel->GetChannelID()),
+  pagemode(PageMode),
+  pagenumber(PageNumber)
 {
-  channelid=Channel->GetChannelID();
-  pagemode=PageMode;
-  pagenumber=PageNumber;
 }
 
 bool cTtxtSubsChannelSetting::Parse(const char *s)
