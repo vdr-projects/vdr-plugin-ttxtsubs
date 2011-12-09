@@ -37,7 +37,6 @@ class cTtxtsubsConf {
     {
       mDoDisplay = 1;
       mRealDoDisplay =1;
-      mDoRecord = 1;
       mMainMenuEntry = 0;
       mFrenchSpecial = 0;
       mDvbSources = 0;
@@ -53,7 +52,6 @@ class cTtxtsubsConf {
 
  public:
   int doDisplay(void) {return mRealDoDisplay;}
-  int doRecord(void) {return mDoRecord;}
   int mainMenuEntry(void) {return mMainMenuEntry;}
   int frenchSpecial(void) {return mFrenchSpecial;}
   int dvbSources(void) {return mDvbSources;}
@@ -71,7 +69,6 @@ class cTtxtsubsConf {
  protected:
   int mDoDisplay;
   int mRealDoDisplay;
-  int mDoRecord;
   int mMainMenuEntry;
   int mFrenchSpecial;
   int mDvbSources;

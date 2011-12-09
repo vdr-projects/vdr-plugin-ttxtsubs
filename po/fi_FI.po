@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ttxtsubs 0.2.0\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-03-20 22:52+0200\n"
+"POT-Creation-Date: 2011-12-09 19:08+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: Finnish <vdr@linuxtv.org>\n"
@@ -54,9 +54,6 @@ msgstr "vain DVB-C"
 
 msgid "Display Subtitles"
 msgstr "Näytä tekstitykset"
-
-msgid "Record Subtitles"
-msgstr "Tallenna tekstitykset"
 
 msgid "Live Delay"
 msgstr "Viive Live-lähetyksessä"

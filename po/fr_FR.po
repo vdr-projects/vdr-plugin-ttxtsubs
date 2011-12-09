@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-03-20 22:52+0200\n"
+"POT-Creation-Date: 2011-12-09 19:08+0200\n"
 "PO-Revision-Date: 2010-02-28 14:43+0100\n"
 "Last-Translator: Nival Michaël\n"
 "Language-Team: French <vdr@linuxtv.org>\n"
@@ -57,9 +57,6 @@ msgstr "Seulement DVB-C"
 
 msgid "Display Subtitles"
 msgstr "Afficher les sous-titre"
-
-msgid "Record Subtitles"
-msgstr "Enregistrer les sous-titres"
 
 msgid "Live Delay"
 msgstr "Délai en directe"

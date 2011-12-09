@@ -1,6 +1,9 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
+201x-xx-xx: Version x.x.x
+- Removed "Record Subtitles" setup option (unused since 0.2.0).
+
 2011-10-08: Version 0.2.4
 - Updated patch for VDR 1.7.21 (Closes #745)
 
