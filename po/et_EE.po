@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:59+0200\n"
+"POT-Creation-Date: 2011-12-09 21:28+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Arthur Konovalov <artlov@gmail.com>\n"
 "Language-Team: Estonian <vdr@linuxtv.org>\n"
@@ -40,18 +40,6 @@ msgstr "pildisuhe (iganenud)"
 msgid "Page Mode"
 msgstr "lk valik"
 
-msgid "All"
-msgstr "kõik"
-
-msgid "Only DVB-S"
-msgstr "DVB-S"
-
-msgid "Only DVB-T"
-msgstr "DVB-T"
-
-msgid "Only DVB-C"
-msgstr "DVB-C"
-
 msgid "Display Subtitles"
 msgstr "Subtiitrite kuvamine"
 
@@ -63,9 +51,6 @@ msgstr "Salvestuse viivitus (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Peamenüü valikud"
-
-msgid "DVB Source Selection"
-msgstr "DVB allika valik"
 
 msgid "Font Size (pixel)"
 msgstr "Fondi suurus (pix)"

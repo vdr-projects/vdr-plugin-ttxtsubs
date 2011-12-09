@@ -38,7 +38,6 @@ class cTtxtsubsConf {
     mDoDisplay(1),
     mRealDoDisplay(1),
     mMainMenuEntry(0),
-    mDvbSources(0),
     mFontSize(20),
     mOutlineWidth(2),
     mReplayDelay(0),
@@ -51,7 +50,6 @@ class cTtxtsubsConf {
  public:
   int doDisplay(void) {return mRealDoDisplay;}
   int mainMenuEntry(void) {return mMainMenuEntry;}
-  int dvbSources(void) {return mDvbSources;}
   int fontSize(void) {return mFontSize;}
   int outlineWidth(void) {return mOutlineWidth;}
   char (*languages(void))[MAXLANGUAGES][2][4] {return &mLanguages;}
@@ -65,7 +63,6 @@ class cTtxtsubsConf {
   int mDoDisplay;
   int mRealDoDisplay;
   int mMainMenuEntry;
-  int mDvbSources;
   int mFontSize;
   int mOutlineWidth;
   char mLanguages[MAXLANGUAGES][2][4];

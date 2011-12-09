@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ttxtsubs 0.2.0\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:59+0200\n"
+"POT-Creation-Date: 2011-12-09 21:28+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: Finnish <vdr@linuxtv.org>\n"
@@ -40,18 +40,6 @@ msgstr "4:3/Letterbox (käytöstä poistunut)"
 msgid "Page Mode"
 msgstr "sivun valinta"
 
-msgid "All"
-msgstr "kaikki"
-
-msgid "Only DVB-S"
-msgstr "vain DVB-S"
-
-msgid "Only DVB-T"
-msgstr "vain DVB-T"
-
-msgid "Only DVB-C"
-msgstr "vain DVB-C"
-
 msgid "Display Subtitles"
 msgstr "Näytä tekstitykset"
 
@@ -63,9 +51,6 @@ msgstr "Viive toistossa (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Päävalikon toiminnot"
-
-msgid "DVB Source Selection"
-msgstr "Tekstityslähteen valinta"
 
 msgid "Font Size (pixel)"
 msgstr "Kirjasintyypin koko (px)"

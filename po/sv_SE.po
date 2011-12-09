@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:59+0200\n"
+"POT-Creation-Date: 2011-12-09 21:28+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Tomas Prybil <tomas@prybil.se>\n"
 "Language-Team: Swedish <vdr@linuxtv.org>\n"
@@ -42,18 +42,6 @@ msgstr "4:3/brevlådeformat"
 msgid "Page Mode"
 msgstr ""
 
-msgid "All"
-msgstr ""
-
-msgid "Only DVB-S"
-msgstr ""
-
-msgid "Only DVB-T"
-msgstr ""
-
-msgid "Only DVB-C"
-msgstr ""
-
 msgid "Display Subtitles"
 msgstr "Visa textning"
 
@@ -65,9 +53,6 @@ msgstr ""
 
 msgid "Main Menu Alternative"
 msgstr "Huvudmenyalternativ"
-
-msgid "DVB Source Selection"
-msgstr ""
 
 msgid "Font Size (pixel)"
 msgstr ""

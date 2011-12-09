@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 20:59+0200\n"
+"POT-Creation-Date: 2011-12-09 21:28+0200\n"
 "PO-Revision-Date: 2009-05-28 14:05+0100\n"
 "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
 "Language-Team: Ukrainian <vdr@linuxtv.org>\n"
@@ -36,18 +36,6 @@ msgstr "4:3/широкий екран"
 msgid "Page Mode"
 msgstr "Режим сторінки"
 
-msgid "All"
-msgstr "Всі"
-
-msgid "Only DVB-S"
-msgstr "Тільки DVB-S"
-
-msgid "Only DVB-T"
-msgstr "Тільки  DVB-T"
-
-msgid "Only DVB-C"
-msgstr "Тільки DVB-C"
-
 msgid "Display Subtitles"
 msgstr "Показувати субтитри"
 
@@ -59,9 +47,6 @@ msgstr "Затримка Програвання (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в головному меню"
-
-msgid "DVB Source Selection"
-msgstr "Вибір DVB джерела"
 
 msgid "Font Size (pixel)"
 msgstr "Размір фонта (пікселі)"

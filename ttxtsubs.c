@@ -315,7 +315,6 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
-  else if(!strcasecmp(Name, "DvbSources")) globals.mDvbSources = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
   else if(!strcasecmp(Name, "OutlineWidth")) globals.mOutlineWidth = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
@@ -477,7 +476,6 @@ void cMenuSetupTtxtsubsLanguages::Store(void)
 }
 
 const char * mainMenuAlts[5] = {NULL, NULL, NULL, NULL, NULL};
-const char * dvbSources[5];
 
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
@@ -493,15 +491,8 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mainMenuAlts[2] = tr("4:3/Letterbox (deprecated)");
     mainMenuAlts[3] = tr("Page Mode");
     mainMenuAlts[4] = NULL;
-
-    dvbSources[0] = tr("All");
-    dvbSources[1] = tr("Only DVB-S");
-    dvbSources[2] = tr("Only DVB-T");
-    dvbSources[3] = tr("Only DVB-C");
-    dvbSources[4] = NULL;
   }
   const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
-  const int numDvbSources = sizeof(dvbSources) / sizeof(dvbSources[0]) - 1;
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     mLanguageNo[n] = -1;
@@ -523,10 +514,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
 			    numMainMenuAlts, mainMenuAlts));
-  if(mConf.mDvbSources < 0 || mConf.mDvbSources >= numDvbSources)
-    mConf.mDvbSources = 0;  // menu item segfaults if out of range
-  Add(new cMenuEditStraItem(tr("DVB Source Selection"),
-                          &mConf.mDvbSources, 4, dvbSources));
   Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE * 2));
   Add(new cMenuEditIntItem(tr("Font OutlineWidth (pixel)"), &mConf.mOutlineWidth, 1, 10));
 
@@ -583,7 +570,6 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("ReplayDelay", mConf.mReplayDelay);
   SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
-  SetupStore("DvbSources", mConf.mDvbSources);
   SetupStore("FontSize", mConf.mFontSize);
   SetupStore("OutlineWidth", mConf.mOutlineWidth);
 
