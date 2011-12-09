@@ -197,9 +197,8 @@ automatically pick them up and present the subtitles to the viewer.
 
 
 Note that some channels don't use teletext subtitles but instead use
-DVB subtitles, which is something different. DVB subtitles are sent as
-bitmaps, somewhat like DVD subtitles. You can find a plugin for DVB
-subtitles here: http://www.saunalahti.fi/~opvirtan/vdr/subtitles/
+DVB subtitles, which is something different. Support for DVB subtitles
+is included in VDR >= 1.5.10; you don't need this plugin for them.
 
 
 Typical ttxtsubs messages and explanations
