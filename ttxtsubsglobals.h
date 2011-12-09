@@ -34,18 +34,19 @@ class cTtxtsubsConf {
 
  public:
   cTtxtsubsConf(void)
+    :
+    mDoDisplay(1),
+    mRealDoDisplay(1),
+    mMainMenuEntry(0),
+    mDvbSources(0),
+    mFontSize(20),
+    mOutlineWidth(2),
+    mI18nLanguage(0),
+    mReplayDelay(0),
+    mReplayTsDelay(0)
     {
-      mDoDisplay = 1;
-      mRealDoDisplay =1;
-      mMainMenuEntry = 0;
-      mDvbSources = 0;
-      mFontSize = 20;
-      mOutlineWidth = 2;
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
-      mI18nLanguage = 0;
-      mReplayDelay = 0;
-      mReplayTsDelay = 0;
     }
 
  public:
