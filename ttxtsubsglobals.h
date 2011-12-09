@@ -41,7 +41,6 @@ class cTtxtsubsConf {
     mDvbSources(0),
     mFontSize(20),
     mOutlineWidth(2),
-    mI18nLanguage(0),
     mReplayDelay(0),
     mReplayTsDelay(0)
     {
@@ -59,7 +58,6 @@ class cTtxtsubsConf {
   int (*hearingImpaireds(void))[MAXLANGUAGES][2] {return &mHearingImpaireds;}
 
   int langChoise(const char *lang, const int HI);
-  int i18nLanguage(void) {return mI18nLanguage;}
   int replayDelay(void) {return mReplayDelay;}
   int replayTsDelay(void) {return mReplayTsDelay;}
 
@@ -72,7 +70,6 @@ class cTtxtsubsConf {
   int mOutlineWidth;
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
-  int mI18nLanguage;
   int mReplayDelay;
   int mReplayTsDelay;
 };
