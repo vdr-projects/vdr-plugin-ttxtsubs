@@ -899,7 +899,7 @@ index 0000000..2471788
 --- /dev/null
 +++ b/vdrttxtsubshooks.c
 @@ -0,0 +1,63 @@
-+/*
++/*                                                                  -*- c++ -*-
 + * vdr-ttxtsubs - A plugin for the Linux Video Disk Recorder
 + * Copyright (c) 2003 - 2008 Ragnar Sundblad <ragge@nada.kth.se>
 + *
@@ -968,7 +968,7 @@ index 0000000..2f97969
 --- /dev/null
 +++ b/vdrttxtsubshooks.h
 @@ -0,0 +1,46 @@
-+/*
++/*                                                                  -*- c++ -*-
 + * vdr-ttxtsubs - A plugin for the Linux Video Disk Recorder
 + * Copyright (c) 2003 - 2008 Ragnar Sundblad <ragge@nada.kth.se>
 + *

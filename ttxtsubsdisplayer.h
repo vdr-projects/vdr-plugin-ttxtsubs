@@ -1,4 +1,4 @@
-/*
+/*                                                                  -*- c++ -*-
  * vdr-ttxtsubs - A plugin for the Linux Video Disk Recorder
  * Copyright (c) 2003 - 2008 Ragnar Sundblad <ragge@nada.kth.se>
  *
