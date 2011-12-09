@@ -313,7 +313,6 @@ cMenuSetupPage *cPluginTtxtsubs::SetupMenu(void)
 bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 {
   if(!strcasecmp(Name, "Display")) { globals.mDoDisplay = atoi(Value); globals.mRealDoDisplay=globals.mDoDisplay; }
-  else if(!strcasecmp(Name, "LiveDelay")) globals.mLiveDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
   else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
@@ -521,7 +520,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   }
 
   Add(new cMenuEditBoolItem(tr("Display Subtitles"), &mConf.mDoDisplay));
-  Add(new cMenuEditIntItem(tr("Live Delay"), &mConf.mLiveDelay, 0, 5000));
   Add(new cMenuEditIntItem(tr("Replay Delay (PES)"), &mConf.mReplayDelay, 0, 5000));
   Add(new cMenuEditIntItem(tr("Replay Delay (TS)"), &mConf.mReplayTsDelay, 0, 5000));
   if(mConf.mMainMenuEntry < 0 || mConf.mMainMenuEntry >= numMainMenuAlts)
@@ -587,7 +585,6 @@ void cMenuSetupTtxtsubs::Store(void)
   }
 
   SetupStore("Display", mConf.mDoDisplay);
-  SetupStore("LiveDelay", mConf.mLiveDelay);
   SetupStore("ReplayDelay", mConf.mReplayDelay);
   SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
   SetupStore("FrenchSpecial", mConf.mFrenchSpecial);

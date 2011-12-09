@@ -45,7 +45,6 @@ class cTtxtsubsConf {
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
       mI18nLanguage = 0;
-      mLiveDelay = 0;
       mReplayDelay = 0;
       mReplayTsDelay = 0;
     }
@@ -62,7 +61,6 @@ class cTtxtsubsConf {
 
   int langChoise(const char *lang, const int HI);
   int i18nLanguage(void) {return mI18nLanguage;}
-  int liveDelay(void) {return mLiveDelay;}
   int replayDelay(void) {return mReplayDelay;}
   int replayTsDelay(void) {return mReplayTsDelay;}
 
@@ -77,7 +75,6 @@ class cTtxtsubsConf {
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
   int mI18nLanguage;
-  int mLiveDelay;
   int mReplayDelay;
   int mReplayTsDelay;
 };

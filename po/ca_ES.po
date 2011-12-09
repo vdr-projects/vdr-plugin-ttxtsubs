@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 19:08+0200\n"
+"POT-Creation-Date: 2011-12-09 20:44+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Jordi Vilà <jvila@tinet.org>\n"
 "Language-Team: Catalan <vdr@linuxtv.org>\n"
@@ -57,9 +57,6 @@ msgstr "Només DVB-C"
 
 msgid "Display Subtitles"
 msgstr "Visualitza subtítols"
-
-msgid "Live Delay"
-msgstr "Retard en directe"
 
 msgid "Replay Delay (PES)"
 msgstr "Retard en reproducció (PES)"
