@@ -189,55 +189,55 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
     switch(foundlines) {
     case 0:
       if(packet != 0) // need a Y0 first
-	return;
+        return;
       foundlines++;
       break;
     case 1:
       if(packet != 1) // need a Y1
-	return;
+        return;
       copy_inv_strip_par(buf, d->data, sizeof(buf));
       if(memcmp((char *) buf, infoline, strlen(infoline)))
-	return;
+        return;
       foundlines++;
       break;
     case 2:
       mLangInfoState++;
       if(packet < 2) // need a Y2 or more
-	return;
+        return;
       if(mLangInfoState == 3)
-	fprintf(stderr, "ttxtsubs: Chosen Language not found in recording, available languages:\n");
+        fprintf(stderr, "ttxtsubs: Chosen Language not found in recording, available languages:\n");
       copy_inv_strip_par(buf, d->data, sizeof(buf));
       for(size_t i = 0; i < 40; i += 8) {
-	if(mLangInfoState == 3 && buf[i] >= 'a' && buf[i] <= 'z')
-	  fprintf(stderr, "          %c%c%c: %c%c%c %s\n", buf[i+4], buf[i+5], buf[i+6],
-		  buf[i], buf[i+1], buf[i+2], buf[i+3] == ' ' ? "" :
-		  buf[i+3] == 'h' ? "(Hearing Impaired)" : "(Unknown type)");
+        if(mLangInfoState == 3 && buf[i] >= 'a' && buf[i] <= 'z')
+          fprintf(stderr, "          %c%c%c: %c%c%c %s\n", buf[i+4], buf[i+5], buf[i+6],
+                  buf[i], buf[i+1], buf[i+2], buf[i+3] == ' ' ? "" :
+                  buf[i+3] == 'h' ? "(Hearing Impaired)" : "(Unknown type)");
 
-	if(buf[i] >= 'a' && buf[i] <= 'z' &&
-	   buf[i+1] >= 'a' && buf[i+1] <= 'z' &&
-	   buf[i+2] >= 'a' && buf[i+2] <= 'z' &&
-	   ((buf[i+3] == ' ') || (buf[i+3] == 'h')) &&
-	   buf[i+4] >= '1' && buf[i+4] <= '8' && 
-	   buf[i+5] >= '0' && buf[i+5] <= '9' && 
-	   buf[i+6] >= '0' && buf[i+6] <= '9' && 
-	   buf[i+7] == ' ') {
-	      int ch = globals.langChoise((char *)buf+i, buf[i+3] == 'h');
-	      unsigned int page =
-		((buf[i+4] - '0') << 8) +
-		((buf[i+5] - '0') << 4) +
-		(buf[i+6] - '0');
-	      if(page >= 0x100 && page < 0x900) {
-		if(page >= 0x800)
-		  page -= 0x800;
+        if(buf[i] >= 'a' && buf[i] <= 'z' &&
+           buf[i+1] >= 'a' && buf[i+1] <= 'z' &&
+           buf[i+2] >= 'a' && buf[i+2] <= 'z' &&
+           ((buf[i+3] == ' ') || (buf[i+3] == 'h')) &&
+           buf[i+4] >= '1' && buf[i+4] <= '8' && 
+           buf[i+5] >= '0' && buf[i+5] <= '9' && 
+           buf[i+6] >= '0' && buf[i+6] <= '9' && 
+           buf[i+7] == ' ') {
+              int ch = globals.langChoise((char *)buf+i, buf[i+3] == 'h');
+              unsigned int page =
+                ((buf[i+4] - '0') << 8) +
+                ((buf[i+5] - '0') << 4) +
+                (buf[i+6] - '0');
+              if(page >= 0x100 && page < 0x900) {
+                if(page >= 0x800)
+                  page -= 0x800;
 
-		if(ch >= 0 && ch < mLangChoise) {
-		  mLangChoise = ch;
-		  mDisp->SetPage(page);
-		  mFoundLangPage = 1;
-		  fprintf(stderr, "Found subtitle page: %03x\n", page); // XXX
-		}
-	      }
-	}
+                if(ch >= 0 && ch < mLangChoise) {
+                  mLangChoise = ch;
+                  mDisp->SetPage(page);
+                  mFoundLangPage = 1;
+                  fprintf(stderr, "Found subtitle page: %03x\n", page); // XXX
+                }
+              }
+        }
       }
       break;
     }
