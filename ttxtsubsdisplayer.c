@@ -117,14 +117,8 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
       for (int p=0; p < pageCount; p++) {
         // isyslog("ttxtsubs: got page info from vdr: %s 0x%02X 0x%2X.0x%02X", teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType,
         //   teletextSubtitlePages[p].ttxtMagazine, teletextSubtitlePages[p].ttxtPage);
-        int ch = globals.langChoise(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05);
-        if (ch >= 0 && ch < mLangChoise) {
-          mLangChoise = ch;
-          int bcdPage = (teletextSubtitlePages[p].ttxtMagazine << 8) + teletextSubtitlePages[p].ttxtPage;
-          mDisp->SetPage(bcdPage);
-          mFoundLangPage = 1;
-          isyslog("Found subtitle page: %03x\n", bcdPage);
-        }
+        SetPreferredPage(teletextSubtitlePages[p].ttxtLanguage, teletextSubtitlePages[p].ttxtType == 0x05,
+          (teletextSubtitlePages[p].ttxtMagazine << 8) + teletextSubtitlePages[p].ttxtPage);
       }
     }
   }
@@ -221,7 +215,6 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
            buf[i+5] >= '0' && buf[i+5] <= '9' && 
            buf[i+6] >= '0' && buf[i+6] <= '9' && 
            buf[i+7] == ' ') {
-              int ch = globals.langChoise((char *)buf+i, buf[i+3] == 'h');
               unsigned int page =
                 ((buf[i+4] - '0') << 8) +
                 ((buf[i+5] - '0') << 4) +
@@ -229,17 +222,22 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
               if(page >= 0x100 && page < 0x900) {
                 if(page >= 0x800)
                   page -= 0x800;
-
-                if(ch >= 0 && ch < mLangChoise) {
-                  mLangChoise = ch;
-                  mDisp->SetPage(page);
-                  mFoundLangPage = 1;
-                  fprintf(stderr, "Found subtitle page: %03x\n", page); // XXX
-                }
+                SetPreferredPage((char *)buf+i, buf[i+3] == 'h', page);
               }
         }
       }
       break;
     }
+  }
+}
+
+bool cTtxtSubsPlayer::SetPreferredPage(const char* language, bool hearingImpaired, unsigned int page)
+{
+  int ch = globals.langChoise(language, hearingImpaired);
+  if (ch >= 0 && ch < mLangChoise) {
+    mLangChoise = ch;
+    mDisp->SetPage(page);
+    mFoundLangPage = 1;
+    isyslog("Found subtitle page: %03x\n", page);
   }
 }

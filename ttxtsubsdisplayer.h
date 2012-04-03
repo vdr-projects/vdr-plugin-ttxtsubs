@@ -47,7 +47,8 @@ class cTtxtSubsPlayer : public cTtxtSubsDisplayer {
 
  private:
   void SearchLanguagePage(uint8_t *p, int len);
-  
+  bool SetPreferredPage(const char* language, bool hearingImpaired, unsigned int page);
+
   int mHasFilteredStream;
   int mFoundLangPage;
   int mLangChoise;
