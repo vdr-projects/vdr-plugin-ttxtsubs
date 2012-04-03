@@ -138,9 +138,9 @@ public:
  protected:
   virtual void ChannelSwitch(const cDevice *Device, int ChannelNumber
 #if APIVERSNUM >= 10726
-			     , bool LiveView
+                             , bool LiveView
 #endif
-			     );
+                             );
   virtual void Replaying(const cControl *Control, const char *Name, const char *FileName, bool On);
   //  virtual void OsdClear(void) { ShowTtxt(); }
   //  virtual void OsdTitle(const char *Title) { HideTtxt(); }
@@ -232,18 +232,18 @@ bool cPluginTtxtsubs::Start(void)
     if(strlen(mOldLanguage)) {
       // use old setup lang, first try to find it amongst known languages
       for(int i = 0; i < gNumLanguages; i++) {
-	if(!memcmp(mOldLanguage, gLanguages[i][0], 3) ||
-	   !memcmp(mOldLanguage, gLanguages[i][1], 3)) {
-	  strncpy(globals.mLanguages[0][0], gLanguages[i][0], 4);
-	  globals.mLanguages[0][0][3] = '\0';
-	  strncpy(globals.mLanguages[0][1], gLanguages[i][1], 4);
-	  globals.mLanguages[0][1][3] = '\0';
-	}
+        if(!memcmp(mOldLanguage, gLanguages[i][0], 3) ||
+           !memcmp(mOldLanguage, gLanguages[i][1], 3)) {
+          strncpy(globals.mLanguages[0][0], gLanguages[i][0], 4);
+          globals.mLanguages[0][0][3] = '\0';
+          strncpy(globals.mLanguages[0][1], gLanguages[i][1], 4);
+          globals.mLanguages[0][1][3] = '\0';
+        }
       }
       if(!memcmp(globals.mLanguages[0][0], "unk", 3)) {
-	// not found there, just copy it
-	memcpy(globals.mLanguages[0][0], mOldLanguage, 3);
-	globals.mLanguages[0][0][3] = '\0';
+        // not found there, just copy it
+        memcpy(globals.mLanguages[0][0], mOldLanguage, 3);
+        globals.mLanguages[0][0][3] = '\0';
       }
       globals.mHearingImpaireds[0][0] = mOldHearingImpaired;
       globals.mHearingImpaireds[0][1] = mOldHearingImpaired;
@@ -334,9 +334,9 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 
 void cPluginTtxtsubs::ChannelSwitch(const cDevice *Device, int ChannelNumber
 #if APIVERSNUM >= 10726
-				    , bool LiveView
+                                    , bool LiveView
 #endif
-				    )
+                                    )
 {
 #if APIVERSNUM < 10726
   bool LiveView = Device->IsPrimaryDevice();
@@ -444,7 +444,7 @@ void cPluginTtxtsubs::parseLanguages(const char *val) {
     if(len) {
       size_t trlen = len;
       if(trlen > 3)
-	trlen = 3;
+        trlen = 3;
       memcpy(globals.mLanguages[i/2][i%2], p, trlen);
       globals.mLanguages[i/2][i%2][trlen] = '\0';
     }
@@ -511,9 +511,9 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
 
     for(int i = 0; i < gNumLanguages; i++) {
       if(!strncmp(mConf.mLanguages[n][0], gLanguages[i][0], 4) &&
-	 !strncmp(mConf.mLanguages[n][1], gLanguages[i][1], 4)) {
-	mLanguageNo[n] = i;
-	break;
+         !strncmp(mConf.mLanguages[n][1], gLanguages[i][1], 4)) {
+        mLanguageNo[n] = i;
+        break;
       }
     }
   }
@@ -524,7 +524,7 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   if(mConf.mMainMenuEntry < 0 || mConf.mMainMenuEntry >= numMainMenuAlts)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
-			    numMainMenuAlts, mainMenuAlts));
+                            numMainMenuAlts, mainMenuAlts));
   Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE * 2));
   Add(new cMenuEditIntItem(tr("Font OutlineWidth (pixel)"), &mConf.mOutlineWidth, 1, 10));
 
@@ -614,22 +614,22 @@ int cTtxtsubsConf::langChoise(const char *lang, const int HI)
 {
   size_t i, j;
   int result = -1;
-  
+
   for(i = 0; i < MAXLANGUAGES; i++) {
     for(j = 0; j < 2; j++) {
       if(!mLanguages[i][j][0])
-	continue;
+        continue;
 
       if(!memcmp(lang, mLanguages[i][j], 3)) {
-	if( ( HI && mHearingImpaireds[i][j] ) || 
-	    ( !HI && !mHearingImpaireds[i][j] ) ) {
-	  result = i*2;
-	  goto x;
-	}
-	if( !HI && mHearingImpaireds[i][j] ) {
-	  result = 1 + i*2;
-	  goto x;
-	}
+        if( ( HI && mHearingImpaireds[i][j] ) || 
+            ( !HI && !mHearingImpaireds[i][j] ) ) {
+          result = i*2;
+          goto x;
+        }
+        if( !HI && mHearingImpaireds[i][j] ) {
+          result = 1 + i*2;
+          goto x;
+        }
       }
     }
   }
