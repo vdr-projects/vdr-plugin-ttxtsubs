@@ -231,13 +231,22 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
   }
 }
 
-bool cTtxtSubsPlayer::SetPreferredPage(const char* language, bool hearingImpaired, unsigned int page)
+bool cTtxtSubsPlayer::SetPreferredPage(const char* language, bool hearingImpaired, unsigned int bcdPage)
 {
+  // Some French channels still send wrong subtitle page number!
+  // This is a hard fix to change the page numbers 05x to 08x
+  // According to ETSI tables pages 850-859 are not used for
+  // teletext subtitles in any country, so we assume, that these can
+  // safely be mapped to 880-889
+
+  if(bcdPage >= 0x50 && bcdPage <= 0x59)
+     bcdPage += 0x30;
+
   int ch = globals.langChoise(language, hearingImpaired);
   if (ch >= 0 && ch < mLangChoise) {
     mLangChoise = ch;
-    mDisp->SetPage(page);
+    mDisp->SetPage(bcdPage);
     mFoundLangPage = 1;
-    isyslog("Found subtitle page: %03x\n", page);
+    isyslog("Found subtitle page: %03x\n", bcdPage < 0x100 ? 0x800 + bcdPage : bcdPage);
   }
 }
