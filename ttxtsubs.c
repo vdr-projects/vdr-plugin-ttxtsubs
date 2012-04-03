@@ -613,29 +613,19 @@ void cMenuSetupTtxtsubs::Store(void)
 int cTtxtsubsConf::langChoise(const char *lang, const int HI)
 {
   size_t i, j;
-  int result = -1;
 
   for(i = 0; i < MAXLANGUAGES; i++) {
     for(j = 0; j < 2; j++) {
-      if(!mLanguages[i][j][0])
-        continue;
-
-      if(!memcmp(lang, mLanguages[i][j], 3)) {
-        if( ( HI && mHearingImpaireds[i][j] ) || 
-            ( !HI && !mHearingImpaireds[i][j] ) ) {
-          result = i*2;
-          goto x;
-        }
-        if( !HI && mHearingImpaireds[i][j] ) {
-          result = 1 + i*2;
-          goto x;
-        }
+      if(mLanguages[i][j][0] && !memcmp(lang, mLanguages[i][j], 3)) {
+        if( ( HI && mHearingImpaireds[i][j] ) || ( !HI && !mHearingImpaireds[i][j] ) )
+          return i*2;
+        if( !HI && mHearingImpaireds[i][j] )
+          return 1 + i*2;
       }
     }
   }
 
- x:
-  return result;
+  return -1;
 }
 
 
