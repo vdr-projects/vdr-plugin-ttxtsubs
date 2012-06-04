@@ -98,7 +98,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
 
 // Take PES packets and break out the teletext data
 // Buffer the data for processing in a separate thread
-// XXX We should do some filtering here to avoid unneccessary load!
+// XXX We should do some filtering here to avoid unnecessary load!
 void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
 {
   int i;

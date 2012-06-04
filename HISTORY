@@ -17,7 +17,7 @@ VDR Plugin 'ttxtsubs' Revision History
   With VDR 1.7.21 the subtitle PIDs are stored in the channels.conf as an
   extension to the teletext PID (see vdr.5 for details).
 
-  This change made it neccessary to change the extension of the tpid in
+  This change made it necessary to change the extension of the tpid in
   channels.conf used by the ttxtsubs patch:
 
   old: ...:201;150=deu,151=fin:...
@@ -95,7 +95,7 @@ VDR Plugin 'ttxtsubs' Revision History
 2009-01-04: Version 0.0.8
 - Updated Italien translation provided by Diego Pierotto
 - Updated Russian translation provided by Oleg Roitburd (Closes #47)
-- Fixed displaying of multiple rows when antialiasing is enabled by  aquiring a
+- Fixed displaying of multiple rows when antialiasing is enabled by acquiring a
   single OSD area for all rows - Thx to Rolf Ahrenberg (Closes #24)
 
 2008-12-18: Version 0.0.7
