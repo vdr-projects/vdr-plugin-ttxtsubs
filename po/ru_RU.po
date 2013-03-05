@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 21:28+0200\n"
+"POT-Creation-Date: 2013-03-06 00:14+0200\n"
 "PO-Revision-Date: 2008-12-30 14:05+0100\n"
 "Last-Translator: Oleg Roitburd <oleg@roitburd.de>\n"
 "Language-Team: Russian <vdr@linuxtv.org>\n"
@@ -43,12 +43,6 @@ msgstr "Режим страницы"
 
 msgid "Display Subtitles"
 msgstr "Показывать субтитры"
-
-msgid "Replay Delay (PES)"
-msgstr "Задержка воспроизведения (PES)"
-
-msgid "Replay Delay (TS)"
-msgstr "Задержка воспроизведения (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Команда в главном меню"

@@ -39,9 +39,7 @@ class cTtxtsubsConf {
     mRealDoDisplay(1),
     mMainMenuEntry(0),
     mFontSize(20),
-    mOutlineWidth(2),
-    mReplayDelay(0),
-    mReplayTsDelay(0)
+    mOutlineWidth(2)
     {
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
@@ -56,8 +54,6 @@ class cTtxtsubsConf {
   int (*hearingImpaireds(void))[MAXLANGUAGES][2] {return &mHearingImpaireds;}
 
   int langChoise(const char *lang, const int HI);
-  int replayDelay(void) {return mReplayDelay;}
-  int replayTsDelay(void) {return mReplayTsDelay;}
 
  protected:
   int mDoDisplay;
@@ -67,8 +63,6 @@ class cTtxtsubsConf {
   int mOutlineWidth;
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
-  int mReplayDelay;
-  int mReplayTsDelay;
 };
 
 extern cTtxtsubsConf globals;

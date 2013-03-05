@@ -31,6 +31,7 @@
 #include <vdr/font.h>
 #include <vdr/config.h>
 #include <vdr/tools.h>
+#include <vdr/device.h>
 
 #include "ttxtsubsglobals.h"
 #include "ttxtsubsdisplay.h"
@@ -163,8 +164,11 @@ void cTtxtSubsDisplay::Show(void)
     ShowOSD();
 }
 
+//Taken from VDR dvbsubtitle.c
+#define LimitTo32Bit(n) ((n) & 0x00000000FFFFFFFFL)
+#define MAXDELTA 40000 // max. reasonable PTS/STC delta in ms
 
-void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
+void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, int64_t sched_pts)
 {
     int mp;
     int mag; // X in ETSI EN 300 706
@@ -256,9 +260,24 @@ void cTtxtSubsDisplay::TtxtData(const uint8_t *Data, uint64_t sched_time)
 
             if (_pageState != collecting)
             {
-                int diff = sched_time - cTimeMs::Now();
-                //printf("Got sched_time %llx, diff %d\n", sched_time, diff);
-                if (diff > 10) cCondWait::SleepMs(diff);
+                int64_t pts = cDevice::PrimaryDevice()->GetSTC();
+
+                //Taken from VDR dvbsubtitle.c
+                int64_t diff = (LimitTo32Bit(sched_pts) - LimitTo32Bit(pts));// some devices only deliver 32 bits
+                if (diff > (int64_t(1) << 31))
+                    diff -= (int64_t(1) << 32);
+                else if (diff < -((int64_t(1) << 31) - 1))
+                    diff += (int64_t(1) << 32);
+                diff /= 90;
+                if (diff > MAXDELTA)
+                    return;
+
+                while( diff > 10 )
+                {
+                    cCondWait::SleepMs(min(diff,int64_t(250)));
+                    if( !_doDisplay ) return;
+                    diff -= 250;
+                }
             }
 
             _pageState = collecting;

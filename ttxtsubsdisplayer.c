@@ -22,16 +22,18 @@
 #include "ttxtsubsdisplay.h"
 #include "utils.h"
 #include "ttxtsubsglobals.h"
+#include "ttxtaudio.h"
 #include <vdr/channels.h>
 
 // ----- class cTtxtSubsDisplayer -----
 
 cTtxtSubsDisplayer::cTtxtSubsDisplayer(int textpage)
   :
+  cThread("TtxtSubsDisplayer"),
   mDisp(new cTtxtSubsDisplay()),
   mGetMutex(),
   mGetCond(),
-  mRingBuf(94000, true),
+  mRingBuf(188000, true),
   mRun(0)
 {
   mDisp->SetPage(textpage);
@@ -59,9 +61,7 @@ void cTtxtSubsDisplayer::Action(void)
     f = mRingBuf.Get();
 
     if(f) {
-      uint64_t sched_time;
-      memcpy(&sched_time, f->Data() + 46, sizeof(sched_time));
-      mDisp->TtxtData(f->Data(), sched_time);
+      mDisp->TtxtData(f->Data(), f->Pts());
       mRingBuf.Drop(f);
     } else {
       // wait for more data
@@ -102,6 +102,7 @@ cTtxtSubsPlayer::cTtxtSubsPlayer(int backup_textpage)
 void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const struct tTeletextSubtitlePage teletextSubtitlePages[], int pageCount)
 {
   int i;
+  int64_t pts = 0;
 
   //printf("cTtxtSubsPlayer: len: %d\n", Length); // XXX
 
@@ -136,14 +137,19 @@ void cTtxtSubsPlayer::PES_data(uchar *p, int Length, bool IsPesRecording, const 
   if(mHasFilteredStream && !mFoundLangPage)
     SearchLanguagePage(p, Length);
 
+  if (PesHasPts(p))
+    pts = PesGetPts(p);
+
+  //Some streams are missing the Subtitle pts so we use the audio instead
+  if (!pts && cTtxtAudio::pts)
+     pts = cTtxtAudio::pts;
+
   // payload_unit_start_indicator
   for(i = 1; (i*46) < Length ; i++) {
     if(0xff == p[i*46]) // stuffing data
       continue;
 
-    uint64_t sched_time=cTimeMs::Now() + (IsPesRecording ? globals.replayDelay() : globals.replayTsDelay());
-    cFrame *f = new cFrame(p + i*46, 46 + sizeof(sched_time));
-    memcpy(f->Data() + 46, &sched_time, sizeof(sched_time));
+    cFrame *f = new cFrame(p + i*46, 46, ftUnknown, -1, pts);
     if (mRingBuf.Put(f))
     {
         mGetCond.Broadcast();

@@ -45,7 +45,7 @@ public:
     void SetPage(int Pageno); // Pageno is 0x000 to 0x799
     void Hide(void);
     void Show(void);
-    void TtxtData(const uint8_t *, uint64_t sched_time = 0);
+    void TtxtData(const uint8_t *, int64_t sched_pts = 0);
 
 protected:
     void ShowOSD();

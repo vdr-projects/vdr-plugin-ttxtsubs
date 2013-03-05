@@ -43,6 +43,7 @@
 #include "ttxtsubspagemenu.h"
 #include "ttxtsubschannelsettings.h"
 #include "ttxtsubslivereceiver.h"
+#include "ttxtaudio.h"
 
 #if defined(APIVERSNUM) && APIVERSNUM < 10706
 #error "This version of ttxtsubs only works with vdr version >= 1.7.6!"
@@ -169,6 +170,7 @@ public:
 private:
   cTtxtSubsPlayer *mDispl;
   cMutex mDisplLock;;
+  cTtxtAudio *mAudio;
 
   char mOldLanguage[4]; // language chosen from previous version
   int mOldHearingImpaired; // HI setting chosen from previous version
@@ -316,8 +318,6 @@ cMenuSetupPage *cPluginTtxtsubs::SetupMenu(void)
 bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
 {
   if(!strcasecmp(Name, "Display")) { globals.mDoDisplay = atoi(Value); globals.mRealDoDisplay=globals.mDoDisplay; }
-  else if(!strcasecmp(Name, "ReplayDelay")) globals.mReplayDelay = atoi(Value);
-  else if(!strcasecmp(Name, "ReplayTsDelay")) globals.mReplayTsDelay = atoi(Value);
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
   else if(!strcasecmp(Name, "OutlineWidth")) globals.mOutlineWidth = atoi(Value);
@@ -396,6 +396,8 @@ void cPluginTtxtsubs::StartTtxtPlay(int backup_page)
   if(!mDispl) {
     isyslog("ttxtsubs: teletext subtitles replayer started with initial page %03x", backup_page);
     mDispl = new cTtxtSubsPlayer(backup_page);
+    if (!mAudio)
+      mAudio = new cTtxtAudio();
     ShowTtxt();
   } else
     esyslog("ttxtsubs: Error: StartTtxtPlay called when already started!");
@@ -519,8 +521,6 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   }
 
   Add(new cMenuEditBoolItem(tr("Display Subtitles"), &mConf.mDoDisplay));
-  Add(new cMenuEditIntItem(tr("Replay Delay (PES)"), &mConf.mReplayDelay, 0, 5000));
-  Add(new cMenuEditIntItem(tr("Replay Delay (TS)"), &mConf.mReplayTsDelay, 0, 5000));
   if(mConf.mMainMenuEntry < 0 || mConf.mMainMenuEntry >= numMainMenuAlts)
     mConf.mMainMenuEntry = 0;  // menu item segfaults if out of range
   Add(new cMenuEditStraItem(tr("Main Menu Alternative"), &mConf.mMainMenuEntry,
@@ -578,8 +578,6 @@ void cMenuSetupTtxtsubs::Store(void)
   }
 
   SetupStore("Display", mConf.mDoDisplay);
-  SetupStore("ReplayDelay", mConf.mReplayDelay);
-  SetupStore("ReplayTsDelay", mConf.mReplayTsDelay);
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
   SetupStore("FontSize", mConf.mFontSize);
   SetupStore("OutlineWidth", mConf.mOutlineWidth);

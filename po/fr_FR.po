@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 21:28+0200\n"
+"POT-Creation-Date: 2013-03-06 00:14+0200\n"
 "PO-Revision-Date: 2010-02-28 14:43+0100\n"
 "Last-Translator: Nival Michaël\n"
 "Language-Team: French <vdr@linuxtv.org>\n"
@@ -45,12 +45,6 @@ msgstr "Mode page"
 
 msgid "Display Subtitles"
 msgstr "Afficher les sous-titre"
-
-msgid "Replay Delay (PES)"
-msgstr "Delai à la lecture (PES)"
-
-msgid "Replay Delay (TS)"
-msgstr "Delai à la lecture (TS)"
 
 msgid "Main Menu Alternative"
 msgstr "Choix du menu principal"

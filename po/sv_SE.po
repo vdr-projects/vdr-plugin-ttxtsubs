@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <author>\n"
-"POT-Creation-Date: 2011-12-09 21:28+0200\n"
+"POT-Creation-Date: 2013-03-06 00:14+0200\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Tomas Prybil <tomas@prybil.se>\n"
 "Language-Team: Swedish <vdr@linuxtv.org>\n"
@@ -44,12 +44,6 @@ msgstr ""
 
 msgid "Display Subtitles"
 msgstr "Visa textning"
-
-msgid "Replay Delay (PES)"
-msgstr ""
-
-msgid "Replay Delay (TS)"
-msgstr ""
 
 msgid "Main Menu Alternative"
 msgstr "Huvudmenyalternativ"

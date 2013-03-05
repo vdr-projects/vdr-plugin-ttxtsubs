@@ -51,7 +51,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 ### The object files (add further files here):
 
 OBJS = $(PLUGIN).o ttxtsubsdisplayer.o ttxtsubsdisplay.o teletext.o \
-	ttxtsubspagemenu.o ttxtsubschannelsettings.o ttxtsubslivereceiver.o
+	ttxtsubspagemenu.o ttxtsubschannelsettings.o ttxtsubslivereceiver.o ttxtaudio.o
 
 ### Implicit rules:
 .PHONY: all all-redirect
