@@ -6,8 +6,8 @@ index e8321a4..c1b6c48 100644
                           background transparency. By default the values as broadcast
                           are used.
  
-+  Record Teletext Subtitles = no
-+                         If set to 'yes', teletext subtitles will be recorded.
++  Enable teletext support = no
++                         If set to 'yes', enables teletext subtitles.
 +
    LNB:
  
