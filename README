@@ -8,8 +8,9 @@ Description:
   This plug-in implements displaying, recording and replaying teletext
   based subtitles using the on screen display.
 
-Current Maintainer:
+Current Maintainers:
   Tobias Grimm <vdr@e-tobi.net>
+  Ville Skyttä <ville.skytta@iki.fi>
 
 Original Author:
   Ragnar Sundblad <ragge@nada.kth.se>
@@ -22,7 +23,7 @@ Old homepage:
 
 Copyright:
   (C) 2003 - 2008 Ragnar Sundblad
-  (C) 2009 - 2011 Tobias Grimm
+  (C) 2009 - 2013 Tobias Grimm, Ville Skyttä
 
 License:
   This program is free software; you can redistribute it and/or modify it
