@@ -26,7 +26,7 @@ msgid "Display teletext subtitles"
 msgstr "Zeige Videotextuntertitel"
 
 msgid "deprecated"
-msgstr ""
+msgstr "veraltet"
 
 msgid "Page Selection"
 msgstr "Seitenauswahl"
@@ -34,9 +34,8 @@ msgstr "Seitenauswahl"
 msgid "Display on/off"
 msgstr "Anzeige ein/aus"
 
-#, fuzzy
 msgid "4:3/Letterbox (deprecated)"
-msgstr "4:3/Letterbox"
+msgstr "4:3/Letterbox (veraltet)"
 
 msgid "Page Mode"
 msgstr "Seitenmodus"
@@ -48,10 +47,10 @@ msgid "Main Menu Alternative"
 msgstr "Hauptmenu Alternative"
 
 msgid "Font Size (pixel)"
-msgstr ""
+msgstr "Font-Größe (Pixel)"
 
 msgid "Font OutlineWidth (pixel)"
-msgstr ""
+msgstr "Font-Umrandungs (Pixel)"
 
 msgid "Language"
 msgstr "Sprache"
