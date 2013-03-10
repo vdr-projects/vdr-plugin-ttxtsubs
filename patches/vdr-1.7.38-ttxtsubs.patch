@@ -1,12 +1,12 @@
 diff --git a/MANUAL b/MANUAL
-index e8321a4..c1b6c48 100644
+index e8321a4..f96b183 100644
 --- a/MANUAL
 +++ b/MANUAL
 @@ -756,6 +756,9 @@ Version 1.6
                           background transparency. By default the values as broadcast
                           are used.
  
-+  Enable teletext support = no
++  Enable teletext support = yes
 +                         If set to 'yes', enables teletext subtitles.
 +
    LNB:
@@ -188,14 +188,14 @@ index 9a4a829..ec84027 100644
       cTimeMs Timeout(QUERY_REPLY_TIMEOUT);
       do {
 diff --git a/config.c b/config.c
-index 2c87985..f105baf 100644
+index 2c87985..9ed5435 100644
 --- a/config.c
 +++ b/config.c
 @@ -397,6 +397,7 @@ cSetup::cSetup(void)
    MarginStop = 10;
    AudioLanguages[0] = -1;
    DisplaySubtitles = 0;
-+  SupportTeletext = 0;
++  SupportTeletext = 1;
    SubtitleLanguages[0] = -1;
    SubtitleOffset = 0;
    SubtitleFgTransparency = 0;

@@ -1,4 +1,4 @@
-From 380361f9a1844403ee4620748b7d971a71f14b54 Mon Sep 17 00:00:00 2001
+From 52b572646b476bbe402fc56e929de310b949efdf Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sat, 13 Feb 2010 14:42:30 +0100
 Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
@@ -37,28 +37,28 @@ Subject: [PATCH 2/6] Added setup option to enable teletext subtitle recording
  30 files changed, 84 insertions(+), 1 deletion(-)
 
 diff --git a/MANUAL b/MANUAL
-index e8321a4..acd2e51 100644
+index e8321a4..f96b183 100644
 --- a/MANUAL
 +++ b/MANUAL
 @@ -756,6 +756,9 @@ Version 1.6
                           background transparency. By default the values as broadcast
                           are used.
  
-+  Enable teletext support = no
++  Enable teletext support = yes
 +                         If set to 'yes', enables teletext subtitles.
 +
    LNB:
  
    Use DiSEqC = no        Generally turns DiSEqC support on or off.
 diff --git a/config.c b/config.c
-index 2c87985..f105baf 100644
+index 2c87985..9ed5435 100644
 --- a/config.c
 +++ b/config.c
 @@ -397,6 +397,7 @@ cSetup::cSetup(void)
    MarginStop = 10;
    AudioLanguages[0] = -1;
    DisplaySubtitles = 0;
-+  SupportTeletext = 0;
++  SupportTeletext = 1;
    SubtitleLanguages[0] = -1;
    SubtitleOffset = 0;
    SubtitleFgTransparency = 0;

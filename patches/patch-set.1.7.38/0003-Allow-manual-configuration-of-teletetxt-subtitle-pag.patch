@@ -1,4 +1,4 @@
-From 81f20bc05af9fc4a6d79aeb028c2e3f2aad22685 Mon Sep 17 00:00:00 2001
+From 1c37c1a96eaac460f3905ec46899a3361044fe16 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages

@@ -12,6 +12,7 @@ VDR Plugin 'ttxtsubs' Revision History
 - Sync subtitles using PTS (Closes #119) (Thx to Matti Horila and Dimitar Petrovski)
 - Added option for setting the left/center/right justification of subtitles
   (Closes #957) (Thx to Jussi Tepponen)
+- Enable teletext subtitles in VDR patch by default (Closes #819)
 
 2011-10-08: Version 0.2.4
 - Updated patch for VDR 1.7.21 (Closes #745)
