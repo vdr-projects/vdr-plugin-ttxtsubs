@@ -52,7 +52,7 @@
 #error "This version of ttxtsubs requires the ttxtsubs patch version 2 to be applied to VDR!!"
 #endif
 
-static const char *VERSION        = "0.2.4";
+static const char *VERSION        = "0.3.0";
 static const char *DESCRIPTION    = trNOOP("Teletext subtitles");
 
 cTtxtsubsConf globals;

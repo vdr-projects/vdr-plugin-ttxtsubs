@@ -1,12 +1,15 @@
 VDR Plugin 'ttxtsubs' Revision History
 --------------------------------------
 
-2012-04-xx: Version x.x.x
+2013-03-10: Version 0.3.0
 - Removed obsolete (unused since 0.2.0) setup options: DVB Source Selection,
   Live Delay, Record Subtitles, and Workaround for some French chns.
 - Added hard-coded workaround for french channels where page numbes 850-859
-  must be mapped to 880-889 (Closes #865, #703)
-  (Thx to Jussi Tepponen!)
+  must be mapped to 880-889 (Closes #865, #703) (Thx to Jussi Tepponen!)
+- Some code refactorings
+- Adapt to VDR 1.7.26 API changes.
+- Updated patch for VDR 1.7.38
+- Sync subtitles using PTS (Closes #119) (Thx to Matti Horila and Dimitar Petrovski)
 
 2011-10-08: Version 0.2.4
 - Updated patch for VDR 1.7.21 (Closes #745)
