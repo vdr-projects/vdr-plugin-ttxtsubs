@@ -1,4 +1,4 @@
-From a932f6d2b2569e64d7fc56b5f128917709ff5a8c Mon Sep 17 00:00:00 2001
+From 9a23ec1bd9ccbb80bd860e03def6d90fae82d3c7 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:55:04 +0100
 Subject: [PATCH 1/6] Record teletext subtitles
@@ -157,7 +157,7 @@ index bde60e4..8a27b99 100644
    return true;
  }
 diff --git a/remux.c b/remux.c
-index 9be3078..2e31012 100644
+index 587d7e5..fa5a650 100644
 --- a/remux.c
 +++ b/remux.c
 @@ -385,6 +385,29 @@ int cPatPmtGenerator::MakeSubtitlingDescriptor(uchar *Target, const char *Langua

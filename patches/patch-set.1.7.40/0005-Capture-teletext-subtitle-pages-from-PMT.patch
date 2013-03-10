@@ -1,4 +1,4 @@
-From 0460f10ead868f796e642adf6a3bdc1b6d8ca190 Mon Sep 17 00:00:00 2001
+From b5178c0a9c1eff2a1b90f891b19286524ad53b5d Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
@@ -9,7 +9,7 @@ Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
  2 files changed, 29 insertions(+)
 
 diff --git a/remux.c b/remux.c
-index 2e31012..3c7a156 100644
+index fa5a650..00dbf05 100644
 --- a/remux.c
 +++ b/remux.c
 @@ -605,6 +605,7 @@ void cPatPmtParser::Reset(void)
@@ -29,7 +29,7 @@ index 2e31012..3c7a156 100644
       dpids[0] = 0;
       spids[0] = 0;
 @@ -797,6 +799,28 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
-                                     spids[NumSpids]= 0;
+                                     spids[NumSpids] = 0;
                                      }
                                   break;
 +                            case SI::TeletextDescriptorTag: {

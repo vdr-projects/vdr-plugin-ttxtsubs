@@ -1,4 +1,4 @@
-From 1c37c1a96eaac460f3905ec46899a3361044fe16 Mon Sep 17 00:00:00 2001
+From 0351ee0c356deee5075ae4e730dbbaa53388ea3f Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages
@@ -91,10 +91,10 @@ index dbdcb17..b407672 100644
    tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES];
    int caids[MAXCAIDS + 1]; // list is zero-terminated
 diff --git a/vdr.5 b/vdr.5
-index 4003a5e..cb1552d 100644
+index ca705d4..dc5c339 100644
 --- a/vdr.5
 +++ b/vdr.5
-@@ -233,6 +233,12 @@ by an '=' sign, as in
+@@ -235,6 +235,12 @@ by an '=' sign, as in
  
  .B ...:201;2001=deu,2002=eng:...
  
