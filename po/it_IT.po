@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-03-10 12:55+0100\n"
+"POT-Creation-Date: 2013-03-10 13:30+0100\n"
 "PO-Revision-Date: 2010-03-02 20:48+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team: Italian <vdr@linuxtv.org>\n"
@@ -45,6 +45,15 @@ msgstr "4:3/Letterbox (deprecato)"
 msgid "Page Mode"
 msgstr "Mod. pagina"
 
+msgid "Center"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
 msgid "Display Subtitles"
 msgstr "Visualizza sottotitoli"
 
@@ -56,6 +65,9 @@ msgstr "Dim. caratteri (pixel)"
 
 msgid "Font OutlineWidth (pixel)"
 msgstr "Larghezza caratteri delineati (pixel)"
+
+msgid "Subtitles alignment"
+msgstr ""
 
 msgid "Language"
 msgstr "Lingua"

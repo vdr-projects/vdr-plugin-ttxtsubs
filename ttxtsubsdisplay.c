@@ -456,7 +456,18 @@ void cTtxtSubsDisplay::ShowOSD(void)
     {
         int lineWidth = _osdFont->Width(_subTitleTextLines[textLineIndex].text) + 2 * globals.mOutlineWidth + 5;
         int lineHeight = (textHeight / _numberOfSubTitleTextLines);
-        int x = (width - lineWidth) / 2;
+        int x;
+        switch(globals.mJustification) {
+        case 1:    //left justified
+          x = globals.mOutlineWidth; // to fit the outline on the screen!
+          break;
+        case 2:    //right justified
+          x = width - (lineWidth + globals.mOutlineWidth);
+          break;
+        default:   //centered
+          x = (width - lineWidth) / 2;
+          break;
+        } 
         int y = lineHeight * textLineIndex + globals.mOutlineWidth + 5;
         tColor foregroundColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][0];
         tColor outlineColor = SubtitleColorMap[_subTitleTextLines[textLineIndex].color][1];

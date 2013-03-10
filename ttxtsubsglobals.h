@@ -39,7 +39,8 @@ class cTtxtsubsConf {
     mRealDoDisplay(1),
     mMainMenuEntry(0),
     mFontSize(20),
-    mOutlineWidth(2)
+    mOutlineWidth(2),
+    mJustification(1)
     {
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
@@ -50,6 +51,7 @@ class cTtxtsubsConf {
   int mainMenuEntry(void) {return mMainMenuEntry;}
   int fontSize(void) {return mFontSize;}
   int outlineWidth(void) {return mOutlineWidth;}
+  int justification(void) {return mJustification;}
   char (*languages(void))[MAXLANGUAGES][2][4] {return &mLanguages;}
   int (*hearingImpaireds(void))[MAXLANGUAGES][2] {return &mHearingImpaireds;}
 
@@ -61,6 +63,7 @@ class cTtxtsubsConf {
   int mMainMenuEntry;
   int mFontSize;
   int mOutlineWidth;
+  int mJustification;
   char mLanguages[MAXLANGUAGES][2][4];
   int mHearingImpaireds[MAXLANGUAGES][2];
 };

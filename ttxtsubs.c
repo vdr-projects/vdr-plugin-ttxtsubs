@@ -321,6 +321,7 @@ bool cPluginTtxtsubs::SetupParse(const char *Name, const char *Value)
   else if(!strcasecmp(Name, "MainMenuEntry")) globals.mMainMenuEntry = atoi(Value);
   else if(!strcasecmp(Name, "FontSize")) globals.mFontSize = atoi(Value);
   else if(!strcasecmp(Name, "OutlineWidth")) globals.mOutlineWidth = atoi(Value);
+  else if(!strcasecmp(Name, "Justification")) globals.mJustification = atoi(Value);
   else if(!strcasecmp(Name, "Languages")) parseLanguages(Value);
   else if(!strcasecmp(Name, "HearingImpaireds")) parseHIs(Value);
   // Handle old settings
@@ -489,6 +490,7 @@ void cMenuSetupTtxtsubsLanguages::Store(void)
 }
 
 const char * mainMenuAlts[5] = {NULL, NULL, NULL, NULL, NULL};
+const char * justificationAlts[3] = {NULL, NULL, NULL};
 
 cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
   :
@@ -506,6 +508,12 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
     mainMenuAlts[4] = NULL;
   }
   const int numMainMenuAlts = sizeof(mainMenuAlts) / sizeof(mainMenuAlts[0]) - 1;
+  if(justificationAlts[0] == NULL) {
+    justificationAlts[0] = tr("Center");
+    justificationAlts[1] = tr("Left");
+    justificationAlts[2] = tr("Right");
+  } 
+  const int numJustificationAlts = sizeof(justificationAlts) / sizeof(justificationAlts[0]);
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     mLanguageNo[n] = -1;
@@ -527,6 +535,7 @@ cMenuSetupTtxtsubs::cMenuSetupTtxtsubs(cPluginTtxtsubs *ttxtsubs, int doStore)
                             numMainMenuAlts, mainMenuAlts));
   Add(new cMenuEditIntItem(tr("Font Size (pixel)"), &mConf.mFontSize, 10, MAXFONTSIZE * 2));
   Add(new cMenuEditIntItem(tr("Font OutlineWidth (pixel)"), &mConf.mOutlineWidth, 1, 10));
+  Add(new cMenuEditStraItem(tr("Subtitles alignment"), &mConf.mJustification, numJustificationAlts, justificationAlts));
 
   for(int n = 0; n < MAXLANGUAGES; n++) {
     char str[100];
@@ -581,6 +590,7 @@ void cMenuSetupTtxtsubs::Store(void)
   SetupStore("MainMenuEntry", mConf.mMainMenuEntry);
   SetupStore("FontSize", mConf.mFontSize);
   SetupStore("OutlineWidth", mConf.mOutlineWidth);
+  SetupStore("Justification", mConf.mJustification);
 
   char lstr[MAXLANGUAGES*2*4 + 1];
   char histr[MAXLANGUAGES*2 + 1];

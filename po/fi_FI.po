@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ttxtsubs 0.2.0\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-03-10 12:55+0100\n"
+"POT-Creation-Date: 2013-03-10 13:30+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: Finnish <vdr@linuxtv.org>\n"
@@ -40,6 +40,15 @@ msgstr "4:3/Letterbox (käytöstä poistunut)"
 msgid "Page Mode"
 msgstr "sivun valinta"
 
+msgid "Center"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
 msgid "Display Subtitles"
 msgstr "Näytä tekstitykset"
 
@@ -51,6 +60,9 @@ msgstr "Kirjasintyypin koko (px)"
 
 msgid "Font OutlineWidth (pixel)"
 msgstr "Kirjasinreunuksen koko (px)"
+
+msgid "Subtitles alignment"
+msgstr ""
 
 msgid "Language"
 msgstr "Tekstityskieli"

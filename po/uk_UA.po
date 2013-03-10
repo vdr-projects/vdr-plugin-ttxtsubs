@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-03-10 12:55+0100\n"
+"POT-Creation-Date: 2013-03-10 13:30+0100\n"
 "PO-Revision-Date: 2009-05-28 14:05+0100\n"
 "Last-Translator: Yarema aka Knedlyk <yupadmin@gmail.com>\n"
 "Language-Team: Ukrainian <vdr@linuxtv.org>\n"
@@ -36,6 +36,15 @@ msgstr "4:3/широкий екран"
 msgid "Page Mode"
 msgstr "Режим сторінки"
 
+msgid "Center"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
 msgid "Display Subtitles"
 msgstr "Показувати субтитри"
 
@@ -48,6 +57,9 @@ msgstr "Размір фонта (пікселі)"
 #, fuzzy
 msgid "Font OutlineWidth (pixel)"
 msgstr "Размір фонта (пікселі)"
+
+msgid "Subtitles alignment"
+msgstr ""
 
 msgid "Language"
 msgstr "Мова"

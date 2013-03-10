@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-03-10 12:55+0100\n"
+"POT-Creation-Date: 2013-03-10 13:30+0100\n"
 "PO-Revision-Date: 2007-08-24 23:49+0300\n"
 "Last-Translator: Jordi Vilà <jvila@tinet.org>\n"
 "Language-Team: Catalan <vdr@linuxtv.org>\n"
@@ -43,6 +43,15 @@ msgstr "4:3/Letterbox"
 msgid "Page Mode"
 msgstr "Modalitat pàgina"
 
+msgid "Center"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
 msgid "Display Subtitles"
 msgstr "Visualitza subtítols"
 
@@ -53,6 +62,9 @@ msgid "Font Size (pixel)"
 msgstr ""
 
 msgid "Font OutlineWidth (pixel)"
+msgstr ""
+
+msgid "Subtitles alignment"
 msgstr ""
 
 msgid "Language"
