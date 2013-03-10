@@ -1,17 +1,17 @@
-From e2833f1f09f24154b664e956ae31bcae6d101ce9 Mon Sep 17 00:00:00 2001
+From 71d770ce0c87238044a34dfc6fd4d25846e2eeb6 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Sun, 14 Feb 2010 01:30:34 +0100
 Subject: [PATCH 4/6] Decrypt teletext stream
 
 ---
  ci.c |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ 1 file changed, 5 insertions(+)
 
 diff --git a/ci.c b/ci.c
-index 59d62ef..b024f67 100644
+index 9a4a829..ec84027 100644
 --- a/ci.c
 +++ b/ci.c
-@@ -1913,6 +1913,8 @@ void cCamSlot::AddChannel(const cChannel *Channel)
+@@ -1914,6 +1914,8 @@ void cCamSlot::AddChannel(const cChannel *Channel)
           AddPid(Channel->Sid(), *Dpid, STREAM_TYPE_PRIVATE);
       for (const int *Spid = Channel->Spids(); *Spid; Spid++)
           AddPid(Channel->Sid(), *Spid, STREAM_TYPE_PRIVATE);
@@ -20,10 +20,10 @@ index 59d62ef..b024f67 100644
       }
  }
  
-@@ -1936,6 +1938,9 @@ bool cCamSlot::CanDecrypt(const cChannel *Channel)
+@@ -1937,6 +1939,9 @@ bool cCamSlot::CanDecrypt(const cChannel *Channel)
           CaPmt.AddPid(*Dpid, STREAM_TYPE_PRIVATE);
       for (const int *Spid = Channel->Spids(); *Spid; Spid++)
-          CaPmt.AddPid(*Spid, STREAM_TYPE_PRIVATE); 
+          CaPmt.AddPid(*Spid, STREAM_TYPE_PRIVATE);
 +     if (Channel->Tpid() && Setup.SupportTeletext) {
 +        CaPmt.AddPid(Channel->Tpid(), STREAM_TYPE_PRIVATE);
 +        }
@@ -31,5 +31,5 @@ index 59d62ef..b024f67 100644
       cTimeMs Timeout(QUERY_REPLY_TIMEOUT);
       do {
 -- 
-1.7.6.3
+1.7.10.4
 

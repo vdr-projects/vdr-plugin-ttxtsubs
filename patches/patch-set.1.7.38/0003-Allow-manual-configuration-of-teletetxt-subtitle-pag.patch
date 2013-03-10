@@ -1,4 +1,4 @@
-From 88c023f4fc9025de7b1d98ae1bd4523378b012fb Mon Sep 17 00:00:00 2001
+From 81f20bc05af9fc4a6d79aeb028c2e3f2aad22685 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 21:56:41 +0100
 Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages
@@ -11,10 +11,10 @@ Subject: [PATCH 3/6] Allow manual configuration of teletetxt subtitle pages
  3 files changed, 43 insertions(+), 3 deletions(-)
 
 diff --git a/channels.c b/channels.c
-index 5ab31bb..44d4be2 100644
+index 3eb31ce..a7f69a9 100644
 --- a/channels.c
 +++ b/channels.c
-@@ -381,9 +381,9 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
+@@ -411,9 +411,9 @@ void cChannel::SetSubtitlingDescriptors(uchar *SubtitlingTypes, uint16_t *Compos
  void cChannel::SetTeletextSubtitlePages(tTeletextSubtitlePage pages[], int numberOfPages)
  {
    int mod = CHANNELMOD_NONE;
@@ -26,7 +26,7 @@ index 5ab31bb..44d4be2 100644
    for (int i = 0; (i < numberOfPages) && (totalTtxtSubtitlePages < MAXTXTPAGES); i++) {
        if (teletextSubtitlePages[totalTtxtSubtitlePages].ttxtMagazine != pages[i].ttxtMagazine ||
            teletextSubtitlePages[totalTtxtSubtitlePages].ttxtPage != pages[i].ttxtPage ||
-@@ -526,10 +526,17 @@ cString cChannel::ToText(const cChannel *Channel)
+@@ -556,10 +556,17 @@ cString cChannel::ToText(const cChannel *Channel)
          q += IntArrayToString(q, Channel->dpids, 10, Channel->dlangs, Channel->dtypes);
          }
       *q = 0;
@@ -45,7 +45,7 @@ index 5ab31bb..44d4be2 100644
       if (Channel->spids[0]) {
          *q++ = ';';
          q += IntArrayToString(q, Channel->spids, 10, Channel->slangs);
-@@ -698,6 +705,32 @@ bool cChannel::Parse(const char *s)
+@@ -730,6 +737,32 @@ bool cChannel::Parse(const char *s)
                      }
                spids[NumSpids] = 0;
                }
@@ -79,7 +79,7 @@ index 5ab31bb..44d4be2 100644
                return false;
             if (caidbuf) {
 diff --git a/channels.h b/channels.h
-index 3fc443c..6e7367f 100644
+index dbdcb17..b407672 100644
 --- a/channels.h
 +++ b/channels.h
 @@ -126,6 +126,7 @@ private:
@@ -91,10 +91,10 @@ index 3fc443c..6e7367f 100644
    tTeletextSubtitlePage teletextSubtitlePages[MAXTXTPAGES];
    int caids[MAXCAIDS + 1]; // list is zero-terminated
 diff --git a/vdr.5 b/vdr.5
-index c46a2bf..96e142a 100644
+index 4003a5e..cb1552d 100644
 --- a/vdr.5
 +++ b/vdr.5
-@@ -225,6 +225,12 @@ by an '=' sign, as in
+@@ -233,6 +233,12 @@ by an '=' sign, as in
  
  .B ...:201;2001=deu,2002=eng:...
  
@@ -108,5 +108,5 @@ index c46a2bf..96e142a 100644
  .B Conditional access
  A hexadecimal integer defining how this channel can be accessed:
 -- 
-1.7.6.3
+1.7.10.4
 

@@ -1,4 +1,4 @@
-From 9960c81bed0689a397f8a3b9e3de91a3f75e5237 Mon Sep 17 00:00:00 2001
+From 8061253a177218ffea0b7a823a8a2f742a033290 Mon Sep 17 00:00:00 2001
 From: etobi <git@e-tobi.net>
 Date: Fri, 12 Feb 2010 22:06:19 +0100
 Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
@@ -6,21 +6,21 @@ Subject: [PATCH 5/6] Capture teletext subtitle pages from PMT
 ---
  remux.c |   24 ++++++++++++++++++++++++
  remux.h |    5 +++++
- 2 files changed, 29 insertions(+), 0 deletions(-)
+ 2 files changed, 29 insertions(+)
 
 diff --git a/remux.c b/remux.c
-index adec265..4f9950f 100644
+index 2e31012..3c7a156 100644
 --- a/remux.c
 +++ b/remux.c
-@@ -439,6 +439,7 @@ void cPatPmtParser::Reset(void)
-   pmtPid = -1;
+@@ -605,6 +605,7 @@ void cPatPmtParser::Reset(void)
+   pmtPids[0] = 0;
    vpid = vtype = 0;
    ppid = 0;
 +  tpid = 0;
  }
  
  void cPatPmtParser::ParsePat(const uchar *Data, int Length)
-@@ -524,6 +525,7 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
+@@ -693,6 +694,7 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
       int NumSpids = 0;
       vpid = vtype = 0;
       ppid = 0;
@@ -28,7 +28,7 @@ index adec265..4f9950f 100644
       apids[0] = 0;
       dpids[0] = 0;
       spids[0] = 0;
-@@ -628,6 +630,28 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
+@@ -797,6 +799,28 @@ void cPatPmtParser::ParsePmt(const uchar *Data, int Length)
                                      spids[NumSpids]= 0;
                                      }
                                   break;
@@ -58,10 +58,10 @@ index adec265..4f9950f 100644
                                   SI::ISO639LanguageDescriptor *ld = (SI::ISO639LanguageDescriptor *)d;
                                   dbgpatpmt(" '%s'", ld->languageCode);
 diff --git a/remux.h b/remux.h
-index 80d6afd..5f15dfe 100644
+index 4cef4da..203ed34 100644
 --- a/remux.h
 +++ b/remux.h
-@@ -220,6 +220,7 @@ private:
+@@ -342,6 +342,7 @@ private:
    int vpid;
    int ppid;
    int vtype;
@@ -69,7 +69,7 @@ index 80d6afd..5f15dfe 100644
    int apids[MAXAPIDS + 1]; // list is zero-terminated
    int atypes[MAXAPIDS + 1]; // list is zero-terminated
    char alangs[MAXAPIDS][MAXLANGCODE2];
-@@ -266,6 +267,9 @@ public:
+@@ -392,6 +393,9 @@ public:
    int Vtype(void) const { return vtype; }
         ///< Returns the video stream type as defined by the current PMT, or 0 if no video
         ///< stream type has been detected, yet.
@@ -79,7 +79,7 @@ index 80d6afd..5f15dfe 100644
    const int *Apids(void) const { return apids; }
    const int *Dpids(void) const { return dpids; }
    const int *Spids(void) const { return spids; }
-@@ -280,6 +284,7 @@ public:
+@@ -406,6 +410,7 @@ public:
    uchar SubtitlingType(int i) const { return (0 <= i && i < MAXSPIDS) ? subtitlingTypes[i] : uchar(0); }
    uint16_t CompositionPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? compositionPageIds[i] : uint16_t(0); }
    uint16_t AncillaryPageId(int i) const { return (0 <= i && i < MAXSPIDS) ? ancillaryPageIds[i] : uint16_t(0); }
@@ -88,5 +88,5 @@ index 80d6afd..5f15dfe 100644
  
  // TS to PES converter:
 -- 
-1.7.6.3
+1.7.10.4
 
