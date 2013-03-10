@@ -40,7 +40,7 @@ class cTtxtsubsConf {
     mMainMenuEntry(0),
     mFontSize(20),
     mOutlineWidth(2),
-    mJustification(1)
+    mJustification(0)
     {
       memset(mLanguages, 0, sizeof(mLanguages));
       memset(mHearingImpaireds, 0, sizeof(mHearingImpaireds));
