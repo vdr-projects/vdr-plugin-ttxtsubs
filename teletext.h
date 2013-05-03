@@ -83,14 +83,6 @@ unsigned char unham(unsigned char a,unsigned char b);
 
 #define UNHAM_INV(a, b) unham(invtab[a], invtab[b])
 
-// ham 8/4 the byte in into two bytes pointed to by out
-void ham8_4byte(uint8_t in, uint8_t *out);
-// ham 8/4 the nibble in into the byte pointed to by out
-uint8_t ham8_4nibble(uint8_t in);
-
-// odd parity status for last 7 bits of byte 
-int parity(uint8_t x);
-
 /*
  * Map Latin G0 teletext characters into a ISO-8859-1 approximation.
  * Trying to use similar looking or similar meaning characters.

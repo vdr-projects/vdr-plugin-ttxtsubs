@@ -21,15 +21,13 @@ cTtxtAudio::~cTtxtAudio()
 void cTtxtAudio::Play(const uchar* p, int Length, uchar Id)
 {
   int64_t tmp_pts = 0;
-  bool audio_pts_wrap = false;
 
   if (PesHasPts(p))
     tmp_pts = PesGetPts(p);
   if (tmp_pts != 0) {
     if ((pts > 0x1ffff0000LL) && (tmp_pts < 0x000100000LL)) {
-      audio_pts_wrap=true;
+      tmp_pts+=0x200000000LL;
     }
-    if (audio_pts_wrap) { tmp_pts+=0x200000000LL; }
   }
   if (tmp_pts != pts) { pts=tmp_pts; }
 

@@ -237,7 +237,7 @@ void cTtxtSubsPlayer::SearchLanguagePage(uint8_t *p, int len)
   }
 }
 
-bool cTtxtSubsPlayer::SetPreferredPage(const char* language, bool hearingImpaired, unsigned int bcdPage)
+void cTtxtSubsPlayer::SetPreferredPage(const char* language, bool hearingImpaired, unsigned int bcdPage)
 {
   // Some French channels still send wrong subtitle page number!
   // This is a hard fix to change the page numbers 05x to 08x
