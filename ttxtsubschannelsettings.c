@@ -38,7 +38,7 @@ bool cTtxtSubsChannelSetting::Parse(const char *s)
    char *buffer=NULL;
    int PageMode;
    int PageNumber;
-   if (3 == sscanf(s, "%a[^,],%d,%d\n", &buffer, &PageMode, &PageNumber)) {
+   if (3 == sscanf(s, "%m[^,],%d,%d\n", &buffer, &PageMode, &PageNumber)) {
       tChannelID channelID=tChannelID::FromString(buffer);
       if (channelID.Valid()) {
         channelid=channelID;
